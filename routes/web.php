@@ -10,6 +10,7 @@ use App\Livewire\Admin\RehabTypeForm;
 use App\Livewire\Admin\User;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
+use App\Livewire\Doctor\Dashboard as DoctorDashboard;
 use App\Livewire\Welcome;
 use App\Models\RehabType;
 use Illuminate\Support\Facades\Auth;
@@ -44,9 +45,11 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('/masterdata/rehabilitation', Rehabilitation::class)->name('rehabilitation');
     Route::get('/masterdata/rehabilitation/create', RehabilitationForm::class)->name('rehabilitation.create');
     Route::get('/masterdata/rehabilitation/{id}/edit', RehabilitationForm::class)->name('rehabilitation.edit');
+});
 
-    
-    
+// Doctor
+Route::middleware(['auth', 'verified', 'role:doctor'])->prefix('doctor')->name('doctor.')->group(function () {
+    Route::get('/dashboard', DoctorDashboard::class)->name('dashboard');
 });
 
 require __DIR__ . '/auth.php';

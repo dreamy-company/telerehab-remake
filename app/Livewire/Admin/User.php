@@ -18,7 +18,7 @@ class User extends Component
                 $query->where('name', 'like', '%'.$this->search.'%')
                       ->orWhere('email', 'like', '%'.$this->search.'%')
                       ->orWhere('telephone', 'like', '%'.$this->search.'%');
-            })->paginate(10),
+            })->where('role', '!=', 'patient')->paginate(10),
         ]);
     }
 }
