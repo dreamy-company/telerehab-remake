@@ -12,37 +12,92 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-#[Layout('layouts.app')]
+#[Layout('layouts.guest')]
 class Register extends Component
 {
     use WithFileUploads;
-    public $name, $email, $password, $telephone, $medical_record_number, $bpjs_number, $bpjs_card, $patient_condition = [], $address, $prosthetic, $prosthetic_since;   
 
-    public function render()
+    // State Management Steps
+    public $currentStep = 1;
+    public $totalSteps = 3;
+
+    // Data Properties
+    public $name, $email, $password, $telephone; // Step 1
+    public $address, $medical_record_number, $prosthetic, $prosthetic_since; // Step 2
+    public $bpjs_number, $bpjs_card; // Step 3
+    
+    // Ubah menjadi array untuk support multiple upload sesuai snippet Anda
+    public $patient_condition = []; 
+
+    // Judul Step untuk UI
+    public function getStepTitleProperty()
     {
-        return view('livewire.auth.register');
+        return match($this->currentStep) {
+            1 => 'Buat Akun Baru',
+            2 => 'Informasi Medis',
+            3 => 'Dokumen Pendukung',
+        };
     }
 
-    public function store()
+    public function getStepDescriptionProperty()
     {
+        return match($this->currentStep) {
+            1 => 'Lengkapi data diri dan kontak Anda.',
+            2 => 'Detail alamat dan kebutuhan prostetik.',
+            3 => 'Upload foto kondisi & kartu BPJS.',
+        };
+    }
 
+    // Navigasi Next
+    public function nextStep()
+    {
+        $this->validateCurrentStep();
+        if ($this->currentStep < $this->totalSteps) {
+            $this->currentStep++;
+        }
+    }
 
-        try {
+    // Navigasi Previous
+    public function previousStep()
+    {
+        if ($this->currentStep > 1) {
+            $this->currentStep--;
+        }
+    }
+
+    // Validasi Per Step
+    public function validateCurrentStep()
+    {
+        if ($this->currentStep == 1) {
             $this->validate([
-                'name' => 'required',
+                'name' => 'required|string|min:3',
                 'email' => 'required|email|unique:users,email',
+                'telephone' => 'required|numeric',
                 'password' => 'required|min:6',
-                'telephone' => 'required',
-                'medical_record_number' => 'required|unique:patients,medical_record_number',
-                'bpjs_number' => 'required|unique:patients,bpjs_number',
-                'bpjs_card' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-                'patient_condition' => 'required',
-                'patient_condition.*' => 'file|mimes:jpg,jpeg,png|max:2048',
-                'address' => 'required',
+            ]);
+        } elseif ($this->currentStep == 2) {
+            $this->validate([
+                'address' => 'required|string|min:10',
+                'medical_record_number' => 'nullable|string|unique:patients,medical_record_number',
                 'prosthetic' => 'required|string',
                 'prosthetic_since' => 'required|date',
             ]);
+        }
+    }
 
+    // Fungsi Utama: Register (Menggantikan Store)
+    public function register()
+    {
+        // 1. Validasi Step Terakhir (Step 3)
+        $this->validate([
+            'bpjs_number' => 'nullable|unique:patients,bpjs_number',
+            'bpjs_card' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'patient_condition' => 'nullable|array', // Validasi array
+            'patient_condition.*' => 'file|mimes:jpg,jpeg,png|max:2048', // Validasi tiap file
+        ]);
+
+        try {
+            // 2. Buat User
             $user = User::create([
                 'name' => $this->name,
                 'email' => $this->email,
@@ -51,22 +106,25 @@ class Register extends Component
                 'role' => 'patient',
             ]);
 
+            // 3. Upload BPJS (Jika ada)
             $bpjsPath = null;
             if ($this->bpjs_card) {
                 $bpjsPath = $this->bpjs_card->store('bpjs', 'public');
             }
 
+            // 4. Buat Patient Profile
             $patient = Patient::create([
                 'user_id' => $user->id,
-                'medical_record_number' => $this->medical_record_number ?? null,
-                'bpjs_number' => $this->bpjs_number ?? null,
+                'medical_record_number' => $this->medical_record_number,
+                'bpjs_number' => $this->bpjs_number,
                 'bpjs_card' => $bpjsPath,
-                'prosthetic' => $this->prosthetic ?? null,
-                'prosthetic_since' => $this->prosthetic_since ?? null,
+                'prosthetic' => $this->prosthetic,
+                'prosthetic_since' => $this->prosthetic_since,
                 'address' => $this->address,
             ]);
 
-            if ($this->patient_condition) {
+            // 5. Upload Foto Kondisi Pasien (Multiple Loop)
+            if (!empty($this->patient_condition)) {
                 foreach ($this->patient_condition as $file) {
                     $photoPath = $file->store('patient_photos', 'public');
                     PatientPhoto::create([
@@ -76,10 +134,19 @@ class Register extends Component
                 }
             }
 
-            return redirect()->route('auth.login')->with('success-alert', 'Registration successful. Please log in.');
-            
+            // 6. Redirect Sukses
+            $this->dispatch('alert-success', 'Registrasi Berhasil! Silakan Login.');
+            return redirect()->route('auth.login');
+
         } catch (ValidationException $e) {
             $this->dispatch('alert-error', collect($e->errors())->flatten()->first());
+        } catch (\Exception $e) {
+            $this->dispatch('alert-error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
         }
+    }
+
+    public function render()
+    {
+        return view('livewire.auth.register');
     }
 }
