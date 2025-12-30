@@ -1,0 +1,60 @@
+<div class="shadow-md p-12 text-center bg-white">
+    <div class="mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <label class="input w-full sm:w-auto">
+            <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <g
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-width="2.5"
+                    fill="none"
+                    stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                </g>
+            </svg>
+            <input type="search" required placeholder="Search" wire:model.live.debounce="search" />
+        </label>
+        <a href="{{ route('admin.rehabilitation.create') }}" class="w-full sm:w-auto px-6 py-2 bg-primary-500 text-white rounded-lg transition-colors hover:cursor-pointer hover:bg-primary-600">Add Rehabilitation</a>
+    </div>
+
+    <div>
+        <table class="w-full border-collapse table-auto">
+            <thead class="bg-primary-400">
+                <tr>
+                    <th class="border border-gray-300 px-4 py-2">No</th>
+                    <th class="border border-gray-300 px-4 py-2">Name</th>
+                    <th class="border border-gray-300 px-4 py-2">Rehabilitation Phase</th>
+                    <th class="border border-gray-300 px-4 py-2">Description</th>
+                    <th class="border border-gray-300 px-4 py-2">Video Url</th>
+                    <th class="border border-gray-300 px-4 py-2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($data as $index => $item)
+                <tr class="hover:bg-gray-50">
+                    <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $item->name }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $item->rehabType?->name }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $item->description }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $item->video_url }}</td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        <!-- change popover-1 and --anchor-1 names. Use unique names for each dropdown -->
+                        <div class="dropdown dropdown-start">
+                            <div tabindex="0" role="button" class="btn m-1 bg-[#94B9C5] text-white">Action</div>
+                            <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-40 p-2 shadow-sm">
+                                <li><a href="{{ route('admin.rehabilitation.edit', $item->id) }}" class="bg-yellow-400 hover:bg-yellow-500 "><i class="fas fa-edit"></i> Edit</a></li>
+                                <li><a wire:click="delete({{ $item->id }})" class="bg-red-500 hover:bg-red-600 text-white"><i class="fas fa-trash"></i> Delete</a></li>
+                            </ul>
+                        </div>
+
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="5" class="border border-gray-300 px-4 py-2 text-center">No data found</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>

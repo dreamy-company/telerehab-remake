@@ -1,0 +1,150 @@
+@import "tailwindcss";
+@import "nice-select2/dist/css/nice-select2.css";
+@plugin "daisyui";
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+@source "../../storage/framework/views/*.php";
+@source "../**/*.blade.php";
+@source "../**/*.js";
+
+/* =========================
+   THEME (COLOR TOKENS)
+   ========================= */
+@theme {
+    /* PRIMARY */
+    --color-primary-50: #e6faf7;
+    --color-primary-100: #c2f1ea;
+    --color-primary-200: #8be3d8;
+    --color-primary-300: #54d5c5;
+    --color-primary-400: #2bc5b3;
+    --color-primary-500: #17B8A6;
+    /* BASE */
+    --color-primary-600: #109382;
+    --color-primary-700: #0c6f63;
+    --color-primary-800: #094c44;
+    --color-primary-900: #062a25;
+
+    --color-secondary-50: #e8f0f4;
+    --color-secondary-100: #d1e1e9;
+    --color-secondary-200: #a3c3d3;
+    --color-secondary-300: #75a5bd;
+    --color-secondary-400: #5591ad;
+    --color-secondary-500: #94B9C5;
+    --color-secondary-600: #7a9fb3;
+    --color-secondary-700: #5a7a8f;
+    --color-secondary-800: #3d555f;
+    --color-secondary-900: #253039;
+}
+
+/* =========================
+   CUSTOM STYLES
+   ========================= */
+/* =========================
+   BACKGROUND
+   ========================= */
+@utility bg-primary {
+    background-color: var(--color-primary-500);
+}
+
+@utility bg-primary-50 {
+    background-color: var(--color-primary-50);
+}
+
+@utility bg-primary-100 {
+    background-color: var(--color-primary-100);
+}
+
+@utility bg-primary-200 {
+    background-color: var(--color-primary-200);
+}
+
+@utility bg-primary-300 {
+    background-color: var(--color-primary-300);
+}
+
+@utility bg-primary-400 {
+    background-color: var(--color-primary-400);
+}
+
+@utility bg-primary-600 {
+    background-color: var(--color-primary-600);
+}
+
+@utility bg-primary-700 {
+    background-color: var(--color-primary-700);
+}
+
+@utility bg-primary-800 {
+    background-color: var(--color-primary-800);
+}
+
+@utility bg-primary-900 {
+    background-color: var(--color-primary-900);
+}
+
+@utility bg-secondary-500 {
+    background-color: var(--color-secondary-500);
+}
+
+/* =========================
+   TEXT
+   ========================= */
+@utility text-primary {
+    color: var(--color-primary-500);
+}
+
+@utility text-primary-600 {
+    color: var(--color-primary-600);
+}
+
+@utility text-primary-700 {
+    color: var(--color-primary-700);
+}
+
+@utility text-primary-800 {
+    color: var(--color-primary-800);
+}
+
+@utility text-secondary-500 {
+    color: var(--color-secondary-500);
+}
+
+@utility text-secondary-600 {
+    color: var(--color-secondary-600);
+}
+
+@utility text-secondary-700 {
+    color: var(--color-secondary-700);
+}
+
+@utility text-secondary-800 {
+    color: var(--color-secondary-800);
+}
+
+/* =========================
+   BORDER
+   ========================= */
+@utility border-primary {
+    border-color: var(--color-primary-500);
+}
+
+@utility border-primary-600 {
+    border-color: var(--color-primary-600);
+}
+
+@utility border-secondary-500 {
+    border-color: var(--color-secondary-500);
+}
+
+@utility border-secondary-600 {
+    border-color: var(--color-secondary-600);
+}
+
+@utility border-secondary-700 {
+    border-color: var(--color-secondary-700);
+}
+
+@utility border-secondary-800 {
+    border-color: var(--color-secondary-800);
+}
+
+

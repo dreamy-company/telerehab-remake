@@ -1,0 +1,35 @@
+[
+    {
+        "name": "Dashboard",
+        "icon": "fa-home",
+        "route": "/admin/dashboard",
+        "subMenu": []
+    },
+    {
+        "name": "MasterData",
+        "icon": "fa-database",
+        "route": null,
+        "subMenu": [
+            {
+                "name": "Users",
+                "icon": "fa-users",
+                "route": "/admin/masterdata/user"
+            },
+            {
+                "name": "Patients",
+                "icon": "fa-user-injured",
+                "route": "/admin/masterdata/patient"
+            },
+            {
+                "name": "Rehabilitation Phases",
+                "icon": "fa-notes-medical",
+                "route": "/admin/masterdata/rehabilitation-phase"
+            },
+            {
+                "name": "Rehabilitations",
+                "icon": "fa-procedures",
+                "route": "/admin/masterdata/rehabilitation"
+            }
+        ]
+    }
+]
