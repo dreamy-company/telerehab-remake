@@ -19,9 +19,10 @@ return new class extends Migration
             $table->foreignId('rehabilitation_id')->constrained('rehabs');
             $table->string('goal');
             $table->date('target');
+            $table->string('diagnosis');
+            $table->string('medicine');
             $table->boolean('isDeleted')->default(false);
             $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
-
             $table->timestamps(); // includes created_at & updated_at
             $table->softDeletes();
         });

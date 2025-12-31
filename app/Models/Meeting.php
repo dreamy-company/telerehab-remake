@@ -10,13 +10,7 @@ class Meeting extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'title', 'description', 'meeting_category',
-        'location', 'date', 'time',
-        'status',
-        'medicine','diagnosa',
-        'isDeleted', 'deleted_by', 'deleted_at', 'doctor_id', 'patient_id'
-    ];
+    protected $guarded = ['id'];
 
     public function doctor()
     {
@@ -24,7 +18,7 @@ class Meeting extends Model
     }
     public function patient()
     {
-        return $this->belongsTo(User::class, 'patient_id');
+        return $this->belongsTo(Patient::class, 'patient_id');
     }
     public function deletedBy()
     {

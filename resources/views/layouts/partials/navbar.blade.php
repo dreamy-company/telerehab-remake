@@ -1,9 +1,11 @@
 <header class="flex justify-between items-center mb-12">
-    <div>
+    <div class="md:ml-5">
         <h2 id="pageTitle" class="text-4xl font-extrabold text-gray-900 tracking-tight" data-i18n="welcome_title">Halo, {{ Auth::user()->name }}</h2>
-        <p id="pageSubtitle" class="text-gray-500 mt-1" data-i18n="welcome_subtitle">Siap untuk progres pemulihan hari ini?</p>
+        @if(Auth::user()->role == 'patient')
+        <p id="pageSubtitle" class="text-gray-500 mt-1" data-i18n="welcome_subtitle">Ready for your recovery process?</p>
+        @endif
     </div>
-    <div class="flex items-center gap-5 mr-40 lg:mr-24">
+    <div class="flex items-center gap-5  md:mr-24">
         <div class="w-14 h-14 rounded-2xl border-4 border-white shadow-lg overflow-hidden bg-teal-200">
             <img id="userAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Stefani" alt="Avatar">
         </div>

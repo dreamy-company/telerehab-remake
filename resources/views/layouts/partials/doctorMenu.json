@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Dashboard",
+        "icon": "fa-home",
+        "route": "/doctor/dashboard",
+        "subMenu": []
+    },
+    {
+        "name": "Patients",
+        "icon": "fa-user-injured",
+        "route": "/doctor/patient",
+        "subMenu": []
+    },
+    {
+        "name": "Consultations Request",
+        "icon": "fa-stethoscope",
+        "route": "/doctor/consultation",
+        "subMenu": []
+    },
+    {
+        "name": "Meeting Schedule",
+        "icon": "fa-calendar-alt",
+        "route": "/doctor/meeting-schedule",
+        "subMenu": []
+    }
+    
+]

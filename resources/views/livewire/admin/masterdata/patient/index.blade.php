@@ -14,7 +14,7 @@
             </svg>
             <input type="search" required placeholder="Search" wire:model.live.debounce="search" />
         </label>
-        <a href="{{ route('admin.patient.create') }}" class="w-full sm:w-auto px-6 py-2 bg-primary-500 text-white rounded-lg transition-colors hover:cursor-pointer hover:bg-primary-600">Add Patient</a>
+        <a @if(Auth::user()->role === 'admin') href="{{ route('admin.patient.create') }}" @elseif(Auth::user()->role === 'doctor') href="{{ route('doctor.patient.create') }}" @endif class="w-full sm:w-auto px-6 py-2 bg-primary-500 text-white rounded-lg transition-colors hover:cursor-pointer hover:bg-primary-600">Add Patient</a>
     </div>
 
     <div>
@@ -43,7 +43,7 @@
                         <div class="dropdown dropdown-start">
                             <div tabindex="0" role="button" class="btn m-1 bg-[#94B9C5] text-white">Action</div>
                             <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-10 w-40 p-2 shadow-sm">
-                                <li><a href="{{ route('admin.patient.edit', $item->id) }}" class="bg-yellow-400 hover:bg-yellow-500 "><i class="fas fa-edit"></i> Edit</a></li>
+                                <li><a @if(Auth::user()->role === 'admin') href="{{ route('admin.patient.edit', $item->id) }}" @elseif(Auth::user()->role === 'doctor') href="{{ route('doctor.patient.edit', $item->id) }}" @endif class="bg-yellow-400 hover:bg-yellow-500 "><i class="fas fa-edit"></i> Edit</a></li>
                                 <li><button wire:click="detail({{ $item->id }})" onclick="patientModal.showModal()" class="bg-blue-400 hover:bg-blue-500 "><i class="fas fa-eye"></i> Detail</button></li>
                                 <li><a href="#" class="bg-red-500 hover:bg-red-600 text-white"><i class="fas fa-trash"></i> Delete</a></li>
                             </ul>

@@ -10,18 +10,7 @@ class RehabRoutine extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'patient_id',
-        'doctor_id',
-        'status',
-        'rehabilitation_id',
-        'goal',
-        'target',
-        'isDeleted',
-        'deleted_by',
-        'deleted_at'
-    ];
-
+    protected $guarded = ['id'];
     public function patient()
     {
         return $this->belongsTo(Patient::class);

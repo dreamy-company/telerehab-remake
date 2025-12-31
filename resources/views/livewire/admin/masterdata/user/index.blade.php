@@ -14,7 +14,8 @@
             </svg>
             <input type="search" required placeholder="Search" wire:model.live.debounce="search" />
         </label>
-        <button class="w-full sm:w-auto px-6 py-2 bg-primary-500 text-white rounded-lg transition-colors hover:cursor-pointer hover:bg-primary-600">Add User</button>
+        <a @if(Auth::user()->role === 'admin') href="{{ route('admin.user.create') }}" @elseif(Auth::user()->role === 'doctor') href="{{ route('doctor.user.create') }}" @endif class="w-full sm:w-auto px-6 py-2 bg-primary-500 text-white rounded-lg transition-colors hover:cursor-pointer hover:bg-primary-600">Add User</a>
+  
     </div>
 
     <div>
