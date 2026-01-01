@@ -25,9 +25,9 @@ class Register extends Component
     public $name, $email, $password, $telephone; // Step 1
     public $address, $medical_record_number, $prosthetic, $prosthetic_since; // Step 2
     public $bpjs_number, $bpjs_card; // Step 3
-    
+
     // Ubah menjadi array untuk support multiple upload sesuai snippet Anda
-    public $patient_condition = []; 
+    public $patient_condition = [];
 
     // Judul Step untuk UI
     public function getStepTitleProperty()
@@ -134,9 +134,10 @@ class Register extends Component
                 }
             }
 
-            // 6. Redirect Sukses
-            $this->dispatch('alert-success', 'Registrasi Berhasil! Silakan Login.');
-            return redirect()->route('auth.login');
+                        // 6. Login User & Redirect to Dashboard
+                        Auth::login($user);
+                        $this->dispatch('alert-success', 'Registrasi Berhasil!');
+                        return redirect()->route('patient.dashboard');
 
         } catch (ValidationException $e) {
             $this->dispatch('alert-error', collect($e->errors())->flatten()->first());

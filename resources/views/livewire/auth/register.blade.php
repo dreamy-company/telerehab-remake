@@ -1,12 +1,12 @@
 <div class="w-full max-w-6xl bg-white rounded-[1.5rem] md:rounded-[2.5rem] shadow-2xl shadow-slate-300/50 overflow-hidden border border-slate-200 grid grid-cols-1 md:grid-cols-12 relative min-h-[auto] md:min-h-[600px]">
-    
+
     <!-- LEFT SIDE: Progress Sidebar -->
     <!-- Mobile: Tampil di atas sebagai Header, Desktop: Sidebar kiri -->
     <div class="col-span-1 md:col-span-4 bg-[#17B8A6] relative p-6 md:p-12 text-white flex flex-col justify-between overflow-hidden">
         <!-- Decoration (Hidden on mobile to save space) -->
         <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-16 -mt-16 blur-3xl hidden md:block"></div>
         <div class="absolute bottom-0 left-0 w-64 h-64 bg-teal-900/20 rounded-full -ml-16 -mb-16 blur-3xl hidden md:block"></div>
-        
+
         <div class="relative z-10">
             <!-- Brand -->
             <div class="flex items-center gap-3 mb-6 md:mb-10">
@@ -37,8 +37,8 @@
                         <div class="hidden md:block w-0.5 h-10 {{ $currentStep > 1 ? 'bg-white/50' : 'bg-teal-200/20' }}"></div>
                     </div>
                     <div class="hidden md:block pt-1"> <!-- Text hidden on mobile -->
-                        <h4 class="font-bold text-sm">Akun & Kontak</h4>
-                        <p class="text-xs text-teal-100">Data dasar pengguna</p>
+                        <h4 class="font-bold text-sm">Account & Contact</h4>
+                        <p class="text-xs text-teal-100">Basic user data</p>
                     </div>
                 </div>
 
@@ -51,8 +51,8 @@
                         <div class="hidden md:block w-0.5 h-10 {{ $currentStep > 2 ? 'bg-white/50' : 'bg-teal-200/20' }}"></div>
                     </div>
                     <div class="hidden md:block pt-1">
-                        <h4 class="font-bold text-sm">Data Medis</h4>
-                        <p class="text-xs text-teal-100">Alamat & kondisi</p>
+                        <h4 class="font-bold text-sm">Medical Data</h4>
+                        <p class="text-xs text-teal-100">Address & condition</p>
                     </div>
                 </div>
 
@@ -64,8 +64,8 @@
                         </div>
                     </div>
                     <div class="hidden md:block pt-1">
-                        <h4 class="font-bold text-sm">Dokumen & BPJS</h4>
-                        <p class="text-xs text-teal-100">Upload berkas</p>
+                        <h4 class="font-bold text-sm">Document & BPJS (Optional, Indonesia Only)</h4>
+                        <p class="text-xs text-teal-100">Upload documents</p>
                     </div>
                 </div>
             </div>
@@ -80,13 +80,13 @@
     <!-- RIGHT SIDE: Form Area -->
     <div class="col-span-1 md:col-span-8 bg-slate-50 p-6 md:p-12 lg:p-16 flex flex-col justify-center relative">
         <form wire:submit.prevent="register">
-            
+
             <!-- STEP 1: Account & Contact -->
             <div class="{{ $currentStep != 1 ? 'hidden' : 'block' }} space-y-4 md:space-y-5 animate-fade-in-up">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                     <!-- Name -->
                     <div class="col-span-1 md:col-span-2">
-                        <label class="block text-sm font-bold text-slate-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Full Name <span class="text-red-500">*</span></label>
                         <!-- Hapus atribut 'required' HTML agar tombol Lanjut berfungsi -->
                         <input type="text" wire:model="name" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="Masukkan nama sesuai KTP">
                         @error('name') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
@@ -101,7 +101,7 @@
 
                     <!-- Phone -->
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2">No. WhatsApp/HP <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-bold text-slate-700 mb-2"> WhatsApp/HP Number<span class="text-red-500">*</span></label>
                         <input type="tel" wire:model="telephone" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="0812...">
                         @error('telephone') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
@@ -124,7 +124,7 @@
             <div class="{{ $currentStep != 2 ? 'hidden' : 'block' }} space-y-4 md:space-y-5 animate-fade-in-up">
                 <!-- Address -->
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">Alamat Lengkap <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Full Address <span class="text-red-500">*</span></label>
                     <textarea wire:model="address" rows="3" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="Nama jalan, RT/RW, Kelurahan, Kecamatan..."></textarea>
                     @error('address') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                 </div>
@@ -132,21 +132,21 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                     <!-- Medical Record -->
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2">No. Rekam Medis (Opsional)</label>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Medical Record Number (Optional)</label>
                         <input type="text" wire:model="medical_record_number" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="RM-XXXXXX">
                         @error('medical_record_number') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Prosthetic Since -->
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2">Menggunakan Prostetik Sejak <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Using Prosthetic Since <span class="text-red-500">*</span></label>
                         <input type="date" wire:model="prosthetic_since" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all">
                         @error('prosthetic_since') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Prosthetic Description -->
                     <div class="col-span-1 md:col-span-2">
-                        <label class="block text-sm font-bold text-slate-700 mb-2">Jenis Prostetik yang Digunakan <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Type of Prosthetic Used <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="prosthetic" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="Contoh: Kaki Palsu Bawah Lutut (Transtibial)">
                         @error('prosthetic') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
@@ -155,10 +155,10 @@
 
             <!-- STEP 3: Documents -->
             <div class="{{ $currentStep != 3 ? 'hidden' : 'block' }} space-y-5 md:space-y-6 animate-fade-in-up">
-                
+
                 <!-- BPJS Number -->
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">Nomor BPJS (Opsional)</label>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">BPJS Number (Optional, Indonesia Only)</label>
                     <input type="number" wire:model="bpjs_number" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="000123456789">
                     @error('bpjs_number') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                 </div>
@@ -171,10 +171,10 @@
                             <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
                                 <i class="fas fa-camera text-lg md:text-xl"></i>
                             </div>
-                            <h5 class="text-xs md:text-sm font-bold text-slate-700">Foto Kondisi Pasien</h5>
-                            <p class="text-[10px] md:text-xs text-slate-400">Upload banyak foto (Max 2MB/foto)</p>
+                            <h5 class="text-xs md:text-sm font-bold text-slate-700">Patient Condition Photos</h5>
+                            <p class="text-[10px] md:text-xs text-slate-400">Upload multiple photos (Max 2MB/photo)</p>
                         </div>
-                        
+
                         <!-- Preview Count -->
                         @if($patient_condition)
                             <div class="mt-2 text-[10px] md:text-xs text-green-600 font-bold bg-green-50 py-1 px-2 rounded-lg inline-block">
@@ -191,22 +191,22 @@
                             <div class="w-10 h-10 md:w-12 md:h-12 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
                                 <i class="fas fa-id-card text-lg md:text-xl"></i>
                             </div>
-                            <h5 class="text-xs md:text-sm font-bold text-slate-700">Foto Kartu BPJS</h5>
+                            <h5 class="text-xs md:text-sm font-bold text-slate-700">BPJS Card Photo (Optional, Indonesia Only)</h5>
                             <p class="text-[10px] md:text-xs text-slate-400">Upload (Max 2MB)</p>
                         </div>
                         @if($bpjs_card)
                             <div class="mt-2 text-[10px] md:text-xs text-green-600 font-bold bg-green-50 py-1 px-2 rounded-lg inline-block">
-                                <i class="fas fa-check-circle"></i> Terpilih
+                                <i class="fas fa-check-circle"></i> Selected
                             </div>
                         @endif
                         @error('bpjs_card') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
                 </div>
-                
+
                 <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-start gap-3">
                     <i class="fas fa-info-circle text-yellow-600 mt-0.5 shrink-0"></i>
                     <p class="text-xs text-yellow-700 leading-relaxed">
-                        Pastikan data benar. Foto kondisi pasien membantu asesmen dokter.
+                        Make sure the data is correct. Patient condition photos help doctors' assessment.
                     </p>
                 </div>
             </div>
@@ -216,11 +216,11 @@
                 <!-- Back Button -->
                 @if($currentStep > 1)
                     <button type="button" wire:click="previousStep" wire:loading.attr="disabled" class="px-4 md:px-6 py-2 md:py-3 rounded-xl border-2 border-slate-200 text-slate-600 text-sm md:text-base font-bold hover:bg-slate-100 hover:text-slate-800 transition-all flex items-center gap-2">
-                        <i class="fas fa-arrow-left"></i> Kembali
+                        <i class="fas fa-arrow-left"></i> Back
                     </button>
                 @else
                     <div class="text-xs md:text-sm text-slate-500">
-                        Sudah punya akun? <a href="{{ route('auth.login') }}" class="text-[#17B8A6] font-bold hover:underline">Login</a>
+                        Already have an account? <a href="{{ route('auth.login') }}" class="text-[#17B8A6] font-bold hover:underline">Login</a>
                     </div>
                 @endif
 
@@ -228,14 +228,14 @@
                 @if($currentStep < $totalSteps)
                     <!-- Tambahkan wire:loading.attr="disabled" dan loading indicator -->
                     <button type="button" wire:click="nextStep" wire:loading.attr="disabled" class="px-6 md:px-8 py-2 md:py-3 rounded-xl bg-[#17B8A6] text-white text-sm md:text-base font-bold hover:bg-[#0d9488] shadow-lg shadow-[#17B8A6]/20 transition-all flex items-center gap-2 ml-auto">
-                        <span wire:loading.remove wire:target="nextStep">Lanjut</span>
-                        <span wire:loading wire:target="nextStep"><i class="fas fa-spinner fa-spin"></i> Proses...</span>
+                        <span wire:loading.remove wire:target="nextStep">Next</span>
+                        <span wire:loading wire:target="nextStep"><i class="fas fa-spinner fa-spin"></i> Processing...</span>
                         <i class="fas fa-arrow-right" wire:loading.remove wire:target="nextStep"></i>
                     </button>
                 @else
                     <button type="submit" class="px-6 md:px-8 py-2 md:py-3 rounded-xl bg-[#17B8A6] text-white text-sm md:text-base font-bold hover:bg-[#0d9488] shadow-lg shadow-[#17B8A6]/20 transition-all flex items-center gap-2 ml-auto" wire:loading.attr="disabled">
-                        <span wire:loading.remove>Daftar Sekarang</span>
-                        <span wire:loading><i class="fas fa-circle-notch fa-spin"></i> Memproses...</span>
+                        <span wire:loading.remove>Register Now</span>
+                        <span wire:loading><i class="fas fa-circle-notch fa-spin"></i> Processing...</span>
                     </button>
                 @endif
             </div>

@@ -1,39 +1,8 @@
 <div>
-    <!-- =============================================== -->
-    <!--                THEME & CONFIG                   -->
-    <!-- =============================================== -->
-    <script>
-        // Script Theme Mode Sederhana
-        const defaultThemeMode = 'light';
-        let themeMode;
-        if (document.documentElement) {
-            if (localStorage.getItem('theme')) {
-                themeMode = localStorage.getItem('theme');
-            } else if (document.documentElement.hasAttribute('data-theme-mode')) {
-                themeMode = document.documentElement.getAttribute('data-theme-mode');
-            } else {
-                themeMode = defaultThemeMode;
-            }
-            if (themeMode === 'system') {
-                themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-            document.documentElement.classList.add(themeMode);
-        }
-    </script>
-
-    <!-- LOAD EXTERNAL RESOURCES -->
-    <!-- FontAwesome (Icons) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    
-    <!-- Navbar Include (Wrapper) -->
-    <!-- Mengganti bg-white menjadi bg-slate-50 agar tidak terlalu silau -->
-    <div class="fixed w-full z-50 bg-slate-50/90 backdrop-blur-md shadow-sm border-b border-[#17B8A6]/10">
-        @include('layouts.partials.landing.navbar')
-    </div>
 
     <!-- Main Background diganti ke bg-slate-100 agar ada kontras dengan kartu -->
     <main class="overflow-x-hidden relative bg-slate-100 min-h-screen font-sans">
-        
+
         <!-- Background Decor (Animated Blobs) -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
             <!-- Blob 1 (Teal) -->
@@ -49,55 +18,50 @@
         <!-- =============================================== -->
         <section class="min-h-screen flex items-center pt-32 pb-20 relative">
             <div class="container mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                
-                <!-- Text Content -->
-                <div class="hero-content flex flex-col gap-6 order-2 lg:order-1 z-10 text-center lg:text-left">
-                    <!-- Badge -->
-                    <div class="flex justify-center lg:justify-start hero-badge">
-                        <!-- bg-white diganti bg-slate-50 -->
-                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 border border-[#17B8A6]/20 shadow-sm">
-                            <span class="w-2 h-2 rounded-full bg-[#17B8A6] animate-pulse"></span>
-                            <span class="text-xs font-bold text-[#17B8A6] tracking-widest uppercase">Future of Mobility</span>
-                        </div>
-                    </div>
 
-                    <!-- Headline -->
-                    <h1 class="font-extrabold text-4xl md:text-5xl lg:text-6xl leading-tight text-slate-800 hero-title">
-                        Realizing the Dream of a <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#17B8A6] to-teal-500">Better Life</span> with Prosthetics
-                    </h1>
-                    
-                    <!-- Description -->
-                    <p class="text-lg text-slate-600 leading-relaxed max-w-lg mx-auto lg:mx-0 hero-desc">
-                        Determination fuels recovery. We combine advanced medical technology with heartfelt care to accompany you at every step of your new journey.
-                    </p>
-                    
-                    <!-- Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 mt-4 justify-center lg:justify-start hero-cta">
-                        <a href="{{ route('auth.login') }}"
-                           class="group relative overflow-hidden rounded-full px-8 py-4 bg-[#17B8A6] hover:bg-[#13978b] text-white font-bold shadow-lg shadow-[#17B8A6]/20 transition-all duration-300 hover:scale-105">
-                            <span class="relative z-10 flex items-center justify-center gap-2">
-                                Start Your Journey
-                                <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-                            </span>
-                        </a>
-                        <!-- Button Secondary: bg-white -> bg-slate-50 -->
-                        <a href="#steps" class="px-8 py-4 rounded-full bg-slate-50 border border-slate-300 font-semibold text-slate-600 shadow-sm hover:border-[#17B8A6] hover:text-[#17B8A6] transition-all flex items-center justify-center">
-                            How it Works
-                        </a>
-                    </div>
+            <!-- Text Content -->
+            <div class="hero-content flex flex-col gap-8 order-2 lg:order-1 z-10 text-center lg:text-left">
+                <!-- Badge -->
+                <div class="flex justify-center lg:justify-start hero-badge">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 border border-[#17B8A6]/20 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-[#17B8A6] animate-pulse"></span>
+                    <span class="text-xs font-bold text-[#17B8A6] tracking-widest uppercase">Future of Mobility</span>
+                </div>
                 </div>
 
-                <!-- Hero Image -->
-                <div class="relative order-1 lg:order-2 flex justify-center hero-image-container opacity-0 translate-x-8">
-                    <!-- Image Background Glow (Softened) -->
-                    <div class="absolute inset-0 bg-gradient-to-tr from-[#17B8A6]/10 to-slate-50 rounded-full scale-90 blur-3xl opacity-50 -z-10"></div>
-                    
-                    <!-- Main Image -->
-                    <img src="{{ asset('assets/images/hero-img.png') }}" 
-                         alt="Prosthetic Landing"
-                         class="w-full max-w-xs sm:max-w-md lg:max-w-lg object-contain drop-shadow-xl floating-image rounded-3xl relative z-10">
+                <!-- Headline -->
+                <h1 class="font-extrabold text-4xl md:text-5xl lg:text-6xl leading-tight text-slate-800 hero-title text-center">
+                Realizing the Dream of a
+                <span class="text-[#17B8A6] bg-clip-text bg-gradient-to-r from-[#17B8A6] to-teal-500">Better Life</span> with Prosthetics
+                </h1>
+
+                <!-- Description -->
+                <p class="text-lg text-slate-600 leading-relaxed max-w-lg mx-auto lg:mx-0 hero-desc text-center">
+                Determination fuels recovery. We combine advanced medical technology with heartfelt care to accompany you at every step of your new journey.
+                </p>
+
+                <!-- Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start hero-cta">
+                <a href="{{ route('auth.login') }}"
+                   class="group relative overflow-hidden rounded-full px-8 py-4 bg-[#17B8A6] hover:bg-[#13978b] text-white font-bold shadow-lg shadow-[#17B8A6]/20 transition-all duration-300 hover:scale-105">
+                    <span class="relative z-10 flex items-center justify-center gap-2">
+                    Start Your Journey
+                    <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+                    </span>
+                </a>
+                <a href="#steps" class="px-8 py-4 rounded-full bg-slate-50 border border-slate-300 font-semibold text-slate-600 shadow-sm hover:border-[#17B8A6] hover:text-[#17B8A6] transition-all flex items-center justify-center">
+                    How it Works
+                </a>
                 </div>
+            </div>
+
+            <!-- Hero Image -->
+            <div class="relative order-1 lg:order-2 flex justify-center hero-image-container opacity-0 translate-x-8">
+                <div class="absolute inset-0 bg-gradient-to-tr from-[#17B8A6]/10 to-slate-50 rounded-full scale-90 blur-3xl opacity-50 -z-10"></div>
+                <img src="{{ asset('assets/images/hero-img.png') }}"
+                 alt="Prosthetic Landing"
+                 class="w-full max-w-xs sm:max-w-md lg:max-w-lg object-contain drop-shadow-xl floating-image rounded-3xl relative z-10">
+            </div>
             </div>
         </section>
 
@@ -117,7 +81,7 @@
 
                 <!-- Steps Layout -->
                 <div class="flex flex-wrap justify-center gap-6 relative z-10">
-                    
+
                     <!-- Step 1 -->
                     <!-- bg-white diganti bg-slate-50 -->
                     <div class="step-card w-full md:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1.5rem)] group bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-[#17B8A6]/30">
@@ -242,7 +206,7 @@
                     <i class="fas fa-phone text-[#17B8A6]"></i> (021) 123-4567
                 </a>
             </div>
-            
+
             <!-- Legal -->
             <div class="flex flex-col gap-4">
                 <h3 class="font-bold text-lg text-white mb-2 pl-3 border-l-4 border-[#17B8A6]">Legal</h3>
@@ -267,7 +231,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const menuToggle = document.querySelector('[data-kt-menu-trigger="click"]') || document.querySelector('.menu-toggle');
             const menuContent = document.querySelector('#kt_header_menu') || document.querySelector('.menu-content');
-            
+
             if (menuToggle && menuContent) {
                 menuToggle.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -283,11 +247,11 @@
             gsap.registerPlugin(ScrollTrigger);
 
             // 1. Hero Animations - Menggunakan FROM agar element tidak hilang (default visible)
-            // Hapus class opacity-0 dari HTML jika ingin fallback yang aman, 
+            // Hapus class opacity-0 dari HTML jika ingin fallback yang aman,
             // tapi di sini kita handle opacity via JS.
-            
+
             const tlHero = gsap.timeline({ defaults: { ease: "power3.out" } });
-            
+
             // Set initial state untuk hero elements
             gsap.set(".hero-badge, .hero-title, .hero-desc, .hero-cta, .hero-image-container", { autoAlpha: 0, y: 30 });
 
@@ -307,7 +271,7 @@
             });
 
             // 3. Section Header (ScrollTrigger)
-            gsap.fromTo(".step-header", 
+            gsap.fromTo(".step-header",
                 { autoAlpha: 0, y: 50 },
                 {
                     scrollTrigger: {
@@ -323,7 +287,7 @@
             );
 
             // 4. Staggered Steps (ScrollTrigger)
-            gsap.fromTo(".step-card", 
+            gsap.fromTo(".step-card",
                 { autoAlpha: 0, y: 60 },
                 {
                     scrollTrigger: {
@@ -339,7 +303,7 @@
             );
         });
     </script>
-    
+
     <style>
         /* Custom Animations untuk Background Blobs */
         @keyframes blob {

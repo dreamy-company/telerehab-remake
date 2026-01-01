@@ -7,44 +7,33 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-// UPDATE: Gunakan 'layouts.guest' bukan 'layouts.app' agar UI tidak rusak
-#[Layout('layouts.guest')] 
+#[Layout('layouts.guest')]
 class Login extends Component
 {
     public $email, $password;
-    public $remember = false; // Tambahkan properti remember me
 
     public function login()
     {
         try {
-            // Validasi Input
             $this->validate([
                 'email' => 'required|email',
                 'password' => 'required',
             ]);
 
-            // Cek apakah email ada di database
             $user = \App\Models\User::where('email', $this->email)->first();
 
             if (!$user) {
-                // Dispatch alert error (ditangkap oleh script di layouts.guest)
-                $this->dispatch('alert-error', 'Email belum terdaftar.');
+                $this->dispatch('alert-error', 'Email not registered.');
                 return;
             }
 
-            // Proses Login
-            if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+            if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
                 session()->regenerate();
-                
-                // Dispatch sukses (opsional, karena langsung redirect)
-                $this->dispatch('alert-success', 'Login Berhasil!');
-                
                 return redirect()->route('dashboard');
             } else {
-                $this->dispatch('alert-error', 'Password salah.');
+                $this->dispatch('alert-error', 'Invalid password.');
             }
-        } catch (ValidationException $e) {
-            // Menangkap error validasi dan menampilkannya sebagai alert
+        } catch (ValidationException $e){
             $this->dispatch('alert-error', collect($e->errors())->flatten()->first());
         }
     }
@@ -56,10 +45,8 @@ class Login extends Component
         session()->regenerateToken();
         return redirect()->route('auth.login');
     }
-
     public function render()
     {
-        // Pastikan path view sesuai dengan lokasi file yang dibuat di atas
         return view('livewire.auth.login');
     }
 }
