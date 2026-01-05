@@ -16,12 +16,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('routine_result_id')->constrained('routine_results');
             $table->foreignId('doctor_id')->nullable()->constrained('users');
-            $table->foreignId('terapist_id')->nullable()->constrained('users');
+            $table->foreignId('therapist_id')->nullable()->constrained('users');
 
             $table->text('review_doctor')->nullable();
-            $table->text('review_terapist')->nullable();
+            $table->text('review_therapist')->nullable();
             $table->text('video_doctor')->nullable();
-            $table->text('video_terapist')->nullable();
+            $table->text('video_therapist')->nullable();
             $table->boolean('isDeleted')->default(false);
             $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();

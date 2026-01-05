@@ -14,7 +14,7 @@ use Livewire\Component;
 class MeetingScheduleConsultation extends Component
 {
     protected $listeners = ['select2-rehab-initialized' => 'select2RehabInitialized'];
-    public $meetingId, $patientData = null, $phase = null, $rehabilitation = null, $targetDate, $goal, $diagnosis, $medicine, $rehabilitations = [];
+    public $meetingId, $patientData = null, $phase = null, $rehabilitation = null, $targetDate, $goal, $diagnosis, $medicine, $rehabilitations = [], $currentRehabilitation, $rehabilitationStatus;
 
     public function mount($id)
     {
@@ -22,6 +22,10 @@ class MeetingScheduleConsultation extends Component
             $this->meetingId = $id;
 
             $this->patientData = Meeting::with('patient.user', 'patient.photos')->find($id);
+            $this->currentRehabilitation = RehabRoutine::where('patient_id', $this->patientData->patient_id)
+                ->where('status', 'process')
+                ->latest()
+                ->first();
         }
     }
 
@@ -39,27 +43,57 @@ class MeetingScheduleConsultation extends Component
     {
         try {
             $this->validate([
-                'phase' => 'required|string',
-                'rehabilitation' => 'required|string',
-                'targetDate' => 'required|date',
-                'goal' => 'required|string',
+                'rehabilitation' => $this->rehabilitationStatus === 'new' ? 'required|string' : 'nullable|string',
                 'diagnosis' => 'required|string',
                 'medicine' => 'required|string',
+                'rehabilitationStatus' => 'required|string',
+                'targetDate' => $this->rehabilitationStatus === 'new' ? 'required|date' : 'nullable|date',
+                'phase' => $this->rehabilitationStatus === 'new' ? 'required|string' : 'nullable|string',
+                'goal' => $this->rehabilitationStatus === 'new' ? 'required|string' : 'nullable|string',
             ]);
 
-            Meeting::where('id', $this->meetingId)->update(['status' => 'done']);
-            $rehabilitationRoutine = RehabRoutine::create([
-                'patient_id' => $this->patientData->patient_id,
-                'doctor_id' => $this->patientData->doctor_id,
-                'rehabilitation_id' => $this->rehabilitation,
-                'target' => $this->targetDate,
-                'goal' => $this->goal,
-                'status' => 'process',
-                'diagnosis' => $this->diagnosis,
-                'medicine' => $this->medicine,
-            ]);
-            if ($rehabilitationRoutine) {
+
+            if ($this->rehabilitationStatus === 'continue') {
+                Meeting::where('id', $this->meetingId)->update([
+                    'status' => 'done',
+                    'medicine' => $this->medicine,
+                    'diagnosis' => $this->diagnosis,
+                ]);
+
                 return redirect()->route('doctor.meeting-schedule')->with('success-alert', 'Consultation saved successfully.');
+            } else if ($this->rehabilitationStatus === 'complete') {
+                Meeting::where('id', $this->meetingId)->update([
+                    'status' => 'done',
+                    'medicine' => $this->medicine,
+                    'diagnosis' => $this->diagnosis,
+                ]);
+                RehabRoutine::where('status', 'process')
+                    ->where('patient_id', $this->patientData->patient_id)
+                    ->latest()
+                    ->update(['status' => 'complete']);
+                return redirect()->route('doctor.meeting-schedule')->with('success-alert', 'Consultation saved successfully.');
+            } else if ($this->rehabilitationStatus === 'new' && $this->currentRehabilitation) {
+                Meeting::where('id', $this->meetingId)->update([
+                    'status' => 'done',
+                    'medicine' => $this->medicine,
+                    'diagnosis' => $this->diagnosis,
+                ]);
+                RehabRoutine::where('status', 'process')
+                    ->where('patient_id', $this->patientData->patient_id)
+                    ->latest()
+                    ->update(['status' => 'complete']);
+
+                $rehabilitationRoutine = RehabRoutine::create([
+                    'patient_id' => $this->patientData->patient_id,
+                    'doctor_id' => $this->patientData->doctor_id,
+                    'rehabilitation_id' => $this->rehabilitation,
+                    'target' => $this->targetDate,
+                    'goal' => $this->goal,
+                    'status' => 'process',
+                ]);
+                if ($rehabilitationRoutine) {
+                    return redirect()->route('doctor.meeting-schedule')->with('success-alert', 'Consultation saved successfully.');
+                }
             }
         } catch (ValidationException $e) {
             $this->dispatch('alert-error', collect($e->errors())->flatten()->first());

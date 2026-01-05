@@ -13,9 +13,9 @@ class RatingResponse extends Model
     protected $fillable = [
         'routine_result_id',
         'doctor_id',
-        'terapist_id',
-        'review_terapist',
-        'video_terapist',
+        'therapist_id',
+        'review_therapist',
+        'video_therapist',
         'video_doctor',
         'review_doctor',
         'isDeleted',
@@ -42,9 +42,9 @@ class RatingResponse extends Model
     {
         return $this->belongsTo(RoutineResult::class, 'routine_result_id');
     }
-    public function terapist()
+    public function therapist()
     {
-        return $this->belongsTo(User::class, 'terapist_id');
+        return $this->belongsTo(User::class, 'therapist_id');
     }
     protected static function boot()
     {

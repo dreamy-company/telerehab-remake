@@ -3,6 +3,7 @@
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Patient;
 use App\Livewire\Admin\PatientForm;
+use App\Livewire\Admin\PatientRehabilitation as AdminPatientRehabilitation;
 use App\Livewire\Admin\Rehabilitation;
 use App\Livewire\Admin\RehabilitationForm;
 use App\Livewire\Admin\RehabType as AdminRehabType;
@@ -17,6 +18,9 @@ use App\Livewire\Doctor\MeetingSchedule;
 use App\Livewire\Doctor\MeetingScheduleConsultation;
 use App\Livewire\Patient\Dashboard as PatientDashboard;
 use App\Livewire\Patient\Rehabilitation as PatientRehabilitation;
+use App\Livewire\Patient\RehabilitationExercise;
+use App\Livewire\Admin\PatientRehabilitationExercise;
+use App\Livewire\Therapist\Dashboard as TherapistDashboard;
 use App\Livewire\Welcome;
 use App\Models\RehabType;
 use Illuminate\Support\Facades\Auth;
@@ -31,13 +35,15 @@ Route::get('/auth/logout', [Login::class, 'logout'])->name('auth.logout');
 // Redirect Dashboard
 Route::get('/dashboard', function () {
     $checkUser = Auth::user();
-    
+
     if ($checkUser->role === 'admin') {
         return redirect()->route('admin.dashboard');
-    } else if( $checkUser->role === 'doctor') {
+    } else if ($checkUser->role === 'doctor') {
         return redirect()->route('doctor.dashboard');
     } else if ($checkUser->role === 'patient') {
         return redirect()->route('patient.dashboard');
+    } else if ($checkUser->role === 'therapist') {
+        return redirect()->route('therapist.dashboard');
     }
 })->name('dashboard');
 
@@ -67,11 +73,13 @@ Route::middleware(['auth', 'verified', 'role:doctor'])->prefix('doctor')->name('
     // PATIENT
     Route::get('/patient', Patient::class)->name('patient');
     Route::get('/patient/create', PatientForm::class)->name('patient.create');
-    Route::get('/patient/{id}/edit', PatientForm::class)->name('patient.edit');
+    Route::get('/patient/{id}/edit', PatientForm::class)->name(name: 'patient.edit');
+    Route::get('/patient/{id}/rehabilitation', AdminPatientRehabilitation::class)->name('patient.rehabilitation');
+    Route::get('/patient/{id}/rehabilitation/{rehabRoutineId}/exercise', PatientRehabilitationExercise::class)->name('patient.rehabilitation.exercise');
 
     // CONSULTATION
     Route::get('/consultation', Consultation::class)->name('consultation');
-    
+
     // MEETING SCHEDULE
     Route::get('/meeting-schedule', MeetingSchedule::class)->name('meeting-schedule');
     Route::get('/meeting-schedule/{id}/consultation', MeetingScheduleConsultation::class)->name('meeting-schedule.consultation');
@@ -82,7 +90,19 @@ Route::middleware(['auth', 'verified', 'role:doctor'])->prefix('doctor')->name('
 Route::middleware(['auth', 'verified', 'role:patient'])->prefix('patient')->name('patient.')->group(function () {
     Route::get('/dashboard', PatientDashboard::class)->name('dashboard');
     Route::get('/rehabilitation', PatientRehabilitation::class)->name('rehabilitation');
-
+    Route::get('/rehabilitation/{id}/exercise', RehabilitationExercise::class)->name('rehabilitation.exercise');
 });
 
+
+// Therapist
+Route::middleware(['auth', 'verified', 'role:therapist'])->prefix('therapist')->name('therapist.')->group(function () {
+    Route::get('/dashboard', TherapistDashboard::class)->name('dashboard');
+
+    // PATIENT
+    Route::get('/patient', Patient::class)->name('patient');
+    Route::get('/patient/create', PatientForm::class)->name('patient.create');
+    Route::get('/patient/{id}/edit', PatientForm::class)->name(name: 'patient.edit');
+    Route::get('/patient/{id}/rehabilitation', AdminPatientRehabilitation::class)->name('patient.rehabilitation');
+    Route::get('/patient/{id}/rehabilitation/{rehabRoutineId}/exercise', PatientRehabilitationExercise::class)->name('patient.rehabilitation.exercise');
+});
 require __DIR__ . '/auth.php';

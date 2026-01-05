@@ -4,7 +4,7 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest">Total Patient</p>
-                    <h3 class="text-3xl font-extrabold text-blue-900 mt-1"></h3>
+                    <h3 class="text-3xl font-extrabold text-blue-900 mt-1">{{ $totalPatient }}</h3>
                 </div>
                 <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-500"><i class="fas fa-users"></i></div>
             </div>
@@ -12,19 +12,19 @@
         <div class="card-modern p-6 bg-orange-50 border-orange-100">
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="text-[10px] font-black text-orange-400 uppercase tracking-widest">Total Rehabilitations</p>
-                    <h3 class="text-3xl font-extrabold text-orange-900 mt-1"></h3>
+                    <p class="text-[10px] font-black text-orange-400 uppercase tracking-widest">Total Consultation Request</p>
+                    <h3 class="text-3xl font-extrabold text-orange-900 mt-1">{{ $totalConsultationRequest }}</h3>
                 </div>
-                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-orange-500"><i class="fas fa-notes-medical"></i></div>
+                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-orange-500"><i class="fas fa-calendar-alt"></i></div>
             </div>
         </div>
         <div class="card-modern p-6 bg-teal-50 border-teal-100">
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="text-[10px] font-black text-teal-400 uppercase tracking-widest">Total Rehabilitations Phases</p>
-                    <h3 class="text-3xl font-extrabold text-teal-900 mt-1"></h3>
+                    <p class="text-[10px] font-black text-teal-400 uppercase tracking-widest">Total Patient In Rehabilitation</p>
+                    <h3 class="text-3xl font-extrabold text-teal-900 mt-1">{{ $totalRehabilitationPhases }}</h3>
                 </div>
-                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-teal-500"><i class="fas fa-layer-group"></i></div>
+                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-teal-500"><i class="fas fa-user-injured"></i></div>
             </div>
         </div>
     </div>

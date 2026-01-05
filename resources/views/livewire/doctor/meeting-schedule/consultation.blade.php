@@ -23,9 +23,16 @@
                     <p><span class="font-semibold">BPJS:</span> {{ $patientData?->patient->bpjs_number }}</p>
                     <p><span class="font-semibold">Prosthetic:</span> {{ $patientData?->patient->prosthetic }}</p>
                     <p><span class="font-semibold">Since:</span> {{ $patientData ? \Carbon\Carbon::parse($patientData->patient->prosthetic_since)->format('d F Y') : '-' }}</p>
+
                 </div>
             </div>
-
+            @if($currentRehabilitation)
+            <div class="divider"></div>
+            <div class="flex flex-col items-start">
+                <p class="font-semibold text-primary-500">Current Rehabilitation</p>
+                <p> {{ $currentRehabilitation->rehabilitation->name ?? 'N/A' }}</p>
+            </div>
+            @endif
             <div class="divider"></div>
 
             <div class="space-y-3 text-sm">
@@ -53,6 +60,35 @@
         <!-- RIGHT : FORM -->
         <section class="lg:w-2/3 p-6 space-y-6">
 
+            <div class="flex flex-col items-start">
+                <label class="label font-semibold">Diagnosis *</label>
+                <textarea
+                    wire:model="diagnosis"
+                    class="textarea textarea-bordered w-full @error('diagnosis') textarea-error @enderror"
+                    placeholder="Enter diagnosis"></textarea>
+                @error('diagnosis') <p class="text-error text-sm">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="flex flex-col items-start">
+                <label class="label font-semibold">Medicine Recommendation *</label>
+                <input type="text"
+                    wire:model="medicine"
+                    class="input input-bordered w-full @error('medicine') input-error @enderror" placeholder="Enter Medicine Recommendation">
+                @error('medicine') <p class="text-error text-sm">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="flex flex-col items-start">
+                <label class="label font-semibold">Rehabilitation Status *</label>
+                <select wire:model="rehabilitationStatus"
+                    class="select select-bordered w-full @error('rehabilitationStatus') select-error @enderror" onchange="@this.set('rehabilitationStatus',this.value);">
+                    <option value="">Select Status</option>
+                    <option value="continue">Continue</option>
+                    <option value="complete">Complete</option>
+                    <option value="new">New Rehabilitation</option>
+                </select>
+                @error('rehabilitationStatus') <p class="text-error text-sm">{{ $message }}</p> @enderror
+            </div>
+            @if($rehabilitationStatus === 'new')
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                 <div wire:ignore>
@@ -106,25 +142,10 @@
 
 
             </div>
-            <div class="flex flex-col items-start">
-                <label class="label font-semibold">Diagnosis *</label>
-                <textarea
-                    wire:model="diagnosis"
-                    class="textarea textarea-bordered w-full @error('diagnosis') textarea-error @enderror"
-                    placeholder="Enter diagnosis"></textarea>
-                @error('diagnosis') <p class="text-error text-sm">{{ $message }}</p> @enderror
-            </div>
-
-            <div class="flex flex-col items-start">
-                <label class="label font-semibold">Medicine Recommendation *</label>
-                <input type="text"
-                    wire:model="medicine"
-                    class="input input-bordered w-full @error('medicine') input-error @enderror" placeholder="Enter Medicine Recommendation">
-                @error('medicine') <p class="text-error text-sm">{{ $message }}</p> @enderror
-            </div>
+            @endif
 
             <div class="flex justify-end gap-3 pt-4 border-t">
-                <button class="btn btn-ghost" onclick="consultationModal.close()">Cancel</button>
+                <a href="{{ route('doctor.meeting-schedule') }}" class="btn bg-gray-200">Cancel</a>
                 <button class="btn bg-primary-300" wire:click="saveSchedule">
                     <i class="fas fa-save mr-1"></i> Save Consultation
                 </button>

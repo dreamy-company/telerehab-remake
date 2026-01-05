@@ -77,4 +77,9 @@ class Patient extends Model
     {
         return $this->hasMany(RehabRoutine::class);
     }
+
+    public function meetings()
+    {
+        return $this->hasMany(Meeting::class);
+    }
 }

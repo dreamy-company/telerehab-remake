@@ -17,6 +17,9 @@
           $menuItems = json_decode(file_get_contents(resource_path('views/layouts/partials/doctorMenu.json')), true);
           elseif(Auth::user()->role === 'patient')
           $menuItems = json_decode(file_get_contents(resource_path('views/layouts/partials/patientMenu.json')), true);
+          elseif(Auth::user()->role === 'therapist')
+          $menuItems = json_decode(file_get_contents(resource_path('views/layouts/partials/therapistMenu.json')), true);
+         
           @endphp
           @foreach ($menuItems as $item)
           @if (empty($item['subMenu']))

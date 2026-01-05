@@ -1,0 +1,15 @@
+[
+    {
+        "name": "Dashboard",
+        "icon": "fa-home",
+        "route": "/therapist/dashboard",
+        "subMenu": []
+    },
+    {
+        "name": "Patients",
+        "icon": "fa-user-injured",
+        "route": "/therapist/patient",
+        "subMenu": []
+    }
+    
+]
