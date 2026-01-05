@@ -1,7 +1,7 @@
 <div class="">
     <!-- <nav id="mobileNav" class="bg-white fixed bottom-0 left-0 w-full bottom-nav flex lg:hidden justify-around items-center p-4 z-50 shadow-2xl">
     @php
-    $menuItems = json_decode(file_get_contents('/home/cakra/project/dreamy/telerehab-remake/resources/views/layouts/partials/adminMenu.json'), true);
+          $menuItems = json_decode(file_get_contents(resource_path('views/layouts/partials/adminMenu.json')), true);
 
     @endphp
     @foreach ($menuItems as $item)

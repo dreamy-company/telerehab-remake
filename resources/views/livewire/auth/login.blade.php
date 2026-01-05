@@ -1,73 +1,102 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 via-white to-teal-50">
-    <div class="w-full max-w-6xl mx-auto px-4">
-        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
-            <div class="grid md:grid-cols-2 gap-0">
-                <!-- Left Side - Image (Hidden on mobile) -->
-                <div class="hidden md:block relative bg-gradient-to-br from-teal-500 to-teal-700">
-                    <div class="absolute inset-0 flex items-center justify-center p-12">
-                        <div class="text-center text-white">
-                            <img src="{{asset('assets/images/login-img.png')}}" alt="Telerehab" class="w-full h-auto rounded-2xl  mb-6">
-                            
-                        </div>
-                    </div>
-                </div>
+<div class="w-full max-w-5xl bg-slate-50/90 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-slate-300/50 overflow-hidden border border-slate-200 grid md:grid-cols-2 relative transform transition-all hover:shadow-brand-500/5">
 
-                <!-- Right Side - Form -->
-                <div class="p-8 md:p-12">
-                    <!-- Header -->
-                    <div class="text-center mb-8">
-                        <h1 class="text-3xl font-black text-primary-500">Telerehab</h1>
-                        <p class="text-sm text-gray-500 mt-2">Log in to your account</p>
-                    </div>
+    <!-- Left Side: Image & Brand -->
+    <div class="hidden md:flex relative bg-[#17B8A6] items-center justify-center p-12 overflow-hidden group">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl transition-transform duration-700 group-hover:scale-110"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-teal-900/10 rounded-full -ml-12 -mb-12 blur-xl transition-transform duration-700 group-hover:scale-110"></div>
 
-                    <!-- Form -->
-                    <form class="space-y-5" wire:submit.prevent="login">
-                        <!-- Email Input -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-                            <input type="email" required class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-500 focus:outline-none transition-colors bg-gray-50" placeholder="name@example.com" wire:model="email" autocomplete="off">
-                        </div>
+        <!-- Pattern Overlay -->
+        <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
 
-                        <!-- Password Input -->
-                        <div x-data="{ show: false }">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
-                            <div class="flex items-center relative">
-                                <input :type="show ? 'text' : 'password'" required class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-500 focus:outline-none transition-colors bg-gray-50" placeholder="••••••••" wire:model="password" id="password" autocomplete="off">
-                                <button type="button" class="absolute right-3 text-gray-500 hover:text-gray-700" @click="show = !show">
-                                    <i x-show="!show" class="fas fa-eye w-5 h-5"></i>
-                                    <i x-show="show" class="fas fa-eye-slash w-5 h-5"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Remember Me & Forgot -->
-                        <div class="flex items-center justify-between text-sm">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" class="w-4 h-4 rounded border-gray-300">
-                                <span class="text-gray-600">Remember me</span>
-                            </label>
-                            <a href="#" class="text-primary hover:text-teal-700 font-semibold">Forgot password?</a>
-                        </div>
-
-                        <!-- Login Button -->
-                        <button type="submit" class="w-full bg-[#17B8A6] text-white font-bold py-3 rounded-xl hover:shadow-lg transition-all mt-6">
-                            Login
-                        </button>
-                    </form>
-
-                    <!-- Divider -->
-                    <div class="flex items-center gap-3 my-6">
-                        <div class="flex-1 h-px bg-gray-200"></div>
-                        <span class="text-xs text-gray-500">or</span>
-                        <div class="flex-1 h-px bg-gray-200"></div>
-                    </div>
-
-                    <!-- Sign Up Link -->
-                    <p class="text-center text-gray-600 text-sm">
-                        Don't have an account? <a href="{{ route('auth.register') }}" class="text-primary font-bold hover:text-teal-700">Register here</a>
-                    </p>
-                </div>
+        <div class="relative z-10 text-center text-white">
+            <div class="mb-8 relative inline-block">
+                <!-- Glow effect -->
+                <div class="absolute inset-0 bg-white/20 blur-2xl rounded-full scale-90"></div>
+                <!-- Menggunakan Asset Helper -->
+                <img src="{{ asset('assets/images/login-img.png') }}" alt="Telerehab Illustration" class="w-64 mx-auto relative z-10 drop-shadow-2xl transform transition-transform duration-500 group-hover:-translate-y-2">
             </div>
+            <h2 class="text-3xl font-bold mb-3 tracking-tight">Welcome Back!</h2>
+            <p class="text-teal-50 opacity-90 leading-relaxed font-medium">
+                "Recovery is a process. It takes time. <br>It takes patience. It takes everything you've got."
+            </p>
+        </div>
+    </div>
+
+    <!-- Right Side: Login Form -->
+    <div class="p-8 md:p-12 lg:p-16 flex flex-col justify-center relative bg-slate-50">
+        <!-- Mobile Brand Title -->
+        <div class="md:hidden text-center mb-8">
+            <img src="{{ asset('assets/images/logo_telerehab.jpeg') }}" alt="Telerehab Logo" class="mx-auto w-32">
+        </div>
+
+        <!-- Header Text -->
+        <div class="text-center md:text-left mb-10">
+            <h1 class="text-3xl text-center md:text-4xl font-extrabold text-slate-800 mb-2">Login</h1>
+            <p class="text-slate-500 font-medium text-center">Please enter your details to continue.</p>
+        </div>
+
+        <!-- Form dengan wire:submit -->
+        <form class="space-y-6" wire:submit.prevent="login">
+            <!-- Email Input -->
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2 ml-1">Email Address</label>
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#17B8A6] transition-colors">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <input type="email" required
+                        class="w-full pl-12 pr-4 py-4 bg-slate-100 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#17B8A6] focus:outline-none focus:ring-4 focus:ring-[#17B8A6]/10 transition-all duration-300 font-semibold placeholder-slate-400 text-slate-800"
+                        placeholder="hello@telerehab.id"
+                        wire:model="email"
+                        autocomplete="email">
+                </div>
+                @error('email') <span class="text-red-500 text-xs mt-1 ml-1 block">{{ $message }}</span> @enderror
+            </div>
+
+            <!-- Password Input -->
+            <div x-data="{ show: false }">
+                <label class="block text-sm font-bold text-slate-700 mb-2 ml-1">Password</label>
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#17B8A6] transition-colors">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <input :type="show ? 'text' : 'password'" required
+                        class="w-full pl-12 pr-12 py-4 bg-slate-100 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#17B8A6] focus:outline-none focus:ring-4 focus:ring-[#17B8A6]/10 transition-all duration-300 font-semibold placeholder-slate-400 text-slate-800"
+                        placeholder="••••••••"
+                        wire:model="password"
+                        id="password">
+                    <button type="button" class="absolute right-0 inset-y-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer" @click="show = !show">
+                        <i :class="show ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </button>
+                </div>
+                @error('password') <span class="text-red-500 text-xs mt-1 ml-1 block">{{ $message }}</span> @enderror
+            </div>
+
+            <!-- Submit Button (Loading State) -->
+            <button type="submit" class="w-full bg-[#17B8A6] hover:bg-[#13978b] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#17B8A6]/20 hover:shadow-[#17B8A6]/40 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3 group mt-4 disabled:opacity-50 disabled:cursor-not-allowed" wire:loading.attr="disabled">
+                <span wire:loading.remove>Sign In</span>
+                <span wire:loading><i class="fas fa-circle-notch fa-spin"></i> Processing...</span>
+                <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform" wire:loading.remove></i>
+            </button>
+        </form>
+
+        <!-- Separator -->
+        <div class="relative my-8">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-slate-200"></div>
+            </div>
+            <div class="relative flex justify-center text-xs uppercase">
+                <span class="px-4 bg-slate-50 text-slate-400 font-bold tracking-wider">Or continue with</span>
+            </div>
+        </div>
+
+        <!-- Register CTA -->
+        <div class="text-center">
+            <p class="text-slate-500 text-sm font-medium mb-4">Don't have an account yet?</p>
+            <a href="{{ route('auth.register') }}" class="inline-flex items-center justify-center w-full px-8 py-3 rounded-2xl border-2 border-slate-200 text-slate-600 font-bold hover:border-[#17B8A6] hover:text-[#17B8A6] hover:bg-[#17B8A6]/5 transition-all duration-300">
+                Create New Account
+            </a>
         </div>
     </div>
 </div>
