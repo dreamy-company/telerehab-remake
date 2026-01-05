@@ -22,8 +22,8 @@ return new class extends Migration
             $table->date('date')->nullable();
             $table->time('time')->nullable();
             $table->string('status')->nullable();
-            $table->string('diagnosis');
-            $table->string('medicine');
+            $table->string('diagnosis')->nullable(); 
+            $table->string('medicine')->nullable(); 
             $table->boolean('isDeleted')->default(false);
             $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
             $table->softDeletes();
