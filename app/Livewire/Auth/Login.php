@@ -7,7 +7,7 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('layouts.app')]
+#[Layout('layouts.guest')]
 class Login extends Component
 {
     public $email, $password;
@@ -33,7 +33,7 @@ class Login extends Component
             } else {
                 $this->dispatch('alert-error', 'Invalid password.');
             }
-        } catch (ValidationException $e) {
+        } catch (ValidationException $e){
             $this->dispatch('alert-error', collect($e->errors())->flatten()->first());
         }
     }
