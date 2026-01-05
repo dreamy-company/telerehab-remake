@@ -1,0 +1,15 @@
+[
+    {
+        "name": "Dashboard",
+        "icon": "fa-home",
+        "route": "/patient/dashboard",
+        "subMenu": []
+    },
+    {
+        "name": "Rehabilitation",
+        "icon": "fa-procedures",
+        "route": "/patient/rehabilitation",
+        "subMenu": []
+    }
+   
+]

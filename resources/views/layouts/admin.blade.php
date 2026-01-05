@@ -44,7 +44,7 @@
     @include('layouts.partials.mobilenav')
 
     <!-- Main Content Area -->
-    <main class="bg-[#FBFDFE] lg:ml-72 pt-6 md:p-6 min-height-screen">
+    <main class="bg-[#FBFDFE] lg:ml-72 py-6 md:py-6 my-6 min-height-screen">
 
         <!-- Header -->
         @include('layouts.partials.navbar')

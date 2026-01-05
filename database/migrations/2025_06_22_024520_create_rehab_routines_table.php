@@ -21,7 +21,6 @@ return new class extends Migration
             $table->date('target');
             $table->boolean('isDeleted')->default(false);
             $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
-
             $table->timestamps(); // includes created_at & updated_at
             $table->softDeletes();
         });

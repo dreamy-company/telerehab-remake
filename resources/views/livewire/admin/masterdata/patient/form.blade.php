@@ -64,8 +64,8 @@
 
               
                 @if($old_patient_condition && $patientId)
-                <div class="mt-2">
-                    <p class="text-xs text-gray-600">Current file:</p>
+                <p class="text-xs text-gray-600">Current file:</p>
+                <div class="mt-2 flex gap-2">
                     @foreach ($old_patient_condition as $photo)
                         <img src="{{ Storage::url($photo['url']) }}" alt="Patient Condition" class="w-32 h-32 object-cover rounded-lg">
                     @endforeach
@@ -95,7 +95,7 @@
             </div>
 
             <div class="flex gap-2 pt-4 justify-end w-full">
-                <a href="{{ route('admin.patient') }}" class="btn bg-gray-500 text-white font-bold py-3 rounded-xl hover:bg-gray-600 transition-all">
+                <a @if(Auth::user()->role === 'admin') href="{{ route('admin.patient') }}" @elseif(Auth::user()->role === 'doctor') href="{{ route('doctor.patient') }}" @endif class="btn bg-gray-500 text-white font-bold py-3 rounded-xl hover:bg-gray-600 transition-all">
                     Cancel
                 </a>
                 <button type="submit" class="btn bg-primary-500 text-white font-bold py-3 rounded-xl hover:bg-primary-600 transition-all">

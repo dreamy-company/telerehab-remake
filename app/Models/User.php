@@ -102,9 +102,9 @@ class User extends Authenticatable
         return $this->hasMany(RatingResponse::class, 'doctor_id');
     }
 
-    public function terapistRatingResponses()
+    public function therapistRatingResponses()
     {
-        return $this->hasMany(RatingResponse::class, 'terapist_id');
+        return $this->hasMany(RatingResponse::class, 'therapist_id');
     }
     public function deletedRatingResponses()
     {

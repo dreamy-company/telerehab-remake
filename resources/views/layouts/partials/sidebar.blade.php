@@ -11,12 +11,19 @@
 
       <nav id="sidebarNav" class="space-y-3 flex-1">
           @php
+          if(Auth::user()->role === 'admin')
           $menuItems = json_decode(file_get_contents(resource_path('views/layouts/partials/adminMenu.json')), true);
-
+          elseif(Auth::user()->role === 'doctor')
+          $menuItems = json_decode(file_get_contents(resource_path('views/layouts/partials/doctorMenu.json')), true);
+          elseif(Auth::user()->role === 'patient')
+          $menuItems = json_decode(file_get_contents(resource_path('views/layouts/partials/patientMenu.json')), true);
+          elseif(Auth::user()->role === 'therapist')
+          $menuItems = json_decode(file_get_contents(resource_path('views/layouts/partials/therapistMenu.json')), true);
+         
           @endphp
           @foreach ($menuItems as $item)
           @if (empty($item['subMenu']))
-          <a href="{{ $item['route'] }}" class="flex items-center gap-3 p-3 rounded-xl hover:bg-teal-50 transition-colors {{ request()->url() === url($item['route']) ? 'bg-teal-100 text-teal-600 font-semibold nav-active' : 'text-gray-600' }}">
+          <a href="{{ $item['route'] }}" class="flex items-center gap-3 p-3 rounded-xl hover:bg-teal-50 transition-colors {{ request()->url() === url($item['route']) ? 'bg-teal-100 text-teal-600 font-semibold nav-active' : 'text-gray-600' }}" wire:navigate>
               <i class="fas {{ $item['icon'] }} w-5"></i>
               <span>{{ $item['name'] }}</span>
           </a>
@@ -32,7 +39,7 @@
               </button>
               <div class="pl-6 space-y-2 {{ $isActive ? '' : 'hidden' }} group-hover:block">
                   @foreach ($item['subMenu'] as $subItem)
-                  <a href="{{ $subItem['route'] }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-teal-50 transition-colors {{ request()->url() === url($subItem['route']) ? 'bg-teal-100 text-teal-600 font-semibold' : 'text-gray-600' }}">
+                  <a href="{{ $subItem['route'] }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-teal-50 transition-colors {{ request()->url() === url($subItem['route']) ? 'bg-teal-100 text-teal-600 font-semibold' : 'text-gray-600' }}" wire:navigate>
                       <i class="fas {{ $subItem['icon'] }} w-4"></i>
                       <span class="text-sm">{{ $subItem['name'] }}</span>
                   </a>
@@ -43,8 +50,8 @@
           @endforeach
       </nav>
 
-      <div class="bg-teal-50 p-6 rounded-3xl border border-teal-100">
+      <!-- <div class="bg-teal-50 p-6 rounded-3xl border border-teal-100">
           <p class="text-[10px] font-black text-teal-600 uppercase mb-2" data-i18n="voice_help_title">Bantuan Suara</p>
           <p class="text-xs text-teal-800 italic leading-relaxed" data-i18n="voice_help_desc">"Buka Latihan", "Rekam Video", "Scroll Bawah"</p>
-      </div>
+      </div> -->
   </aside>
