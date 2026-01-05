@@ -67,21 +67,29 @@ class MeetingScheduleConsultation extends Component
                     'medicine' => $this->medicine,
                     'diagnosis' => $this->diagnosis,
                 ]);
-                RehabRoutine::where('status', 'process')
+                $updateCurrentRehab = RehabRoutine::where('status', 'process')
                     ->where('patient_id', $this->patientData->patient_id)
-                    ->latest()
-                    ->update(['status' => 'complete']);
+                    ->latest()->first();
+                if ($updateCurrentRehab) {
+                    $updateCurrentRehab->status = 'complete';
+                    $updateCurrentRehab->save();
+                }
                 return redirect()->route('doctor.meeting-schedule')->with('success-alert', 'Consultation saved successfully.');
-            } else if ($this->rehabilitationStatus === 'new' && $this->currentRehabilitation) {
+            } else if ($this->rehabilitationStatus === 'new') {
+                
                 Meeting::where('id', $this->meetingId)->update([
                     'status' => 'done',
                     'medicine' => $this->medicine,
                     'diagnosis' => $this->diagnosis,
                 ]);
-                RehabRoutine::where('status', 'process')
+
+                $updateCurrentRehab = RehabRoutine::where('status', 'process')
                     ->where('patient_id', $this->patientData->patient_id)
-                    ->latest()
-                    ->update(['status' => 'complete']);
+                    ->latest()->first();
+                if ($updateCurrentRehab) {
+                    $updateCurrentRehab->status = 'complete';
+                    $updateCurrentRehab->save();
+                }
 
                 $rehabilitationRoutine = RehabRoutine::create([
                     'patient_id' => $this->patientData->patient_id,
