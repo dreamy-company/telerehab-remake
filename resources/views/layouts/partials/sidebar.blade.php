@@ -19,27 +19,51 @@
           $menuItems = json_decode(file_get_contents(resource_path('views/layouts/partials/patientMenu.json')), true);
           elseif(Auth::user()->role === 'therapist')
           $menuItems = json_decode(file_get_contents(resource_path('views/layouts/partials/therapistMenu.json')), true);
-         
           @endphp
+
           @foreach ($menuItems as $item)
+
+          {{-- MENU TANPA SUBMENU --}}
           @if (empty($item['subMenu']))
-          <a href="{{ $item['route'] }}" class="flex items-center gap-3 p-3 rounded-xl hover:bg-teal-50 transition-colors {{ request()->url() === url($item['route']) ? 'bg-teal-100 text-teal-600 font-semibold nav-active' : 'text-gray-600' }}" wire:navigate>
+          @php
+          $isActive = request()->is(ltrim($item['route'], '/').'*');
+          @endphp
+
+          <a href="{{ $item['route'] }}"
+              class="flex items-center gap-3 p-3 rounded-xl hover:bg-teal-50 transition-colors
+               {{ $isActive ? 'bg-teal-100 text-teal-600 font-semibold nav-active' : 'text-gray-600' }}"
+              wire:navigate>
               <i class="fas {{ $item['icon'] }} w-5"></i>
               <span>{{ $item['name'] }}</span>
           </a>
+
+          {{-- MENU DENGAN SUBMENU --}}
           @else
           @php
-          $isActive = collect($item['subMenu'])->contains(fn($sub) => request()->url() === url($sub['route']));
+          $isActive = collect($item['subMenu'])->contains(function ($sub) {
+          return request()->is(ltrim($sub['route'], '/').'*');
+          });
           @endphp
+
           <div class="group">
-              <button type="button" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-teal-50 transition-colors {{ $isActive ? 'bg-teal-100 text-teal-600 font-semibold' : 'text-gray-600' }}">
+              <button type="button"
+                  class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-teal-50 transition-colors
+                        {{ $isActive ? 'bg-teal-100 text-teal-600 font-semibold' : 'text-gray-600' }}">
                   <i class="fas {{ $item['icon'] }} w-5"></i>
                   <span>{{ $item['name'] }}</span>
                   <i class="fas fa-chevron-down w-4 ml-auto transition-transform {{ $isActive ? 'rotate-180' : '' }}"></i>
               </button>
-              <div class="pl-6 space-y-2 {{ $isActive ? '' : 'hidden' }} group-hover:block">
+
+              <div class="pl-6 space-y-2 {{ $isActive ? '' : 'hidden' }}">
                   @foreach ($item['subMenu'] as $subItem)
-                  <a href="{{ $subItem['route'] }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-teal-50 transition-colors {{ request()->url() === url($subItem['route']) ? 'bg-teal-100 text-teal-600 font-semibold' : 'text-gray-600' }}" wire:navigate>
+                  @php
+                  $subActive = request()->is(ltrim($subItem['route'], '/').'*');
+                  @endphp
+
+                  <a href="{{ $subItem['route'] }}"
+                      class="flex items-center gap-3 p-2 rounded-lg hover:bg-teal-50 transition-colors
+                           {{ $subActive ? 'bg-teal-100 text-teal-600 font-semibold' : 'text-gray-600' }}"
+                      wire:navigate>
                       <i class="fas {{ $subItem['icon'] }} w-4"></i>
                       <span class="text-sm">{{ $subItem['name'] }}</span>
                   </a>
@@ -49,6 +73,7 @@
           @endif
           @endforeach
       </nav>
+
 
       <!-- <div class="bg-teal-50 p-6 rounded-3xl border border-teal-100">
           <p class="text-[10px] font-black text-teal-600 uppercase mb-2" data-i18n="voice_help_title">Bantuan Suara</p>
