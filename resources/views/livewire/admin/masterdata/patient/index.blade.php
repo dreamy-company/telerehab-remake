@@ -46,9 +46,7 @@
                                 <li><a @if(Auth::user()->role === 'admin') href="{{ route('admin.patient.edit', $item->id) }}" @elseif(Auth::user()->role === 'doctor') href="{{ route('doctor.patient.edit', $item->id) }}" @endif class="bg-yellow-400 hover:bg-yellow-500 "><i class="fas fa-edit"></i> Edit</a></li>
                                 <li><button wire:click="detail({{ $item->id }})" onclick="patientModal.showModal()" class="bg-blue-400 hover:bg-blue-500 "><i class="fas fa-eye"></i> Detail</button></li>
                                 <li>
-                                    @if(Auth::user()->role === 'admin')
-                                        <a href="{{ route('admin.patient.rehabilitation', ['patient' => $item->id]) }}" class="bg-primary-600 hover:bg-primary-700 text-white"><i class="fas fa-stethoscope"></i> Rehabilitation</a>
-                                    @elseif(Auth::user()->role === 'doctor')
+                                   @if(Auth::user()->role === 'doctor')
                                         <a href="{{ route('doctor.patient.rehabilitation', ['id' => $item->id]) }}" class="bg-primary-600 hover:bg-primary-700 text-white"><i class="fas fa-stethoscope"></i> Rehabilitation</a>
                                     @elseif(Auth::user()->role === 'therapist')
                                         <a href="{{ route('therapist.patient.rehabilitation', ['id' => $item->id]) }}" class="bg-primary-600 hover:bg-primary-700 text-white"><i class="fas fa-stethoscope"></i> Rehabilitation</a>
