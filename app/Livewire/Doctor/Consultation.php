@@ -39,6 +39,7 @@ class Consultation extends Component
 
         $this->patientData = null;
         return redirect()->route('doctor.consultation')->with('success-alert', 'Consultation schedule saved successfully.');
+        // return redirect()->route('doctor.consultation')->with('success-alert', 'Consultation schedule saved successfully.');
     }
     public function render()
     {

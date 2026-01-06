@@ -115,7 +115,7 @@
                     </label>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <label class="relative cursor-pointer group">
+                        <!-- <label class="relative cursor-pointer group">
                             <input type="radio" wire:model.live="rehabilitationStatus" value="continue"
                                 class="peer sr-only">
                             <div
@@ -137,7 +137,7 @@
                                 <span
                                     class="font-bold text-sm text-slate-600 peer-checked:text-emerald-800">Complete</span>
                             </div>
-                        </label>
+                        </label> -->
 
                         <label class="relative cursor-pointer group">
                             <input type="radio" wire:model.live="rehabilitationStatus" value="new" class="peer sr-only">

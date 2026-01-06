@@ -16,21 +16,23 @@ class NotAuthenticatedMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $userRole = Auth::user()->role;
-        if ($userRole === "admin") {
-            return redirect()->route("admin.dashboard");
-        }
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->role === "admin") {
+                return redirect()->route("admin.dashboard");
+            }
 
-        if ($userRole === "patient") {
-            return redirect()->route("patient.dashboard");
-        }
+            if ($user->role === "patient") {
+                return redirect()->route("patient.dashboard");
+            }
 
-        if ($userRole === "doctor") {
-            return redirect()->route("doctor.dashboard");
-        }
+            if ($user->role === "doctor") {
+                return redirect()->route("doctor.dashboard");
+            }
 
-        if ($userRole === "therapist") {
-            return redirect()->route("therapist.dashboard");
+            if ($user->role === "therapist") {
+                return redirect()->route("therapist.dashboard");
+            }
         }
 
         return $next($request);

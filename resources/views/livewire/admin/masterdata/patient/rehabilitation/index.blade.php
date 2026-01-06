@@ -1,5 +1,7 @@
 <section class="space-y-8 animate-in fade-in duration-500">
-    <a href="{{ route(Auth::user()->role === 'doctor' ? 'doctor.patient' : 'therapist.patient') }}" class="btn bg-primary-500 text-sm font-bold text-white hover:bg-primary-600 mb-4 rounded-md"><i class="fas fa-arrow-left mr-2"></i> Back to Patients</a>
+    <a href="{{ url()->previous() }}" class="btn bg-primary-500 text-sm font-bold text-white hover:bg-primary-600 mb-4 rounded-md">
+        <i class="fas fa-arrow-left mr-2"></i> Back to Patients
+    </a>
 
     <div class="card-modern p-8 bg-white border-l-8 border-teal-500">
         <div class="flex items-start justify-between">

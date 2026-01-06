@@ -76,7 +76,7 @@ class MeetingScheduleConsultation extends Component
                 }
                 return redirect()->route('doctor.meeting-schedule')->with('success-alert', 'Consultation saved successfully.');
             } else if ($this->rehabilitationStatus === 'new') {
-                
+
                 Meeting::where('id', $this->meetingId)->update([
                     'status' => 'done',
                     'medicine' => $this->medicine,
@@ -100,7 +100,7 @@ class MeetingScheduleConsultation extends Component
                     'status' => 'process',
                 ]);
                 if ($rehabilitationRoutine) {
-                    return redirect()->route('doctor.meeting-schedule')->with('success-alert', 'Consultation saved successfully.');
+                    return redirect()->route('doctor.dashboard')->with('success-alert', 'Consultation saved successfully.');
                 }
             }
         } catch (ValidationException $e) {
