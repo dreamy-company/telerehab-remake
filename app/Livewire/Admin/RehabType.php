@@ -17,9 +17,9 @@ class RehabType extends Component
     {
         $this->idToDelete = $id;
         $rehabType = ModelsRehabType::findOrFail($this->idToDelete);
-        if($rehabType){
+        if ($rehabType) {
             $this->dispatch('alert-delete', 'Are you sure you want to delete this Rehab Type?');
-        } else{
+        } else {
             $this->dispatch('alert-error', 'Rehab Type not found.');
         }
     }
@@ -27,20 +27,20 @@ class RehabType extends Component
     public function deleteConfirmed()
     {
         $rehabType = ModelsRehabType::findOrFail($this->idToDelete);
-        if($rehabType){
+        if ($rehabType) {
             $rehabType->isDeleted = true;
             $rehabType->deleted_by = Auth::user()->id;
             $rehabType->save();
             $rehabType->delete();
             $this->dispatch('delete-success', 'Rehab Type deleted successfully.');
-        } else{
+        } else {
             $this->dispatch('alert-error', 'Rehab Type not found.');
         }
     }
     public function render()
     {
-        return view('livewire.admin.masterdata.rehab-type.index',[
-            'data' => ModelsRehabType::when($this->search, function($query) {
+        return view('livewire.admin.masterdata.rehab-type.index', [
+            'data' => ModelsRehabType::when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })->orderBy('created_at', 'desc')->get()
         ]);

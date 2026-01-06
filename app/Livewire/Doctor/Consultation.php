@@ -20,11 +20,10 @@ class Consultation extends Component
     }
     public function saveSchedule()
     {
-        
+
         $this->validate([
             'date' => 'required|date',
             'time' => 'required',
-            'category' => 'required|string',
             'location' => 'required|string',
         ]);
 
@@ -32,11 +31,12 @@ class Consultation extends Component
             'doctor_id' => Auth::user()->id,
             'date' => $this->date,
             'time' => $this->time,
+            'category' => 'Offline',
             'meeting_category' => $this->category,
             'location' => $this->location,
         ]);
 
-       
+
         $this->patientData = null;
         return redirect()->route('doctor.consultation')->with('success-alert', 'Consultation schedule saved successfully.');
     }
