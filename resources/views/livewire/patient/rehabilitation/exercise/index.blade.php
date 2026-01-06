@@ -19,26 +19,53 @@
                 </iframe>
             </div>
         </div>
-
-        <!-- Upload Zone (lebih kecil) -->
-        <div id="uploadZone"
-            class="bg-white shadow-lg rounded-md p-10 border-4 border-dashed border-teal-50
-                flex flex-col items-center text-center py-20 w-full">
-            <div class="w-24 h-24 bg-teal-50 text-teal-600 rounded-full flex items-center justify-center text-4xl mb-6 shadow-inner">
-                <i class="fas fa-camera"></i>
+        <!-- Upload Zone (Side Info & Action) -->
+        <div id="uploadZone" class="bg-white shadow-lg rounded-xl p-8 border border-gray-100 flex flex-col h-full">
+            <div class="mb-6">
+                <span class="text-xs font-bold text-teal-600 uppercase tracking-widest mb-1 block">Active Program</span>
+                <h3 class="text-2xl font-extrabold text-gray-900 leading-tight mb-3">
+                    {{ $rehabData->rehabilitation->name }}
+                </h3>
+                <p class="text-sm text-gray-500 leading-relaxed italic">
+                    "{{ $rehabData->rehabilitation->description }}"
+                </p>
             </div>
-            <h4 class="text-xl font-extrabold text-gray-900 mb-2">Upload Video</h4>
-            <p class="text-sm text-gray-400 mb-10 leading-relaxed px-4">
-                Record your exercise so that doctors & therapists can monitor your progress.
-            </p>
 
-            @if($rehabData->routineResults->where('date', now()->format('Y-m-d'))->count() > 0)
-            <p class="text-green-600 font-bold mb-4"><i class="fas fa-check-circle mr-2"></i> Exercise Video for today has been uploaded. Thank you!</p>
-            @else
-            <button onclick="uploadModal.showModal()" class="btn bg-primary-500 text-white hover:bg-primary-600 rounded-lg w-full justify-center">
-                <i class="fas fa-circle-dot mr-2"></i> UPLOAD VIDEO
-            </button>
-            @endif
+            <div class="space-y-4 mb-8">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase block mb-1">Goal</span>
+                        <span class="text-sm font-semibold text-gray-700">{{ $rehabData->rehabilitation->rehabRoutines->first()->goal }}</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase block mb-1">Target</span>
+                        <span class="text-sm font-semibold text-gray-700">{{ $rehabData->rehabilitation->rehabRoutines->first()->target }}</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between bg-teal-50/50 p-3 rounded-lg border border-teal-100">
+                    <span class="text-xs font-bold text-teal-800 uppercase">Current Status</span>
+                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-teal-100 text-teal-700 uppercase">
+                        {{ $rehabData->rehabilitation->rehabRoutines->first()->status }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="mt-auto pt-6 border-t border-dashed border-gray-200">
+                <div class="flex flex-col items-center text-center mb-6">
+                    <div class="w-14 h-14 bg-teal-50 text-teal-600 rounded-full flex items-center justify-center text-xl mb-3 shadow-sm">
+                        <i class="fas fa-camera-retro"></i>
+                    </div>
+                    <p class="text-xs text-gray-400 leading-snug px-4">
+                        Record your progress and upload it here for review by your therapist.
+                    </p>
+                </div>
+
+                <button onclick="uploadModal.showModal()" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3.5 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg active:scale-[0.98]">
+                    <i class="fas fa-cloud-upload-alt text-lg"></i>
+                    <span>UPLOAD VIDEO</span>
+                </button>
+            </div>
         </div>
 
     </div>
@@ -76,51 +103,113 @@
 
 
     <!-- Riwayat Upload & Feedback Full Width Below -->
-    <div class="bg-white shadow-lg rounded-md p-8">
-        <h4 class="font-bold text-xl mb-6 flex items-center gap-3"><i class="fas fa-history text-teal-500"></i> Video History & Feedback</h4>
+    <div class="bg-white shadow-lg rounded-2xl p-8 border border-gray-100">
+        <h4 class="font-bold text-xl mb-8 flex items-center gap-3 text-gray-800">
+            <div class="w-10 h-10 bg-teal-50 text-teal-600 rounded-lg flex items-center justify-center">
+                <i class="fas fa-history"></i>
+            </div>
+            Video History & Feedback
+        </h4>
+
         @forelse ($results as $result)
-        <div class="border-b border-gray-100 pb-6 mb-6">
-            <div class="flex flex-col md:flex-row gap-6">
-                <div class="w-full md:w-40 h-24 rounded-xl overflow-hidden relative flex-shrink-0 bg-black">
-                    <a href="{{ Storage::url($result->video_url) }}"
-                        target="_blank"
-                        class="absolute inset-0 flex items-center justify-center
-              bg-black/40  transition
-              text-white text-xl">
-                        <i class="fas fa-play"></i>
-                    </a>
+        <div class="group border-b border-gray-100 pb-8 mb-8 last:border-0 last:mb-0 last:pb-0">
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Video Thumbnail/Trigger -->
+                <div class="w-full md:w-48 h-28 rounded-2xl overflow-hidden relative flex-shrink-0 bg-slate-900 shadow-md group-hover:shadow-lg transition-shadow duration-300">
+                    <button onclick="video_modal_{{ $result->id }}.showModal()"
+                        class="absolute inset-0 flex flex-col items-center justify-center bg-black/40 hover:bg-black/20 transition-all text-white group/btn cursor-pointer">
+                        <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center mb-2 group-hover/btn:scale-110 transition-transform">
+                            <i class="fas fa-play text-sm"></i>
+                        </div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider">Play Session</span>
+                    </button>
+
+                    <dialog id="video_modal_{{ $result->id }}" class="modal backdrop-blur-sm">
+                        <div class="modal-box w-11/12 max-w-4xl p-0 overflow-hidden bg-black rounded-2xl">
+                            <div class="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md absolute top-0 left-0 right-0 z-10">
+                                <h3 class="text-white font-bold text-sm">Your Exercise Video - {{ $result->created_at->format('d M Y, H:i') }}</h3>
+                                <form method="dialog">
+                                    <button class="btn btn-sm btn-circle btn-ghost text-white">✕</button>
+                                </form>
+                            </div>
+                            <video controls class="w-full aspect-video outline-none">
+                                <source src="{{ Storage::url($result->video_url) }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <form method="dialog" class="modal-backdrop"><button>close</button></form>
+                    </dialog>
                 </div>
 
-                <div class="flex-1 space-y-3">
+                <div class="flex-1 space-y-4">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h5 class="font-bold text-gray-800 text-sm">{{ $result->routine?->rehabilitation?->name ?? 'Unknown Exercise' }}</h5>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase mt-1">{{ \Carbon\Carbon::parse($result->date)->format('d F Y') }}</p>
+                            <h5 class="font-extrabold text-gray-900 text-lg leading-tight">{{ $result->routine?->rehabilitation?->name ?? 'Exercise Session' }}</h5>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-[10px] text-teal-600 font-black uppercase tracking-tighter bg-teal-50 px-2 py-0.5 rounded">{{ \Carbon\Carbon::parse($result->created_at)->format('l, d F Y') }}</span>
+                                <span class="text-[10px] text-gray-400 font-bold uppercase">{{ \Carbon\Carbon::parse($result->created_at)->format('H:i') }}</span>
+                            </div>
                         </div>
                         @if($result->ratingResponse)
-                        <span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-[10px] font-black uppercase">Reviewed</span>
+                        <span class="flex items-center gap-1.5 bg-green-50 text-green-600 px-3 py-1 rounded-full text-[10px] font-black uppercase border border-green-100">
+                            <i class="fas fa-check-circle"></i> Reviewed
+                        </span>
                         @endif
                     </div>
-                    @if($result->ratingResponse && $result->ratingResponse->doctor)
-                    <div class="bg-blue-50 p-3 rounded-xl border border-blue-100 flex gap-3 items-start">
-                        <div class="w-6 h-6 rounded-full bg-blue-200 flex items-center justify-center text-blue-600 text-[10px] flex-shrink-0 mt-0.5"><i class="fas fa-user-md"></i></div>
-                        <div>
-                            <p class="text-[10px] font-black text-blue-700 uppercase mb-1">{{ $result->ratingResponse?->doctor?->name }}</p>
-                            <p class="text-xs text-blue-900 leading-relaxed italic">"{{ $result->ratingResponse?->review_doctor }}"</p>
-                            <a href="{{ Storage::url($result->ratingResponse?->video_doctor) }}" target="_blank" class="btn bg-blue-500 text-white text-xs rounded-md px-2 py-1">View Video</a>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        @if($result->ratingResponse && $result->ratingResponse->doctor)
+                        <div class="bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100 flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600 flex-shrink-0"><i class="fas fa-user-md"></i></div>
+                            <div class="flex-1 overflow-hidden">
+                                <p class="text-[10px] font-black text-indigo-700 uppercase mb-1">Doctor's Feedback</p>
+                                <span class="text-[10px] text-indigo-600 font-black uppercase tracking-tighter bg-indigo-50 px-2 py-0.5 mb-4 rounded">{{ \Carbon\Carbon::parse($result->ratingResponse->created_at)->format('l, d F Y') }} {{ \Carbon\Carbon::parse($result->ratingResponse->created_at)->format('H:i') }}</span>
+                                <p class="text-xs text-indigo-900 leading-relaxed italic line-clamp-2 mb-3">"{{ $result->ratingResponse->review_doctor }}"</p>
+                                <button onclick="doctor_video_{{ $result->id }}.showModal()" class="inline-flex items-center gap-2 text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-lg transition-colors cursor-pointer">
+                                    <i class="fas fa-play-circle"></i> WATCH REVIEW
+                                </button>
+                                <dialog id="doctor_video_{{ $result->id }}" class="modal backdrop-blur-sm">
+                                    <div class="modal-box w-11/12 max-w-4xl p-0 overflow-hidden bg-black rounded-2xl">
+                                        <div class="flex items-center justify-between p-4 bg-indigo-600 absolute top-0 left-0 right-0 z-10">
+                                            <h3 class="text-white font-bold text-sm">Doctor's Video Feedback</h3>
+                                            <form method="dialog"><button class="btn btn-sm btn-circle btn-ghost text-white">✕</button></form>
+                                        </div>
+                                        <video controls class="w-full aspect-video outline-none pt-12">
+                                            <source src="{{ Storage::url($result->ratingResponse->video_doctor) }}" type="video/mp4">
+                                        </video>
+                                    </div>
+                                    <form method="dialog" class="modal-backdrop"><button>close</button></form>
+                                </dialog>
+                            </div>
                         </div>
-                    </div>
-                    @endif
-                    @if($result->ratingResponse && $result->ratingResponse->therapist)
-                    <div class="bg-orange-50 p-3 rounded-xl border border-orange-100 flex gap-3 items-start">
-                        <div class="w-6 h-6 rounded-full bg-orange-200 flex items-center justify-center text-orange-600 text-[10px] flex-shrink-0 mt-0.5"><i class="fas fa-user-nurse"></i></div>
-                        <div>
-                            <p class="text-[10px] font-black text-orange-700 uppercase mb-1">{{$result->ratingResponse?->therapist?->name}}</p>
-                            <p class="text-xs text-orange-900 leading-relaxed italic">"{{$result->ratingResponse?->review_therapist}}"</p>
-                            <a href="{{ Storage::url($result->ratingResponse?->video_therapist) }}" target="_blank" class="btn bg-orange-500 text-white text-xs rounded-md px-2 py-1">View Video</a>
+                        @endif
+
+                        @if($result->ratingResponse && $result->ratingResponse->therapist)
+                        <div class="bg-orange-50/50 p-4 rounded-2xl border border-orange-100 flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 flex-shrink-0"><i class="fas fa-user-nurse"></i></div>
+                            <div class="flex-1 overflow-hidden">
+                                <p class="text-[10px] font-black text-orange-700 uppercase mb-1">Therapist's Feedback</p>
+                                <span class="text-[10px] text-orange-600 font-black uppercase tracking-tighter bg-orange-50 px-2 py-0.5 mb-4 rounded">{{ \Carbon\Carbon::parse($result->ratingResponse->created_at)->format('l, d F Y') }} {{ \Carbon\Carbon::parse($result->ratingResponse->created_at)->format('H:i') }}</span>
+                                <p class="text-xs text-orange-900 leading-relaxed italic line-clamp-2 mb-3">"{{ $result->ratingResponse->review_therapist }}"</p>
+                                <button onclick="therapist_video_{{ $result->id }}.showModal()" class="inline-flex items-center gap-2 text-[10px] font-bold text-white bg-orange-600 hover:bg-orange-700 px-3 py-1.5 rounded-lg transition-colors">
+                                    <i class="fas fa-play-circle"></i> WATCH REVIEW
+                                </button>
+                                <dialog id="therapist_video_{{ $result->id }}" class="modal backdrop-blur-sm">
+                                    <div class="modal-box w-11/12 max-w-4xl p-0 overflow-hidden bg-black rounded-2xl">
+                                        <div class="flex items-center justify-between p-4 bg-orange-600 absolute top-0 left-0 right-0 z-10">
+                                            <h3 class="text-white font-bold text-sm">Therapist's Video Feedback</h3>
+                                            <form method="dialog"><button class="btn btn-sm btn-circle btn-ghost text-white">✕</button></form>
+                                        </div>
+                                        <video controls class="w-full aspect-video outline-none pt-12">
+                                            <source src="{{ Storage::url($result->ratingResponse->video_therapist) }}" type="video/mp4">
+                                        </video>
+                                    </div>
+                                    <form method="dialog" class="modal-backdrop"><button>close</button></form>
+                                </dialog>
+                            </div>
                         </div>
+                        @endif
                     </div>
-                    @endif
                 </div>
             </div>
         </div>

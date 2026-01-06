@@ -77,13 +77,14 @@
                 <div class="h-8 w-px bg-slate-200"></div>
 
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('auth.login') }}" class="px-5 py-2.5 text-sm font-bold text-slate-600 hover:text-[#17B8A6] transition-colors relative group">
-                        Sign In
-                    </a>
-                    <a href="{{ route('auth.register') }}" class="group px-6 py-2.5 bg-[#17B8A6] hover:bg-[#13978b] text-white text-sm font-bold rounded-full shadow-lg shadow-[#17B8A6]/20 hover:shadow-[#17B8A6]/40 transition-all duration-300 flex items-center gap-2 transform active:scale-95">
-                        <i class="fas fa-plus-circle group-hover:rotate-90 transition-transform duration-300"></i>
-                        Create Account
-                    </a>
+
+                                @if (Auth::user())
+                                <a href="{{ route('dashboard') }}" class="w-full py-3 px-4 rounded-xl border-2 border-slate-200 text-slate-600 font-bold flex justify-center hover:border-[#17B8A6] hover:text-[#17B8A6]">Dashboard</a>
+                                
+                                @else
+                                <a href="{{ route('auth.login') }}" class="w-full py-3 rounded-xl border-2 border-slate-200 text-slate-600 font-bold flex justify-center hover:border-[#17B8A6] hover:text-[#17B8A6]">Sign In</a>
+                                <a href="{{ route('auth.register') }}" class="w-full py-3 rounded-xl bg-[#17B8A6] text-white font-bold flex justify-center shadow-lg shadow-[#17B8A6]/20">Create Account</a>
+                                @endif
                 </div>
             </div>
 
@@ -131,8 +132,13 @@
                             <div class="px-6 py-6 flex flex-col gap-4">
                                 <div class="h-px bg-slate-100 my-2"></div>
 
+                                @if (Auth::user())
+                                <a href="{{ route('dashboard') }}" class="w-full py-3 px-4 rounded-xl border-2 border-slate-200 text-slate-600 font-bold flex justify-center hover:border-[#17B8A6] hover:text-[#17B8A6]">Dashboard</a>
+                                
+                                @else
                                 <a href="{{ route('auth.login') }}" class="w-full py-3 rounded-xl border-2 border-slate-200 text-slate-600 font-bold flex justify-center hover:border-[#17B8A6] hover:text-[#17B8A6]">Sign In</a>
                                 <a href="{{ route('auth.register') }}" class="w-full py-3 rounded-xl bg-[#17B8A6] text-white font-bold flex justify-center shadow-lg shadow-[#17B8A6]/20">Create Account</a>
+                                @endif
                             </div>
                         </div>
                     </div>

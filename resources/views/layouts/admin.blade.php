@@ -9,8 +9,7 @@
     <title>Telerehab - Solusi Pemulihan Tangan</title>
 
     <link href="{{ asset('assets/css/fontawesome.min.css') }}" rel="stylesheet">
-    <link
-        rel="stylesheet"
+    <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/erimicel/select2-tailwindcss-theme/dist/select2-tailwindcss-theme-plain.min.css" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -42,36 +41,35 @@
 
     <!-- Bottom Navbar (Mobile) -->
     @include('layouts.partials.mobilenav')
-
     <!-- Main Content Area -->
-    <main class="bg-[#FBFDFE] lg:ml-72 py-6 md:py-6 my-6 min-height-screen">
+    <main class="bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-100 lg:ml-72 min-h-screen py-6 mb-20 md:mb-0">
 
         <!-- Header -->
         @include('layouts.partials.navbar')
 
-        <div id="bg-[#FBFDFE] mainContainer">
+        <div id="mainContainer" class="w-full px-8 mt-6">
             {{ $slot }}
         </div>
     </main>
 
     <script src="{{ asset('assets/js/sweetalert2@11.js') }}"></script>
     @if(session()->has('success-alert'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire("Success!", "{{ session('success-alert') }}", "success");
-        });
-    </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire("Success!", "{{ session('success-alert') }}", "success");
+            });
+        </script>
     @endif
 
     @if(session()->has('error-alert'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire("Failed!", "{{ session('error-alert') }}", "error");
-        });
-    </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire("Failed!", "{{ session('error-alert') }}", "error");
+            });
+        </script>
     @endif
     <script data-navigate-once>
-        document.addEventListener('livewire:init', function() {
+        document.addEventListener('livewire:init', function () {
 
             Livewire.on('success', (message, isClose = true, type = 'success') => {
                 toastr[type](message);
