@@ -37,6 +37,8 @@ class Dashboard extends Component
         $checkRehabilitation = RehabRoutine::where('patient_id', Auth::user()->patient->id)
             ->where('status', 'process')
             ->latest()->first();
-        return view('livewire.patient.dashboard', compact('checkConsultation', 'checkRehabilitation'));
+        $consultationDatas = Meeting::where('patient_id', Auth::user()->patient->id)
+            ->latest()->get();
+        return view('livewire.patient.dashboard', compact('checkConsultation', 'checkRehabilitation', 'consultationDatas'));
     }
 }

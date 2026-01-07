@@ -74,10 +74,13 @@ class RegisteredUserController extends Controller
             }
 
 
-
             event(new Registered($user));
+
             Auth::login($user);
+
             $request->session()->regenerate();
+
+            session()->flash('alert-success', 'Registrasi berhasil!');
         } catch (\Throwable $e) {
             dd($e);
             throw $e;

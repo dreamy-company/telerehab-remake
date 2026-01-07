@@ -26,10 +26,13 @@ use App\Models\RehabType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', action: Welcome::class);
+Route::get('/', action: Welcome::class)->name('welcome');
 
-Route::get('/auth/register', Register::class)->name('auth.register');
-Route::get('/auth/login', Login::class)->name('auth.login');
+Route::middleware(['not-authenticated'])->group(function () {
+    Route::get('/auth/register', Register::class)->name('auth.register');
+    Route::get('/auth/login', Login::class)->name('auth.login');
+});
+
 Route::get('/auth/logout', [Login::class, 'logout'])->name('auth.logout');
 
 // Redirect Dashboard

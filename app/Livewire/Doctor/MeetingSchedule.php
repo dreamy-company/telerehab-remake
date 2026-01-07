@@ -16,7 +16,7 @@ class MeetingSchedule extends Component
 
     public $search = '';
 
-    
+
     public function saveSchedule()
     {
 
@@ -44,7 +44,7 @@ class MeetingSchedule extends Component
                 ->where('doctor_id', Auth::user()->id)
                 ->where('status', 'pending')
                 ->get(),
-          
+
         ]);
     }
 }

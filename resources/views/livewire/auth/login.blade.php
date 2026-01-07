@@ -97,6 +97,9 @@
             <a href="{{ route('auth.register') }}" class="inline-flex items-center justify-center w-full px-8 py-3 rounded-2xl border-2 border-slate-200 text-slate-600 font-bold hover:border-[#17B8A6] hover:text-[#17B8A6] hover:bg-[#17B8A6]/5 transition-all duration-300">
                 Create New Account
             </a>
+            <a href="{{ route('welcome') }}" class="inline-flex items-center justify-center w-full px-8 py-3 rounded-2xl border-2 bg-blue-500 border-blue-500 text-white font-bold hover:border-blue-600 hover:bg-blue-600 transition-all duration-300 mt-4">
+                Back to Home
+            </a>
         </div>
     </div>
 </div>
