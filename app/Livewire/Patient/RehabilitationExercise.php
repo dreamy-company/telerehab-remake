@@ -19,7 +19,7 @@ class RehabilitationExercise extends Component
     {
         $this->rehabRoutineId = $id;
         $this->rehabData = RehabRoutine::with('rehabilitation')->findOrFail($this->rehabRoutineId);
-        $this->results = $this->rehabData->routineResults()->orderBy('created_at','desc')->get();
+        $this->results = $this->rehabData->routineResults()->orderBy('created_at', 'desc')->get();
     }
 
     public function uploadVideo()
@@ -42,7 +42,7 @@ class RehabilitationExercise extends Component
         $this->feedback = null;
         $this->results = $this->rehabData->routineResults()->get();
 
-       return redirect()->route('patient.rehabilitation.exercise', ['id' => $this->rehabRoutineId])->with('success-alert', 'Video uploaded successfully.');
+        return redirect()->route('patient.rehabilitation.exercise', ['id' => $this->rehabRoutineId])->with('success-alert', 'Video uploaded successfully.');
     }
     public function render()
     {
