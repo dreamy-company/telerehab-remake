@@ -24,6 +24,7 @@ class Dashboard extends Component
     {
         $this->patientData = Meeting::with('patient.user')->find($id);
     }
+
     public function saveSchedule()
     {
 
@@ -44,7 +45,7 @@ class Dashboard extends Component
 
 
         $this->patientData = null;
-        return back()->with('success-alert', 'Consultation schedule saved successfully.');
+        return redirect()->route('doctor.dashboard')->with('success-alert', 'Consultation schedule saved successfully.');
     }
     public function render()
     {
