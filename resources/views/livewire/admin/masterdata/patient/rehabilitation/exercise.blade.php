@@ -126,72 +126,106 @@
             <p class="text-gray-500 font-medium">No exercise videos uploaded yet.</p>
         </div>
         @endforelse
-    <dialog id="feedbackModal" class="modal backdrop-blur-sm transition-all duration-300" wire:ignore.self>
-        <div class="modal-box max-w-2xl p-0 overflow-hidden bg-white rounded-2xl shadow-2xl border border-gray-100">
-            <!-- Header -->
-            <div class="bg-teal-600 p-6 text-white flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-comment-medical text-xl"></i>
+        <dialog id="feedbackModal" class="modal backdrop-blur-sm transition-all duration-300" wire:ignore.self>
+    <div class="modal-box max-w-2xl p-0 overflow-hidden bg-white rounded-2xl shadow-2xl border border-gray-100">
+        
+        <div class="bg-teal-600 p-6 text-white flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-comment-medical text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg leading-none">Submit Clinical Feedback</h3>
+                    <p class="text-teal-100 text-[10px] uppercase font-bold tracking-wider mt-1">Reviewing Patient Session</p>
+                </div>
+            </div>
+            <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost hover:bg-black/10 text-white">✕</button>
+            </form>
+        </div>
+
+        <div class="p-8 space-y-6">
+            
+            <div class="space-y-2"
+                 x-data="{ isUploading: false, progress: 0 }"
+                 x-on:livewire-upload-start="isUploading = true"
+                 x-on:livewire-upload-finish="isUploading = false"
+                 x-on:livewire-upload-error="isUploading = false"
+                 x-on:livewire-upload-progress="progress = $event.detail.progress">
+                 
+                <label class="text-xs font-black text-gray-500 uppercase tracking-widest ml-1">Upload Video Feedback</label>
+                
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-opacity duration-200" 
+                         x-show="!isUploading">
+                        <i class="fas fa-video text-teal-500 group-focus-within:text-teal-600"></i>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-lg leading-none">Submit Clinical Feedback</h3>
-                        <p class="text-teal-100 text-[10px] uppercase font-bold tracking-wider mt-1">Reviewing Patient Session</p>
+
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" 
+                         x-show="isUploading" style="display: none;">
+                        <div class="relative w-6 h-6">
+                            <svg class="w-full h-full transform -rotate-90">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="transparent" class="text-gray-200" />
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="transparent" 
+                                        :stroke-dasharray="2 * Math.PI * 10" 
+                                        :stroke-dashoffset="2 * Math.PI * 10 - (progress / 100) * 2 * Math.PI * 10" 
+                                        class="text-teal-500 transition-all duration-150 ease-out" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <input type="file" wire:model="video" 
+                        class="file-input file-input-bordered w-full pl-11 rounded-xl border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all text-sm h-12 disabled:bg-gray-50 disabled:text-gray-400" 
+                        :disabled="isUploading" />
+                        
+                    <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none" 
+                         x-show="isUploading" style="display: none;">
+                        <span class="text-xs font-bold text-teal-600" x-text="progress + '%'"></span>
                     </div>
                 </div>
-                <form method="dialog">
-                    <button class="btn btn-sm btn-circle btn-ghost hover:bg-black/10 text-white">✕</button>
+
+                <div class="h-4 mt-1"> <div x-show="isUploading" class="flex items-center gap-2 text-xs text-teal-600 font-bold animate-pulse" style="display: none;">
+                        <span>Uploading video... please wait.</span>
+                    </div>
+                    <div wire:loading wire:target="video" class="flex items-center gap-2 text-xs text-orange-500 font-bold">
+                        <i class="fas fa-cog fa-spin"></i> Finalizing & Processing...
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-xs font-black text-gray-500 uppercase tracking-widest ml-1">Clinical Evaluation</label>
+                <textarea
+                    wire:model="review"
+                    rows="4"
+                    class="textarea textarea-bordered w-full rounded-xl border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all text-sm p-4 leading-relaxed"
+                    placeholder="Provide detailed feedback on patient's form, range of motion, and progress..."></textarea>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-50">
+                <button wire:click="submitFeedback" 
+                    x-bind:disabled="isUploading"
+                    wire:loading.attr="disabled"
+                    class="flex-1 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-300 disabled:text-gray-500 text-white py-3.5 rounded-xl font-bold shadow-lg shadow-teal-500/20 transition-all flex items-center justify-center gap-2">
+                    
+                    <span wire:loading.remove wire:target="submitFeedback">
+                        <i class="fas fa-paper-plane mr-1"></i> Save & Send Review
+                    </span>
+                    <span wire:loading wire:target="submitFeedback">
+                        <i class="fas fa-circle-notch fa-spin"></i> Saving Feedback...
+                    </span>
+                </button>
+
+                <form method="dialog" class="sm:w-1/3">
+                    <button class="w-full bg-gray-50 hover:bg-gray-100 text-gray-600 py-3.5 rounded-xl font-bold transition-all border border-gray-200">
+                        Cancel
+                    </button>
                 </form>
             </div>
-
-            <div class="p-8 space-y-6">
-                <!-- Video Upload Section -->
-                <div class="space-y-2">
-                    <label class="text-xs font-black text-gray-500 uppercase tracking-widest ml-1">Upload Video Feedback</label>
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <i class="fas fa-video text-teal-500 group-focus-within:text-teal-600"></i>
-                        </div>
-                        <input type="file" wire:model="video" 
-                            class="file-input file-input-bordered w-full pl-11 rounded-xl border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all text-sm h-12" />
-                    </div>
-                    <div wire:loading wire:target="video" class="flex items-center gap-2 text-xs text-teal-600 font-bold mt-2 animate-pulse">
-                        <i class="fas fa-spinner fa-spin"></i> Processing video upload...
-                    </div>
-                </div>
-
-                <!-- Review Text Section -->
-                <div class="space-y-2">
-                    <label class="text-xs font-black text-gray-500 uppercase tracking-widest ml-1">Clinical Evaluation</label>
-                    <textarea
-                        wire:model="review"
-                        rows="4"
-                        class="textarea textarea-bordered w-full rounded-xl border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all text-sm p-4 leading-relaxed"
-                        placeholder="Provide detailed feedback on patient's form, range of motion, and progress..."></textarea>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-50">
-                    <button wire:click="submitFeedback" 
-                        wire:loading.attr="disabled"
-                        class="flex-1 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-300 text-white py-3.5 rounded-xl font-bold shadow-lg shadow-teal-500/20 transition-all flex items-center justify-center gap-2">
-                        <span wire:loading.remove wire:target="submitFeedback">
-                            <i class="fas fa-paper-plane mr-1"></i> Save & Send Review
-                        </span>
-                        <span wire:loading wire:target="submitFeedback">
-                            <i class="fas fa-circle-notch fa-spin"></i> Saving Feedback...
-                        </span>
-                    </button>
-                    <form method="dialog" class="sm:w-1/3">
-                        <button class="w-full bg-gray-50 hover:bg-gray-100 text-gray-600 py-3.5 rounded-xl font-bold transition-all border border-gray-200">
-                            Cancel
-                        </button>
-                    </form>
-                </div>
-            </div>
         </div>
-        <form method="dialog" class="modal-backdrop bg-gray-900/40 backdrop-blur-sm"><button>close</button></form>
-    </dialog>
+    </div>
+    <form method="dialog" class="modal-backdrop bg-gray-900/40 backdrop-blur-sm"><button>close</button></form>
+</dialog>
 
 
 </section>
