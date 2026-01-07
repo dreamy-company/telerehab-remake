@@ -43,15 +43,15 @@
                 </div>
 
                 @if($currentRehabilitation)
-                    <div class="mt-8 bg-slate-800/50 rounded-xl p-4 border border-slate-700 backdrop-blur-sm">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <p class="text-xs font-bold text-emerald-400 uppercase">Active Program</p>
-                        </div>
-                        <p class="text-sm font-semibold text-white leading-relaxed">
-                            {{ $currentRehabilitation->rehabilitation->name ?? 'N/A' }}
-                        </p>
+                <div class="mt-8 bg-slate-800/50 rounded-xl p-4 border border-slate-700 backdrop-blur-sm">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <p class="text-xs font-bold text-emerald-400 uppercase">Active Program</p>
                     </div>
+                    <p class="text-sm font-semibold text-white leading-relaxed">
+                        {{ $currentRehabilitation->rehabilitation->name ?? 'N/A' }}
+                    </p>
+                </div>
                 @endif
 
                 <div class="mt-auto pt-8 flex gap-3">
@@ -60,10 +60,10 @@
                         <i class="fas fa-id-card mr-2"></i> BPJS
                     </a>
                     @if(count($patientData?->patient->photos ?? []) > 0)
-                        <a href="{{ Storage::url($patientData->patient->photos[0]->url) }}" target="_blank"
-                            class="flex-1 btn btn-sm bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300 font-normal">
-                            <i class="fas fa-image mr-2"></i> Photo
-                        </a>
+                    <a href="{{ Storage::url($patientData->patient->photos[0]->url) }}" target="_blank"
+                        class="flex-1 btn btn-sm bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300 font-normal">
+                        <i class="fas fa-image mr-2"></i> Photo
+                    </a>
                     @endif
                 </div>
             </div>
@@ -115,7 +115,9 @@
                     </label>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <!-- <label class="relative cursor-pointer group">
+                        @if ($currentRehabilitation)
+
+                        <label class="relative cursor-pointer group">
                             <input type="radio" wire:model.live="rehabilitationStatus" value="continue"
                                 class="peer sr-only">
                             <div
@@ -137,7 +139,8 @@
                                 <span
                                     class="font-bold text-sm text-slate-600 peer-checked:text-emerald-800">Complete</span>
                             </div>
-                        </label> -->
+                        </label>
+                        @endif
 
                         <label class="relative cursor-pointer group">
                             <input type="radio" wire:model.live="rehabilitationStatus" value="new" class="peer sr-only">
@@ -155,76 +158,76 @@
                 </div>
 
                 @if($rehabilitationStatus === 'new')
-                    <div
-                        class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 animate-in fade-in slide-in-from-top-4 duration-300">
-                        <h4 class="text-sm font-bold text-indigo-800 uppercase tracking-wide mb-5 flex items-center gap-2">
-                            <i class="fas fa-clipboard-list"></i> Setup New Program
-                        </h4>
+                <div
+                    class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <h4 class="text-sm font-bold text-indigo-800 uppercase tracking-wide mb-5 flex items-center gap-2">
+                        <i class="fas fa-clipboard-list"></i> Setup New Program
+                    </h4>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                            <div class="form-control w-full">
-                                <label class="label py-1">
-                                    <span class="label-text font-bold text-slate-700">1. Select Phase <span
-                                            class="text-red-500">*</span></span>
-                                </label>
-                                <select wire:model.live="phase"
-                                    class="select w-full bg-white border-slate-300 focus:border-indigo-500 focus:ring-indigo-500">
-                                    <option value="">-- Choose Phase --</option>
-                                    @foreach ($phases as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('phase') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="form-control w-full relative">
-                                <label class="label py-1">
-                                    <span class="label-text font-bold text-slate-700">2. Select Rehabilitation <span
-                                            class="text-red-500">*</span></span>
-                                    <span wire:loading wire:target="phase"
-                                        class="loading loading-spinner loading-xs text-indigo-500"></span>
-                                </label>
-
-                                <select wire:model="rehabilitation"
-                                    class="select w-full bg-white border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 disabled:bg-slate-100 disabled:text-slate-400"
-                                    @if(!$phase) disabled @endif>
-                                    <option value="">-- Choose Program --</option>
-                                    @foreach ($rehabilitations as $rehab)
-                                        <option value="{{ $rehab->id }}">{{ $rehab->name }}</option>
-                                    @endforeach
-                                </select>
-
-                                @if(!$phase)
-                                    <p class="text-xs text-slate-400 mt-1 italic">Please select a phase first.</p>
-                                @endif
-                                @error('rehabilitation') <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="form-control w-full">
-                                <label class="label py-1">
-                                    <span class="label-text font-bold text-slate-700">Target Completion <span
-                                            class="text-red-500">*</span></span>
-                                </label>
-                                <input type="date" wire:model="targetDate"
-                                    class="input w-full bg-white border-slate-300 focus:border-indigo-500">
-                                @error('targetDate') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="form-control w-full">
-                                <label class="label py-1">
-                                    <span class="label-text font-bold text-slate-700">Specific Goal <span
-                                            class="text-red-500">*</span></span>
-                                </label>
-                                <input type="text" wire:model="goal"
-                                    class="input w-full bg-white border-slate-300 focus:border-indigo-500"
-                                    placeholder="e.g. Full range of motion">
-                                @error('goal') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                            </div>
-
+                        <div class="form-control w-full">
+                            <label class="label py-1">
+                                <span class="label-text font-bold text-slate-700">1. Select Phase <span
+                                        class="text-red-500">*</span></span>
+                            </label>
+                            <select wire:model.live="phase"
+                                class="select w-full bg-white border-slate-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                <option value="">-- Choose Phase --</option>
+                                @foreach ($phases as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('phase') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                         </div>
+
+                        <div class="form-control w-full relative">
+                            <label class="label py-1">
+                                <span class="label-text font-bold text-slate-700">2. Select Rehabilitation <span
+                                        class="text-red-500">*</span></span>
+                                <span wire:loading wire:target="phase"
+                                    class="loading loading-spinner loading-xs text-indigo-500"></span>
+                            </label>
+
+                            <select wire:model="rehabilitation"
+                                class="select w-full bg-white border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 disabled:bg-slate-100 disabled:text-slate-400"
+                                @if(!$phase) disabled @endif>
+                                <option value="">-- Choose Program --</option>
+                                @foreach ($rehabilitations as $rehab)
+                                <option value="{{ $rehab->id }}">{{ $rehab->name }}</option>
+                                @endforeach
+                            </select>
+
+                            @if(!$phase)
+                            <p class="text-xs text-slate-400 mt-1 italic">Please select a phase first.</p>
+                            @endif
+                            @error('rehabilitation') <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-control w-full">
+                            <label class="label py-1">
+                                <span class="label-text font-bold text-slate-700">Target Completion <span
+                                        class="text-red-500">*</span></span>
+                            </label>
+                            <input type="date" wire:model="targetDate"
+                                class="input w-full bg-white border-slate-300 focus:border-indigo-500">
+                            @error('targetDate') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="form-control w-full">
+                            <label class="label py-1">
+                                <span class="label-text font-bold text-slate-700">Specific Goal <span
+                                        class="text-red-500">*</span></span>
+                            </label>
+                            <input type="text" wire:model="goal"
+                                class="input w-full bg-white border-slate-300 focus:border-indigo-500"
+                                placeholder="e.g. Full range of motion">
+                            @error('goal') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                        </div>
+
                     </div>
+                </div>
                 @endif
 
                 <div class="pt-6 mt-8 border-t border-slate-100 flex items-center justify-end gap-4">

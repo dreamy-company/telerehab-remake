@@ -482,7 +482,7 @@
                         <button type="button" 
                                 class="inline-flex justify-center items-center rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-slate-900 transition-all w-full sm:w-auto" 
                                 @click="showModal = false">
-                            lose Details
+                            Close Details
                         </button>
                      </div>
                 </div>

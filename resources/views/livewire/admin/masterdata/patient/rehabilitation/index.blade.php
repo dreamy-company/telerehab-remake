@@ -41,7 +41,7 @@
                         <p class="text-xs text-gray-500">Target Completion Date: <span class="font-medium text-gray-700">{{ \Carbon\Carbon::parse($item->target)->format('F j, Y') }}</span></p>
                     </div>
 
-                    <a href="{{ route((Auth::user()->role === 'doctor' ? 'doctor' : 'therapist') . '.patient.rehabilitation.exercise', ['id' => $patientData->id, 'rehabRoutineId' => $item->id]) }}" 
+                    <a href="{{ route((Auth::user()->role) . '.patient.rehabilitation.exercise', ['id' => $patientData->id, 'rehabRoutineId' => $item->id]) }}" 
                        class="mt-4 inline-block btn {{ $loop->first ? 'bg-teal-600' : 'bg-teal-500' }} hover:bg-teal-700 text-white text-xs font-bold rounded-md px-4 py-2 transition duration-300">
                         <i class="fas fa-arrow-right mr-1"></i> View Exercises
                     </a>

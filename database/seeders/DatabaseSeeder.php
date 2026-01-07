@@ -47,6 +47,14 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
+        User::factory()->create([
+            'name' => 'Therapist User',
+            'email' => 'therapist@me',
+            'role' => 'therapist',
+            'telephone' => '081122334455',
+            'password' => Hash::make('password'),
+        ]);
+
         // patient data
         $patientData = $patientUser->patient()->create([
             'medical_record_number' => '12345678',
@@ -79,16 +87,21 @@ class DatabaseSeeder extends Seeder
                     'rehabilitation_type_id' => 1,
                     'name' => 'Isometric Exercise for Upper Limb',
                     'description' => 'An exercise to strengthen upper limb muscles without joint movement.',
+                    'video_url' => 'https://www.youtube.com/embed/2-Ferf2Nyq8?si=LznlquPVw2WTo7ZB'
                 ],
                 [
                     'rehabilitation_type_id' => 2,
                     'name' => 'Range of Motion Exercise for Knee',
                     'description' => 'An exercise to improve knee joint flexibility and movement range.',
+                    'video_url' => 'https://www.youtube.com/embed/2-Ferf2Nyq8?si=LznlquPVw2WTo7ZB'
+
                 ],
                 [
                     'rehabilitation_type_id' => 3,
                     'name' => 'Strengthening Exercise for Core Muscles',
                     'description' => 'An exercise to enhance core muscle strength and stability.',
+                    'video_url' => 'https://www.youtube.com/embed/2-Ferf2Nyq8?si=LznlquPVw2WTo7ZB'
+
                 ],
             ]
         );

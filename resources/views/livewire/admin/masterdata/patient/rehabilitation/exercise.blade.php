@@ -108,11 +108,13 @@
                     </div>
                     
                     <!-- Review Button (Preserved Functionality) -->
+                     @if(Auth::user()->role === 'therapist' || Auth::user()->role === 'doctor')
                     <div class="pt-2">
                         <button wire:click="openModal({{ $item->id }})" onclick="feedbackModal.showModal()" class="w-full sm:w-auto px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-bold shadow-md transition-all flex items-center justify-center gap-2 text-sm">
                             <i class="fas fa-edit"></i> Write / Edit Review
                         </button>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
