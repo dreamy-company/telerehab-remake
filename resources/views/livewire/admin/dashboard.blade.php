@@ -1,6 +1,6 @@
 <div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="card-modern p-6 bg-blue-50 border-blue-100">
+        <div class="card-modern p-6 bg-white">
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest">Total Patient</p>
@@ -9,7 +9,7 @@
                 <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-500"><i class="fas fa-users"></i></div>
             </div>
         </div>
-        <div class="card-modern p-6 bg-orange-50 border-orange-100">
+        <div class="card-modern p-6 bg-white">
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-[10px] font-black text-orange-400 uppercase tracking-widest">Total Rehabilitations</p>
@@ -18,7 +18,7 @@
                 <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-orange-500"><i class="fas fa-notes-medical"></i></div>
             </div>
         </div>
-        <div class="card-modern p-6 bg-teal-50 border-teal-100">
+        <div class="card-modern p-6 bg-white">
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-[10px] font-black text-teal-400 uppercase tracking-widest">Total Rehabilitations Phases</p>

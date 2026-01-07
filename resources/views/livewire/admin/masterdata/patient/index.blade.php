@@ -3,11 +3,13 @@
 
         <div
             class="p-5 border-b border-slate-100 flex flex-col sm:flex-row justify-end items-center gap-4 bg-slate-50/50">
+            @if(Auth::user()->role !== 'therapist')
             <a @if(Auth::user()->role === 'admin') href="{{ route('admin.patient.create') }}"
-            @elseif(Auth::user()->role === 'doctor') href="{{ route('doctor.patient.create') }}" @endif
+                @elseif(Auth::user()->role === 'doctor') href="{{ route('doctor.patient.create') }}" @endif
                 class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-bold rounded-xl text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all shadow-sm hover:shadow-md">
                 <i class="fas fa-plus mr-2"></i> Add Patient
             </a>
+            @endif
         </div>
 
         <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
@@ -41,103 +43,114 @@
                                 Contacts</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">
                                 Prosthetic</th>
-                            <th class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            <th class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider" colspan="2">
                                 Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-slate-100">
                         @forelse($data as $index => $item)
-                            <tr class="hover:bg-slate-50 transition-colors group">
-                                <td class="px-6 py-4 text-sm text-slate-400 font-medium">{{ $index + 1 }}</td>
+                        <tr class="hover:bg-slate-50 transition-colors group">
+                            <td class="px-6 py-4 text-sm text-slate-400 font-medium">{{ $index + 1 }}</td>
 
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div
+                                        class="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-50 to-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm mr-3 border border-indigo-200">
+                                        {{ substr($item->user->name, 0, 1) }}
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-bold text-slate-900">{{ $item->user->name }}</div>
                                         <div
-                                            class="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-50 to-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm mr-3 border border-indigo-200">
-                                            {{ substr($item->user->name, 0, 1) }}
-                                        </div>
-                                        <div>
-                                            <div class="text-sm font-bold text-slate-900">{{ $item->user->name }}</div>
-                                            <div
-                                                class="text-xs text-slate-500 font-mono bg-slate-100 inline-block px-1 rounded mt-0.5">
-                                                {{ $item->medical_record_number }}
-                                            </div>
+                                            class="text-xs text-slate-500 font-mono bg-slate-100 inline-block px-1 rounded mt-0.5">
+                                            {{ $item->medical_record_number }}
                                         </div>
                                     </div>
-                                </td>
+                                </div>
+                            </td>
 
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex flex-col gap-1">
-                                        <span class="text-xs text-slate-600 flex items-center gap-1">
-                                            <i class="far fa-id-card text-slate-400"></i> {{ $item->bpjs_number }}
-                                        </span>
-                                        <span class="text-xs text-slate-600 flex items-center gap-1">
-                                            <i class="fas fa-phone text-slate-400 text-[10px]"></i>
-                                            {{ $item->user->telephone ?? '-' }}
-                                        </span>
-                                    </div>
-                                </td>
-
-                                <td class="px-6 py-4">
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100 max-w-[150px] truncate">
-                                        {{ $item->prosthetic }}
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex flex-col gap-1">
+                                    <span class="text-xs text-slate-600 flex items-center gap-1">
+                                        <i class="far fa-id-card text-slate-400"></i> {{ $item->bpjs_number }}
                                     </span>
-                                </td>
+                                    <span class="text-xs text-slate-600 flex items-center gap-1">
+                                        <i class="fas fa-phone text-slate-400 text-[10px]"></i>
+                                        {{ $item->user->telephone ?? '-' }}
+                                    </span>
+                                </div>
+                            </td>
 
                             <td class="px-6 py-4">
-    <div class="flex items-center gap-2">
-        <i class="fas fa-dumbbell text-slate-400"></i>
-        <span class="font-bold text-slate-700">
-            {{ $item->active_routines_count }}
-        </span>
-        <span class="text-xs text-slate-500">Routines Submitted</span>
-        @if($item->rehab_routine_id)
-            <a href="{{ route('doctor.patient.rehabilitation.exercise', ['id' => $item->id, 'rehabRoutineId' => $item->rehab_routine_id]) }}"
-                class="text-indigo-600 hover:text-indigo-800 transition-colors">
-                <i class="fas fa-external-link-alt text-xs"></i>
-            </a>
-        @endif
-    </div>
-    
-    @if($item->latest_routine_at)
-        <p class="text-[10px] text-slate-400 mt-1">
-            Last update: {{ \Carbon\Carbon::parse($item->latest_routine_at)->diffForHumans() }}
-        </p>
-    @endif
-</td>
+                                <span
+                                    class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100 max-w-[150px] truncate">
+                                    {{ $item->prosthetic }}
+                                </span>
+                            </td>
 
-                                <td class="px-6 py-4 whitespace-nowrap text-right">
-                                    <div
-                                        class="flex items-center justify-end gap-2 opacity-100 lg:opacity-60 lg:group-hover:opacity-100 transition-opacity">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-dumbbell text-slate-400"></i>
+                                    <span class="font-bold text-slate-700">
+                                        {{ $item->active_routines_count }}
+                                    </span>
+                                    <span class="text-xs text-slate-500">Routines Submitted</span>
+                                    @if($item->rehab_routine_id)
+                                    <a href="{{ route('doctor.patient.rehabilitation.exercise', ['id' => $item->id, 'rehabRoutineId' => $item->rehab_routine_id]) }}"
+                                        class="text-indigo-600 hover:text-indigo-800 transition-colors">
+                                        <i class="fas fa-external-link-alt text-xs"></i>
+                                    </a>
+                                    @endif
+                                </div>
 
-                                        <button wire:click="detail({{ $item->id }})" onclick="patientModal.showModal()"
-                                            class="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors tooltip"
-                                            data-tip="View Details">
-                                            <i class="fas fa-eye text-xs"></i>
-                                        </button>
+                                @if($item->latest_routine_at)
+                                <p class="text-[10px] text-slate-400 mt-1">
+                                    Last update: {{ \Carbon\Carbon::parse($item->latest_routine_at)->diffForHumans() }}
+                                </p>
+                                @endif
+                            </td>
 
-                                        <a href="{{ route('doctor.patient.edit', $item->id) }}"
-                                            class="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-50 text-amber-600 hover:bg-amber-100 transition-colors tooltip"
-                                            data-tip="Edit">
-                                            <i class="fas fa-edit text-xs"></i>
-                                        </a>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <div
+                                    class="flex items-center justify-end gap-2 opacity-100 lg:opacity-60 lg:group-hover:opacity-100 transition-opacity">
 
-                                        <a href="{{ route('doctor.patient.rehabilitation', ['id' => $item->id]) }}"
-                                            class="w-8 h-8 rounded-lg flex items-center justify-center bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors tooltip"
-                                            data-tip="Rehabilitation Program">
-                                            <i class="fas fa-stethoscope text-xs"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+                                    <button wire:click="detail({{ $item->id }})" onclick="patientModal.showModal()"
+                                        class="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors tooltip"
+                                        data-tip="View Details">
+                                        <i class="fas fa-eye text-xs"></i>
+                                    </button>
+
+                                    @if (Auth::user()->role !== 'therapist')
+
+                                    <a href="{{ Auth::user()->role === 'admin' ? route('admin.patient.edit', $item->id) : route('doctor.patient.edit', $item->id) }}"
+                                        class="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-50 text-amber-600 hover:bg-amber-100 transition-colors tooltip"
+                                        data-tip="Edit">
+                                        <i class="fas fa-edit text-xs"></i>
+                                    </a>
+
+
+                                    @endif
+                                    @if (Auth::user()->role === 'admin')
+                                    <button wire:click="delete({{ $item->id }})"
+                                        class="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-50 text-red-600 hover:bg-red-100 transition-colors tooltip"
+                                        data-tip="Delete">
+                                        <i class="fas fa-trash text-xs"></i>
+                                    </button>
+                                    @endif
+                                    <a href="{{ route(Auth::user()->role . '.patient.rehabilitation', ['id' => $item->id]) }}"
+                                        class="w-8 h-8 rounded-lg flex items-center justify-center bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors tooltip"
+                                        data-tip="Rehabilitation Program">
+                                        <i class="fas fa-stethoscope text-xs"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="5" class="px-6 py-12 text-center text-slate-400">
-                                    <i class="far fa-folder-open text-3xl mb-2"></i>
-                                    <p class="text-sm">No patients found in database.</p>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-slate-400">
+                                <i class="far fa-folder-open text-3xl mb-2"></i>
+                                <p class="text-sm">No patients found in database.</p>
+                            </td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -189,9 +202,11 @@
                                 <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Contact
                                     Info</label>
                                 <p class="text-sm text-slate-600"><i class="far fa-envelope mr-1"></i>
-                                    {{ $patientData->user?->email ?? '-' }}</p>
+                                    {{ $patientData->user?->email ?? '-' }}
+                                </p>
                                 <p class="text-sm text-slate-600 mt-1"><i class="fas fa-phone mr-1"></i>
-                                    {{ $patientData->user?->telephone ?? '-' }}</p>
+                                    {{ $patientData->user?->telephone ?? '-' }}
+                                </p>
                             </div>
                         </div>
 
@@ -230,12 +245,12 @@
                                 <i class="far fa-id-card text-lg"></i> BPJS Scan
                             </a>
                             @if($patientData && $patientData->photos)
-                                @foreach($patientData->photos as $photo)
-                                    <a href="{{ Storage::url($photo->url) }}" target="_blank"
-                                        class="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-white hover:border-primary-300 hover:text-primary-600 transition-all">
-                                        <i class="far fa-image text-lg"></i> Photo {{ $loop->iteration }}
-                                    </a>
-                                @endforeach
+                            @foreach($patientData->photos as $photo)
+                            <a href="{{ Storage::url($photo->url) }}" target="_blank"
+                                class="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-white hover:border-primary-300 hover:text-primary-600 transition-all">
+                                <i class="far fa-image text-lg"></i> Photo {{ $loop->iteration }}
+                            </a>
+                            @endforeach
                             @endif
                         </div>
                     </div>
@@ -274,10 +289,10 @@
                                 For
                             </p>
                             <h4 class="font-bold text-slate-800 leading-none">
-                                {{ $patientData ? $patientData->patient->user->name : 'Loading...' }}
+                                {{ $patientData ? $patientData->patient?->user?->name : 'Loading...' }}
                             </h4>
                             <p class="text-xs text-slate-500 mt-1">MR:
-                                {{ $patientData->patient->medical_record_number ?? '-' }}
+                                {{ $patientData->patient?->medical_record_number ?? '-' }}
                             </p>
                         </div>
                     </div>

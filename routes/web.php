@@ -61,6 +61,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('/masterdata/patient', Patient::class)->name('patient');
     Route::get('/masterdata/patient/create', PatientForm::class)->name('patient.create');
     Route::get('/masterdata/patient/{id}/edit', PatientForm::class)->name('patient.edit');
+    Route::get('/patient/{id}/rehabilitation', AdminPatientRehabilitation::class)->name('patient.rehabilitation');
+    Route::get('/patient/{id}/rehabilitation/{rehabRoutineId}/exercise', PatientRehabilitationExercise::class)->name('patient.rehabilitation.exercise');
     Route::get('/masterdata/rehabilitation-phase', AdminRehabType::class)->name('rehabilitation-phase');
     Route::get('/masterdata/rehabilitation-phase/create', RehabTypeForm::class)->name('rehabilitation-phase.create');
     Route::get('/masterdata/rehabilitation-phase/{id}/edit', RehabTypeForm::class)->name('rehabilitation-phase.edit');

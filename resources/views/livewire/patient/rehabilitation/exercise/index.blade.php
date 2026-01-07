@@ -39,7 +39,7 @@
                     </div>
                     <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
                         <span class="text-[10px] font-bold text-gray-400 uppercase block mb-1">Target</span>
-                        <span class="text-sm font-semibold text-gray-700">{{ $rehabData->rehabilitation->rehabRoutines->first()->target }}</span>
+                        <span class="text-sm font-semibold text-gray-700">{{ \Carbon\Carbon::parse($rehabData->rehabilitation->rehabRoutines->first()->target)->format('d M Y') }}</span>
                     </div>
                 </div>
 
