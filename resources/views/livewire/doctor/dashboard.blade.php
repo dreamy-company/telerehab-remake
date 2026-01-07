@@ -408,8 +408,12 @@
 
     <dialog id="consultationModal" class="modal backdrop:backdrop-blur-sm" wire:ignore.self>
         <div class="modal-box w-11/12 max-w-md bg-white rounded-2xl shadow-2xl p-0 overflow-hidden">
+
             <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
-                <h3 class="font-bold text-lg text-slate-800">Set Appointment</h3>
+                <div>
+                    <h3 class="font-bold text-lg text-slate-800">Set Appointment</h3>
+                    <p class="text-xs text-slate-500">Confirm details for the patient.</p>
+                </div>
                 <form method="dialog">
                     <button class="text-slate-400 hover:text-slate-600 transition-colors"
                         wire:click="$set('patientData', null)">
@@ -419,62 +423,84 @@
             </div>
 
             <div class="p-6 space-y-5">
-                <div class="bg-orange-50/50 rounded-xl p-4 border border-orange-100 flex items-center gap-4">
+
+                <div class="bg-blue-50/50 rounded-xl p-4 border border-blue-100 flex items-start gap-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-orange-600 shadow-sm border border-orange-50">
-                        <i class="fas fa-user-check"></i>
+                        class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-blue-600 shadow-sm border border-blue-50">
+                        <i class="fas fa-user"></i>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-orange-400 uppercase tracking-wider mb-0.5">Scheduling For
-                        </p>
-                        <h4 class="font-bold text-slate-800 leading-none">
+                        <p class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-0.5">Patient</p>
+                        <h4 class="font-bold text-slate-800">
                             {{ $patientData ? $patientData->patient->user->name : 'Loading...' }}
                         </h4>
-                        <p class="text-xs text-slate-500 mt-1">MR:
-                            {{ $patientData->patient->medical_record_number ?? '-' }}
-                        </p>
+                        <p class="text-xs text-slate-500 mt-1">Medical Record: <span
+                                class="font-mono">{{ $patientData->patient->medical_record_number ?? '-' }}</span></p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-1">
+                    <div class="space-y-1.5">
                         <label class="text-xs font-bold text-slate-500 uppercase">Date <span
                                 class="text-red-500">*</span></label>
-                        <input type="date" required wire:model="date"
-                            class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-primary-500 text-sm">
-                        @error('date') <span class="text-red-500 text-[10px]">{{ $message }}</span> @enderror
+                        <div class="relative">
+                            <input type="date" required wire:model="date"
+                                class="w-full pl-3 pr-3 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none text-sm font-medium text-slate-700 bg-white">
+                        </div>
+                        @error('date') <span class="text-red-500 text-[10px] block">{{ $message }}</span> @enderror
                     </div>
-                    <div class="space-y-1">
+                    <div class="space-y-1.5">
                         <label class="text-xs font-bold text-slate-500 uppercase">Time <span
                                 class="text-red-500">*</span></label>
-                        <input type="time" required wire:model="time"
-                            class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-primary-500 text-sm">
-                        @error('time') <span class="text-red-500 text-[10px]">{{ $message }}</span> @enderror
+                        <div class="relative">
+                            <input type="time" required wire:model="time"
+                                class="w-full pl-3 pr-3 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none text-sm font-medium text-slate-700 bg-white">
+                        </div>
+                        @error('time') <span class="text-red-500 text-[10px] block">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
-                <div class="space-y-1">
-                    <label class="text-xs font-bold text-slate-500 uppercase">Location <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" required wire:model="location" placeholder="e.g. Room 102"
-                        class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-primary-500 text-sm">
-                    @error('location') <span class="text-red-500 text-[10px]">{{ $message }}</span> @enderror
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase">Meeting Type</label>
+                    <input type="hidden" wire:model="category" value="offline">
+                    <div
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center text-slate-500 cursor-not-allowed select-none">
+                        <i class="fas fa-hospital-user mr-3 text-primary-500"></i>
+                        <span class="text-sm font-semibold">Offline (In-Person Consultation)</span>
+                        <i class="fas fa-lock ml-auto text-xs text-slate-300"></i>
+                    </div>
+                    @error('category') <span class="text-red-500 text-[10px] block">{{ $message }}</span> @enderror
                 </div>
 
-                <input type="hidden" wire:model="category" value="offline">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase">Location / Room <span
+                            class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-map-marker-alt text-slate-400"></i>
+                        </div>
+                        <input type="text" required wire:model="location" placeholder="e.g. Room 102, Main Building"
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none text-sm font-medium text-slate-700">
+                    </div>
+                    @error('location') <span class="text-red-500 text-[10px] block">{{ $message }}</span> @enderror
+                </div>
+
             </div>
 
-            <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end gap-2">
+            <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end gap-3">
                 <form method="dialog">
                     <button
-                        class="px-4 py-2 rounded-lg text-slate-500 hover:bg-slate-200 text-sm font-bold transition-colors"
-                        wire:click="$set('patientData', null)">Cancel</button>
+                        class="px-5 py-2.5 rounded-xl text-slate-600 font-bold hover:bg-slate-200 text-sm transition-colors"
+                        wire:click="$set('patientData', null)">
+                        Cancel
+                    </button>
                 </form>
                 <button wire:click="saveSchedule"
-                    class="px-6 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800 text-sm font-bold shadow-lg transition-all flex items-center gap-2">
-                    <i class="fas fa-check"></i> Confirm
+                    class="px-6 py-2.5 rounded-xl bg-primary-600 text-white font-bold shadow-lg shadow-primary-500/30 hover:bg-primary-700 hover:shadow-primary-500/40 transform active:scale-95 transition-all text-sm flex items-center gap-2">
+                    <i class="fas fa-check"></i> Confirm Schedule
                 </button>
             </div>
+
         </div>
     </dialog>
 
