@@ -20,21 +20,35 @@ use App\Livewire\Patient\Dashboard as PatientDashboard;
 use App\Livewire\Patient\Rehabilitation as PatientRehabilitation;
 use App\Livewire\Patient\RehabilitationExercise;
 use App\Livewire\Admin\PatientRehabilitationExercise;
+use App\Livewire\Auth\EmailVerifed;
+use App\Livewire\Auth\Profile;
+use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Therapist\Dashboard as TherapistDashboard;
 use App\Livewire\Welcome;
 use App\Models\RehabType;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', action: Welcome::class)->name('welcome');
 
+// Authentication Routes
 Route::middleware(['not-authenticated'])->group(function () {
     Route::get('/auth/register', Register::class)->name('auth.register');
     Route::get('/auth/login', Login::class)->name('auth.login');
 });
 
+// Email Verification Notice
+Route::get('/auth/email/{email}/verify', VerifyEmail::class)->middleware('guest')->name(name: 'auth.verification');
+
+Route::get('/email/verify/{id}/{hash}', EmailVerifed::class
+)->middleware(['not-authenticated'])->name('verification.verify');
+// Logout
 Route::get('/auth/logout', [Login::class, 'logout'])->name('auth.logout');
 
+
+// Profile
+Route::get('/{role}/{id}/profile', Profile::class)->middleware(['auth', 'verified'])->name('auth.profile');
 // Redirect Dashboard
 Route::get('/dashboard', function () {
     $checkUser = Auth::user();

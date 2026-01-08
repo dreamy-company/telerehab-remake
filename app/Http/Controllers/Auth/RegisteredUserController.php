@@ -80,7 +80,7 @@ class RegisteredUserController extends Controller
 
             $request->session()->regenerate();
 
-            session()->flash('alert-success', 'Registrasi berhasil!');
+            session()->flash('alert-success', 'Registration Success!');
         } catch (\Throwable $e) {
             dd($e);
             throw $e;

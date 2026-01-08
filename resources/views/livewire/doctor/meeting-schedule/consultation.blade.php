@@ -115,6 +115,7 @@
                     </label>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        @if($haveRehabilitation)
                         @if ($currentRehabilitation)
 
                         <label class="relative cursor-pointer group">
@@ -141,7 +142,6 @@
                             </div>
                         </label>
                         @endif
-
                         <label class="relative cursor-pointer group">
                             <input type="radio" wire:model.live="rehabilitationStatus" value="new" class="peer sr-only">
                             <div
@@ -152,6 +152,8 @@
                                     Program</span>
                             </div>
                         </label>
+                        @endif
+                        
                     </div>
                     @error('rehabilitationStatus') <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
                     @enderror

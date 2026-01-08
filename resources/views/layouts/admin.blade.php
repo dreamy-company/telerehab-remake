@@ -11,6 +11,7 @@
     <link href="{{ asset('assets/css/fontawesome.min.css') }}" rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/erimicel/select2-tailwindcss-theme/dist/select2-tailwindcss-theme-plain.min.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/toastify.min.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 
@@ -54,22 +55,22 @@
 
     <script src="{{ asset('assets/js/sweetalert2@11.js') }}"></script>
     @if(session()->has('success-alert'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                Swal.fire("Success!", "{{ session('success-alert') }}", "success");
-            });
-        </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire("Success!", "{{ session('success-alert') }}", "success");
+        });
+    </script>
     @endif
 
     @if(session()->has('error-alert'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                Swal.fire("Failed!", "{{ session('error-alert') }}", "error");
-            });
-        </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire("Failed!", "{{ session('error-alert') }}", "error");
+        });
+    </script>
     @endif
     <script data-navigate-once>
-        document.addEventListener('livewire:init', function () {
+        document.addEventListener('livewire:init', function() {
 
             Livewire.on('success', (message, isClose = true, type = 'success') => {
                 toastr[type](message);

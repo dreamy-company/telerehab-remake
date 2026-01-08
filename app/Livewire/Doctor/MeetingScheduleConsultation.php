@@ -14,7 +14,7 @@ use Livewire\Component;
 class MeetingScheduleConsultation extends Component
 {
     protected $listeners = ['select2-rehab-initialized' => 'select2RehabInitialized'];
-    public $meetingId, $patientData = null, $phase = null, $rehabilitation = null, $targetDate, $goal, $diagnosis, $medicine, $rehabilitations = [], $currentRehabilitation, $rehabilitationStatus;
+    public $meetingId, $patientData = null, $phase = null, $rehabilitation = null, $targetDate, $goal, $diagnosis, $medicine, $rehabilitations = [], $currentRehabilitation, $rehabilitationStatus, $haveRehabilitation;
 
     public function mount($id)
     {
@@ -26,7 +26,14 @@ class MeetingScheduleConsultation extends Component
                 ->where('status', 'process')
                 ->latest()
                 ->first();
+
+            $this->haveRehabilitation = RehabRoutine::where('patient_id', $this->patientData->patient_id)->exists();
+
+            if(!$this->haveRehabilitation){
+                $this->rehabilitationStatus = 'new';
+            }
         }
+
     }
 
     public function select2RehabInitialized()

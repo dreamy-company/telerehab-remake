@@ -1,5 +1,11 @@
-<div class="mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+<div class="mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10" @echo:update-channel,update-event.window="$wire.$refresh()">
 
+    <div id="sonner-toaster"></div>
+
+    <div x-data
+        @echo:update-channel,.update-event.window="window.toast.success($event.detail.message)">
+    </div>
+    
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div
             class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center group hover:border-blue-300 transition-all">
@@ -10,6 +16,7 @@
             <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl">
                 <i class="fas fa-users"></i>
             </div>
+
         </div>
 
         <div
@@ -22,11 +29,11 @@
                 class="w-12 h-12 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center text-xl relative">
                 <i class="fas fa-inbox"></i>
                 @if($totalConsultationRequest > 0)
-                    <span class="absolute top-0 right-0 -mt-1 -mr-1 flex h-3 w-3">
-                        <span
-                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
-                    </span>
+                <span class="absolute top-0 right-0 -mt-1 -mr-1 flex h-3 w-3">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+                </span>
                 @endif
             </div>
         </div>
@@ -43,124 +50,104 @@
         </div>
     </div>
 
-    <div x-data="{ activeTab: 'requests' }"
-        class="bg-white rounded-3xl shadow-xl shadow-slate-200/40 border border-slate-200 overflow-hidden min-h-[450px] flex flex-col">
-
-        <div
-            class="px-6 py-5 border-b border-slate-100 bg-slate-50/30 flex flex-col md:flex-row md:items-center justify-between gap-5">
-            <div class="flex flex-col gap-2">
-                <h2 class="text-lg font-bold text-slate-800">Consultation Manager</h2>
-                <div class="inline-flex bg-slate-100 p-1 rounded-xl w-fit">
-                    <button @click="activeTab = 'requests'"
-                        :class="activeTab === 'requests' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'"
-                        class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 cursor-pointer">
-                        <span>Requests</span>
-                        <span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-orange-100 text-orange-700">
-                            {{ count($dataConsultationRequest) }}
-                        </span>
-                    </button>
-                    <button @click="activeTab = 'upcoming'"
-                        :class="activeTab === 'upcoming' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'"
-                        class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 cursor-pointer">
-                        <span>Upcoming</span>
-                        <span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-blue-100 text-blue-700">
-                            {{ count($dataMeetingSchedule) }}
-                        </span>
-                    </button>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Consultation Requests -->
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+            <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800">Consultation Requests</h2>
+                        <span class="text-xs text-orange-600 font-bold">{{ count($dataConsultationRequest) }} pending</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="flex-grow relative bg-white">
-
-            <div x-show="activeTab === 'requests'" x-transition.opacity class="absolute inset-0 overflow-auto">
+            <div class="flex-grow overflow-auto">
                 <table class="min-w-full divide-y divide-slate-100">
-                    <thead class="bg-slate-50/80 backdrop-blur sticky top-0 z-10">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                Patient</th>
-                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                Need</th>
-                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                Time</th>
-                            <th class="px-6 py-3 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                Action</th>
-                        </tr>
-                    </thead>
                     <tbody class="divide-y divide-slate-100">
                         @forelse($dataConsultationRequest as $item)
-                            <tr class="hover:bg-orange-50/40 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold">
-                                            {{ substr($item->patient?->user?->name ?? 'U', 0, 1) }}
-                                        </div>
-                                        <span
-                                            class="font-bold text-sm text-slate-700">{{ $item->patient?->user?->name }}</span>
+                        <tr class="hover:bg-orange-50/40 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold">
+                                        {{ substr($item->patient?->user?->name ?? 'U', 0, 1) }}
                                     </div>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-slate-600">{{ $item->patient?->prosthetic ?? '-' }}</td>
-                                <td class="px-6 py-4 text-sm text-slate-500">{{ $item->created_at->format('d M, H:i') }}
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <button onclick="consultationModal.showModal()"
-                                        wire:click="setConsultation({{ $item->id }})"
-                                        class="btn btn-sm bg-slate-900 text-white hover:bg-slate-800 border-none">Set
-                                        Schedule</button>
-                                </td>
-                            </tr>
+                                    <div>
+                                        <span class="font-bold text-sm text-slate-700">{{ $item->patient?->user?->name }}</span>
+                                        <p class="text-xs text-slate-500">{{ $item->patient?->prosthetic ?? '-' }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <button onclick="consultationModal.showModal()" wire:click="setConsultation({{ $item->id }})"
+                                    class="text-xs font-bold px-3 py-2 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 transition-colors">
+                                    Schedule
+                                </button>
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="4" class="text-center py-10 text-slate-400 text-sm">No new requests</td>
-                            </tr>
+                        <tr>
+                            <td colspan="2" class="text-center py-8 text-slate-400 text-sm">
+                                <i class="far fa-inbox text-2xl mb-2"></i>
+                                <p>No new requests</p>
+                            </td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            <div x-show="activeTab === 'upcoming'" x-cloak x-transition.opacity class="absolute inset-0 overflow-auto">
+        <!-- Upcoming Schedules -->
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+            <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800">Upcoming Schedules</h2>
+                        <span class="text-xs text-blue-600 font-bold">{{ count($dataMeetingSchedule) }} scheduled</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-grow overflow-auto">
                 <table class="min-w-full divide-y divide-slate-100">
-                    <thead class="bg-slate-50/80 backdrop-blur sticky top-0 z-10">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                Patient</th>
-                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                Scheduled At</th>
-                            <th class="px-6 py-3 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                Action</th>
-                        </tr>
-                    </thead>
                     <tbody class="divide-y divide-slate-100">
                         @forelse($dataMeetingSchedule as $item)
-                            <tr class="hover:bg-blue-50/40 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">
-                                            {{ substr($item->patient?->user?->name ?? 'U', 0, 1) }}
-                                        </div>
-                                        <span
-                                            class="font-bold text-sm text-slate-700">{{ $item->patient?->user?->name }}</span>
+                        <tr class="hover:bg-blue-50/40 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">
+                                        {{ substr($item->patient?->user?->name ?? 'U', 0, 1) }}
                                     </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-2 text-sm font-bold text-slate-700">
-                                        <i class="far fa-clock text-blue-500"></i>
-                                        {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d M') : '-' }},
-                                        {{ $item->time ? \Carbon\Carbon::parse($item->time)->format('H:i') : '-' }}
+                                    <div>
+                                        <span class="font-bold text-sm text-slate-700">{{ $item->patient?->user?->name }}</span>
+                                        <p class="text-xs text-slate-500 flex items-center gap-1">
+                                            <i class="far fa-clock text-blue-500 text-[10px]"></i>
+                                            {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d M') : '-' }}, {{ $item->time ? \Carbon\Carbon::parse($item->time)->format('H:i') : '-' }}
+                                        </p>
                                     </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <a href="{{ route('doctor.meeting-schedule.consultation', ['id' => $item->id]) }}"
-                                        class="btn btn-sm bg-primary-600 text-white hover:bg-primary-700 border-none">Start
-                                        Session</a>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <a href="{{ route('doctor.meeting-schedule.consultation', ['id' => $item->id]) }}"
+                                    class="text-xs font-bold px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">
+                                    Start Consultation
+                                </a>
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="3" class="text-center py-10 text-slate-400 text-sm">No upcoming schedules</td>
-                            </tr>
+                        <tr>
+                            <td colspan="2" class="text-center py-8 text-slate-400 text-sm">
+                                <i class="far fa-calendar text-2xl mb-2"></i>
+                                <p>No upcoming schedules</p>
+                            </td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -204,96 +191,96 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-slate-100">
                     @forelse($dataPatients as $index => $item)
-                        <tr class="hover:bg-slate-50 transition-colors group">
-                            <td class="px-6 py-4 text-sm text-slate-400 font-medium">{{ $index + 1 }}</td>
+                    <tr class="hover:bg-slate-50 transition-colors group">
+                        <td class="px-6 py-4 text-sm text-slate-400 font-medium">{{ $index + 1 }}</td>
 
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div
-                                        class="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-50 to-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm mr-3 border border-indigo-200">
-                                        {{ substr($item->user->name, 0, 1) }}
-                                    </div>
-                                    <div>
-                                        <div class="text-sm font-bold text-slate-900">{{ $item->user->name }}</div>
-                                        <div
-                                            class="text-xs text-slate-500 font-mono bg-slate-100 inline-block px-1 rounded mt-0.5">
-                                            {{ $item->medical_record_number }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex flex-col gap-1">
-                                    <span class="text-xs text-slate-600 flex items-center gap-1">
-                                        <i class="far fa-id-card text-slate-400"></i> {{ $item->bpjs_number }}
-                                    </span>
-                                    <span class="text-xs text-slate-600 flex items-center gap-1">
-                                        <i class="fas fa-phone text-slate-400 text-[10px]"></i>
-                                        {{ $item->user->telephone ?? '-' }}
-                                    </span>
-                                </div>
-                            </td>
-
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100 max-w-[150px] truncate">
-                                    {{ $item->prosthetic }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4">
-    <div class="flex items-center gap-2">
-        <i class="fas fa-dumbbell text-slate-400"></i>
-        <span class="font-bold text-slate-700">
-            {{ $item->active_routines_count }}
-        </span>
-        <span class="text-xs text-slate-500">Routines Submitted</span>
-        @if($item->rehab_routine_id)
-            <a href="{{ route('doctor.patient.rehabilitation.exercise', ['id' => $item->id, 'rehabRoutineId' => $item->rehab_routine_id]) }}"
-                class="text-indigo-600 hover:text-indigo-800 transition-colors">
-                <i class="fas fa-external-link-alt text-xs"></i>
-            </a>
-        @endif
-    </div>
-    
-    @if($item->latest_routine_at)
-        <p class="text-[10px] text-slate-400 mt-1">
-            Last update: {{ \Carbon\Carbon::parse($item->latest_routine_at)->diffForHumans() }}
-        </p>
-    @endif
-</td>
-
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
                                 <div
-                                    class="flex items-center justify-end gap-2 opacity-100 lg:opacity-60 lg:group-hover:opacity-100 transition-opacity">
-
-                                    <button wire:click="detail({{ $item->id }})" onclick="patientModal.showModal()"
-                                        class="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors tooltip"
-                                        data-tip="View Details">
-                                        <i class="fas fa-eye text-xs"></i>
-                                    </button>
-
-                                    <a href="{{ route('doctor.patient.edit', $item->id) }}"
-                                        class="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-50 text-amber-600 hover:bg-amber-100 transition-colors tooltip"
-                                        data-tip="Edit">
-                                        <i class="fas fa-edit text-xs"></i>
-                                    </a>
-
-                                    <a href="{{ route('doctor.patient.rehabilitation', ['id' => $item->id]) }}"
-                                        class="w-8 h-8 rounded-lg flex items-center justify-center bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors tooltip"
-                                        data-tip="Rehabilitation Program">
-                                        <i class="fas fa-stethoscope text-xs"></i>
-                                    </a>
+                                    class="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-50 to-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm mr-3 border border-indigo-200">
+                                    {{ substr($item->user->name, 0, 1) }}
                                 </div>
-                            </td>
-                        </tr>
+                                <div>
+                                    <div class="text-sm font-bold text-slate-900">{{ $item->user->name }}</div>
+                                    <div
+                                        class="text-xs text-slate-500 font-mono bg-slate-100 inline-block px-1 rounded mt-0.5">
+                                        {{ $item->medical_record_number }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-col gap-1">
+                                <span class="text-xs text-slate-600 flex items-center gap-1">
+                                    <i class="far fa-id-card text-slate-400"></i> {{ $item->bpjs_number }}
+                                </span>
+                                <span class="text-xs text-slate-600 flex items-center gap-1">
+                                    <i class="fas fa-phone text-slate-400 text-[10px]"></i>
+                                    {{ $item->user->telephone ?? '-' }}
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <span
+                                class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100 max-w-[150px] truncate">
+                                {{ $item->prosthetic }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-dumbbell text-slate-400"></i>
+                                <span class="font-bold text-slate-700">
+                                    {{ $item->active_routines_count }}
+                                </span>
+                                <span class="text-xs text-slate-500">Routines Submitted</span>
+                                @if($item->rehab_routine_id)
+                                <a href="{{ route('doctor.patient.rehabilitation.exercise', ['id' => $item->id, 'rehabRoutineId' => $item->rehab_routine_id]) }}"
+                                    class="text-indigo-600 hover:text-indigo-800 transition-colors">
+                                    <i class="fas fa-external-link-alt text-xs"></i>
+                                </a>
+                                @endif
+                            </div>
+
+                            @if($item->latest_routine_at)
+                            <p class="text-[10px] text-slate-400 mt-1">
+                                Last update: {{ \Carbon\Carbon::parse($item->latest_routine_at)->diffForHumans() }}
+                            </p>
+                            @endif
+                        </td>
+
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div
+                                class="flex items-center justify-end gap-2 opacity-100 lg:opacity-60 lg:group-hover:opacity-100 transition-opacity">
+
+                                <button wire:click="detail({{ $item->id }})" onclick="patientModal.showModal()"
+                                    class="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors tooltip"
+                                    data-tip="View Details">
+                                    <i class="fas fa-eye text-xs"></i>
+                                </button>
+
+                                <a href="{{ route('doctor.patient.edit', $item->id) }}"
+                                    class="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-50 text-amber-600 hover:bg-amber-100 transition-colors tooltip"
+                                    data-tip="Edit">
+                                    <i class="fas fa-edit text-xs"></i>
+                                </a>
+
+                                <a href="{{ route('doctor.patient.rehabilitation', ['id' => $item->id]) }}"
+                                    class="w-8 h-8 rounded-lg flex items-center justify-center bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors tooltip"
+                                    data-tip="Rehabilitation Program">
+                                    <i class="fas fa-stethoscope text-xs"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
                     @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-slate-400">
-                                <i class="far fa-folder-open text-3xl mb-2"></i>
-                                <p class="text-sm">No patients found in database.</p>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td colspan="5" class="px-6 py-12 text-center text-slate-400">
+                            <i class="far fa-folder-open text-3xl mb-2"></i>
+                            <p class="text-sm">No patients found in database.</p>
+                        </td>
+                    </tr>
                     @endforelse
                 </tbody>
             </table>
@@ -345,9 +332,11 @@
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Contact
                                 Info</label>
                             <p class="text-sm text-slate-600"><i class="far fa-envelope mr-1"></i>
-                                {{ $patientData->user?->email ?? '-' }}</p>
+                                {{ $patientData->user?->email ?? '-' }}
+                            </p>
                             <p class="text-sm text-slate-600 mt-1"><i class="fas fa-phone mr-1"></i>
-                                {{ $patientData->user?->telephone ?? '-' }}</p>
+                                {{ $patientData->user?->telephone ?? '-' }}
+                            </p>
                         </div>
                     </div>
 
@@ -385,12 +374,12 @@
                             <i class="far fa-id-card text-lg"></i> BPJS Scan
                         </a>
                         @if($patientData && $patientData->photos)
-                            @foreach($patientData->photos as $photo)
-                                <a href="{{ Storage::url($photo->url) }}" target="_blank"
-                                    class="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-white hover:border-primary-300 hover:text-primary-600 transition-all">
-                                    <i class="far fa-image text-lg"></i> Photo {{ $loop->iteration }}
-                                </a>
-                            @endforeach
+                        @foreach($patientData->photos as $photo)
+                        <a href="{{ Storage::url($photo->url) }}" target="_blank"
+                            class="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-white hover:border-primary-300 hover:text-primary-600 transition-all">
+                            <i class="far fa-image text-lg"></i> Photo {{ $loop->iteration }}
+                        </a>
+                        @endforeach
                         @endif
                     </div>
                 </div>

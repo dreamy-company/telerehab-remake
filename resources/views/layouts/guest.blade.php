@@ -154,7 +154,7 @@
                 Swal.fire({ title: "Gagal!", text: message, icon: "error", confirmButtonColor: '#17B8A6' });
             });
             Livewire.on('alert-success', (message) => {
-                Swal.fire({ title: "Berhasil!", text: message, icon: "success", confirmButtonColor: '#17B8A6' });
+                Swal.fire({ title: "Success!", text: message, icon: "success", confirmButtonColor: '#17B8A6' });
             });
         });
     </script>

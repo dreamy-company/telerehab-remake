@@ -1,4 +1,4 @@
-<div class="space-y-6">
+<div class="space-y-6" @echo:update-channel,update-event.window="$wire.$refresh()">
     <!-- Hero Section: Current Rehabilitation -->
     <div
         class="relative w-full rounded-3xl overflow-hidden bg-white shadow-xl shadow-teal-900/5 border border-slate-100 group">
