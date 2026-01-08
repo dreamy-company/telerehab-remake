@@ -50,9 +50,6 @@
                             <p style="margin: 0; color: #94a3b8; font-size: 12px; line-height: 1.5; text-transform: uppercase; letter-spacing: 1px;">
                                 &copy; {{ date('Y') }} {{ config('app.name') }} Inc.
                             </p>
-                            <p style="margin: 8px 0 0 0; color: #cbd5e1; font-size: 12px;">
-                                Jakarta, Indonesia
-                            </p>
                         </td>
                     </tr>
                 </table>

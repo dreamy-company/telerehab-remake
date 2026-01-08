@@ -44,16 +44,16 @@
                         }
                      }" class="relative notranslate">
 
-                    <button @click="open = !open" @click.away="open = false"
+                    <!-- <button @click="open = !open" @click.away="open = false"
                         class="flex items-center gap-2 px-3 py-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-full shadow-sm transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-[#17B8A6]/20">
                         <span class="text-lg leading-none filter drop-shadow-sm" x-text="flag"></span>
                         <span class="text-sm font-bold text-slate-600 group-hover:text-slate-800 w-5"
                             x-text="currentLang"></span>
                         <i class="fas fa-chevron-down text-[10px] text-slate-400 transition-transform duration-200"
                             :class="{'rotate-180': open}"></i>
-                    </button>
+                    </button> -->
 
-                    <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                    <!-- <div x-show="open" x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 translate-y-2 scale-95"
                         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
                         x-transition:leave="transition ease-in duration-150"
@@ -71,7 +71,7 @@
                                 <span class="text-lg">🇮🇩</span> Indonesia
                             </button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="h-8 w-px bg-slate-200"></div>

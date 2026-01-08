@@ -43,12 +43,12 @@
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between bg-teal-50/50 p-3 rounded-lg border border-teal-100">
+                <!-- <div class="flex items-center justify-between bg-teal-50/50 p-3 rounded-lg border border-teal-100">
                     <span class="text-xs font-bold text-teal-800 uppercase">Current Status</span>
                     <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-teal-100 text-teal-700 uppercase">
                         {{ $rehabData->rehabilitation->rehabRoutines->first()->status }}
                     </span>
-                </div>
+                </div> -->
             </div>
 
             <div class="mt-auto pt-6 border-t border-dashed border-gray-200">

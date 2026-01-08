@@ -6,6 +6,7 @@ use App\Models\Meeting;
 use App\Models\Rehab;
 use App\Models\RehabType;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -28,6 +29,8 @@ class MeetingSchedule extends Component
             'diagnosis' => 'required|string',
             'medicine' => 'required|string',
         ]);
+
+        
         return redirect()->route('doctor.consultation')->with('success-alert', 'Consultation schedule saved successfully.');
     }
     public function render()

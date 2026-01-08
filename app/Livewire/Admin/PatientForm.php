@@ -18,7 +18,7 @@ use Livewire\WithFileUploads;
 class PatientForm extends Component
 {
     use WithFileUploads;
-    public $patientId, $userId, $name, $email, $password, $telephone, $medical_record_number, $bpjs_number, $bpjs_card, $patient_condition = [], $address, $prosthetic, $prosthetic_since, $old_patient_condition, $old_bpjs_card;
+    public $patientId, $userId, $name, $email, $password, $country, $telephone, $medical_record_number, $bpjs_number, $bpjs_card, $patient_condition = [], $address, $prosthetic, $prosthetic_since, $old_patient_condition, $old_bpjs_card;
 
 
 
@@ -30,6 +30,7 @@ class PatientForm extends Component
             $this->userId = $patientData->user->id;
             $this->name = $patientData->user->name;
             $this->email = $patientData->user->email;
+            $this->country = $patientData->user->country;
             $this->telephone = $patientData->user->telephone;
             $this->medical_record_number = $patientData->medical_record_number;
             $this->bpjs_number = $patientData->bpjs_number;
@@ -56,6 +57,7 @@ class PatientForm extends Component
                     : 'required|min:6',
 
                 'telephone' => 'required',
+                'country' => 'required',
 
                 'medical_record_number' => [
                     'required',
@@ -87,6 +89,7 @@ class PatientForm extends Component
                 [
                     'name' => $this->name,
                     'email' => $this->email,
+                    'country' => $this->country,
                     'telephone' => $this->telephone,
                     'role' => 'patient',
                     'password' => $this->password

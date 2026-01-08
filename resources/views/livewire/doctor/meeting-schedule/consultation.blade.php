@@ -76,7 +76,7 @@
                     <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
                         <i class="fas fa-stethoscope text-primary-600"></i> Consultation Result
                     </h3>
-                    <span class="text-xs font-medium text-slate-400">{{ now()->format('d M Y') }}</span>
+                    <!-- <span class="text-xs font-medium text-slate-400">{{ now()->format('d M Y') }}</span> -->
                 </div>
 
                 <div class="space-y-6">

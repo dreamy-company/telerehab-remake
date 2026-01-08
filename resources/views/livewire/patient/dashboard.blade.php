@@ -14,11 +14,11 @@
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div class="max-w-xl">
 
-                    <div
+                    <!-- <div
                         class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-100/80 border border-teal-200 text-teal-700 text-[11px] font-bold uppercase tracking-wider mb-4">
                         <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
                         Current Program
-                    </div>
+                    </div> -->
 
                     <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">
                         {{ $checkRehabilitation->rehabilitation->name ?? 'Start Your Journey' }}

@@ -3,10 +3,12 @@
 namespace App\Livewire\Doctor;
 
 use App\Events\UpdateEvent;
+use App\Mail\ScheduleEmail;
 use App\Models\Meeting;
 use App\Models\Patient;
 use App\Models\RehabRoutine;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -56,9 +58,19 @@ class Dashboard extends Component
             'location' => $this->location,
         ]);
 
-
-        $this->patientData = null;
+        $scheduleDetails = [
+            'name' => $this->patientData->patient->user->name,
+            'date' => $this->date,
+            'time' => $this->time,
+            'location' => $this->location,
+            'doctor' => Auth::user()->name,
+        ];
+        Mail::to($this->patientData->patient->user->email)->send(
+            new ScheduleEmail($scheduleDetails)
+        );
+       
         broadcast(new UpdateEvent('New Schedule'))->toOthers();
+        $this->patientData = null;
         return redirect()->route('doctor.dashboard')->with('success-alert', 'Consultation schedule saved successfully.');
     }
     public function render()

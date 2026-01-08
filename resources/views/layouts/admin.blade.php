@@ -102,7 +102,10 @@
             });
 
             Livewire.on('alert-success', (message) => {
-                Swal.fire(message, "success");
+                Swal.fire({
+                    title: message,
+                    icon: "success",
+                });
             });
 
             Livewire.on('alert-delete', (message) => {

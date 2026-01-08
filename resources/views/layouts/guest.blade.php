@@ -50,7 +50,7 @@
         <div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-3xl mix-blend-multiply opacity-60 animate-blob animation-delay-2000"></div>
     </div>
 
-    <div class="absolute top-12 right-6 z-50">
+    <!-- <div class="absolute top-12 right-6 z-50">
         <div x-data="{
                 open: false,
                 currentLang: 'EN', // Default awal adalah Inggris
@@ -121,7 +121,7 @@
             </div>
 
         </div>
-    </div>
+    </div> -->
 
     <div class="w-full max-w-5xl relative z-10 overflow-y-auto">
         {{ $slot }}
@@ -130,34 +130,34 @@
     @livewireScripts
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <div id="google_translate_element" class="hidden"></div>
+    <!-- <div id="google_translate_element" class="hidden"></div> -->
     <script>
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,id',
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
+        // function googleTranslateElementInit() {
+        //     new google.translate.TranslateElement({
+        //         pageLanguage: 'en',
+        //         includedLanguages: 'en,id',
+        //         autoDisplay: false
+        //     }, 'google_translate_element');
+        // }
 
-        function triggerGoogleTranslate(lang) {
-            const select = document.querySelector('.goog-te-combo');
-            if (select) {
-                select.value = lang;
-                select.dispatchEvent(new Event('change'));
-            }
-        }
+        // function triggerGoogleTranslate(lang) {
+        //     const select = document.querySelector('.goog-te-combo');
+        //     if (select) {
+        //         select.value = lang;
+        //         select.dispatchEvent(new Event('change'));
+        //     }
+        // }
 
         // Listener Alert
         document.addEventListener('livewire:init', function() {
             Livewire.on('alert-error', (message) => {
-                Swal.fire({ title: "Gagal!", text: message, icon: "error", confirmButtonColor: '#17B8A6' });
+                Swal.fire({ title: "Failed!", text: message, icon: "error", confirmButtonColor: '#17B8A6' });
             });
             Livewire.on('alert-success', (message) => {
                 Swal.fire({ title: "Success!", text: message, icon: "success", confirmButtonColor: '#17B8A6' });
             });
         });
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <!-- <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> --> 
 </body>
 </html>
