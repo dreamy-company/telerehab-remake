@@ -73,7 +73,7 @@
     <div id="toastAlert" class="fixed top-10 left-1/2 transform -translate-x-1/2 bg-white p-6 rounded-3xl shadow-2xl border border-teal-100 z-[9999] hidden items-center gap-5 min-w-[320px]">
         <div class="w-14 h-14 bg-green-50 text-green-500 rounded-2xl flex items-center justify-center text-2xl"><i class="fas fa-check-circle"></i></div>
         <div>
-            <h5 class="font-black text-gray-900" id="alertHead">Berhasil!</h5>
+            <h5 class="font-black text-gray-900" id="alertHead">Success!</h5>
             <p class="text-xs text-gray-400" id="alertBody">Data telah diperbarui.</p>
         </div>
     </div>
@@ -107,7 +107,7 @@
 
             Livewire.on('delete-success', (message) => {
                 Swal.fire({
-                    title: "Berhasil!",
+                    title: "Success!",
                     text: message,
                     icon: "success",
                     confirmButtonText: "OK",

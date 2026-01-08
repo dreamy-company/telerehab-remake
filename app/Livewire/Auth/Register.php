@@ -2,11 +2,14 @@
 
 namespace App\Livewire\Auth;
 
+use App\Mail\VerifyEmailMail;
 use App\Models\Patient;
 use App\Models\PatientPhoto;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -22,7 +25,7 @@ class Register extends Component
     public $totalSteps = 3;
 
     // Data Properties
-    public $name, $email, $password, $telephone; // Step 1
+    public $name, $email, $password,$country, $telephone; // Step 1
     public $address, $medical_record_number, $prosthetic, $prosthetic_since; // Step 2
     public $bpjs_number, $bpjs_card; // Step 3
 
@@ -32,7 +35,7 @@ class Register extends Component
     // Judul Step untuk UI
     public function getStepTitleProperty()
     {
-        return match($this->currentStep) {
+        return match ($this->currentStep) {
             1 => 'Buat Akun Baru',
             2 => 'Informasi Medis',
             3 => 'Dokumen Pendukung',
@@ -41,7 +44,7 @@ class Register extends Component
 
     public function getStepDescriptionProperty()
     {
-        return match($this->currentStep) {
+        return match ($this->currentStep) {
             1 => 'Lengkapi data diri dan kontak Anda.',
             2 => 'Detail alamat dan kebutuhan prostetik.',
             3 => 'Upload foto kondisi & kartu BPJS.',
@@ -72,9 +75,11 @@ class Register extends Component
             $this->validate([
                 'name' => 'required|string|min:3',
                 'email' => 'required|email|unique:users,email',
-                'telephone' => 'required|numeric',
+                'country' => 'required|string',
+                'telephone' => 'required|numeric|min:10|unique:users,telephone',
                 'password' => 'required|min:6',
             ]);
+            
         } elseif ($this->currentStep == 2) {
             $this->validate([
                 'address' => 'required|string|min:10',
@@ -88,6 +93,7 @@ class Register extends Component
     // Fungsi Utama: Register (Menggantikan Store)
     public function register()
     {
+        
         // 1. Validasi Step Terakhir (Step 3)
         $this->validate([
             'bpjs_number' => 'nullable|unique:patients,bpjs_number',
@@ -102,6 +108,7 @@ class Register extends Component
                 'name' => $this->name,
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
+                'country' => $this->country,
                 'telephone' => $this->telephone,
                 'role' => 'patient',
             ]);
@@ -133,12 +140,9 @@ class Register extends Component
                     ]);
                 }
             }
-
-                        // 6. Login User & Redirect to Dashboard
-                        Auth::login($user);
-                        $this->dispatch('alert-success', 'Registrasi Berhasil!');
-                        return redirect()->route('patient.dashboard');
-
+            
+            // 7. Redirect to verify email page with success message
+            return redirect()->route('auth.verification', encrypt($user->email))->with('success-alert', 'Registration successful! Please verify your email.');
         } catch (ValidationException $e) {
             $this->dispatch('alert-error', collect($e->errors())->flatten()->first());
         } catch (\Exception $e) {

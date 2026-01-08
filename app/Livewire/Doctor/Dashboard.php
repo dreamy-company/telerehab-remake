@@ -2,11 +2,13 @@
 
 namespace App\Livewire\Doctor;
 
+use App\Events\UpdateEvent;
 use App\Models\Meeting;
 use App\Models\Patient;
 use App\Models\RehabRoutine;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 #[Layout('layouts.admin')]
@@ -15,6 +17,17 @@ class Dashboard extends Component
 
     public $search = '', $patientData = null, $date, $time, $category, $location;
 
+    #[On('echo:update-channel,.update-event')]
+    public function handleUpdate($payload)
+    {
+        $message = $payload['message'];
+
+        if ($message === 'Update Data') {
+            $this->render();
+        } elseif ($message === 'Request Consultation') {
+            $this->dispatch('toaster-info', 'There is a new consultation request.');
+        } 
+    }
     public function detail($idPatient)
     {
         $this->patientData = Patient::find($idPatient);
@@ -45,6 +58,7 @@ class Dashboard extends Component
 
 
         $this->patientData = null;
+        broadcast(new UpdateEvent('New Schedule'))->toOthers();
         return redirect()->route('doctor.dashboard')->with('success-alert', 'Consultation schedule saved successfully.');
     }
     public function render()

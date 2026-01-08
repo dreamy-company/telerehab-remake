@@ -12,6 +12,15 @@
             @endif
         </div>
         <div class="flex items-center gap-5  md:mr-24">
+
+            <div
+                class="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center text-gray-400 border border-gray-100 hover:cursor-pointer">
+                <a href="{{ route('auth.profile', ['role' => Auth::user()->role, 'id' => encrypt(Auth::user()->id)]) }}"
+                    class="flex items-center justify-center w-full h-full rounded-2xl hover:bg-gray-50 cursor-pointer">
+                    <i class="fas fa-user text-xl"></i>
+                </a>
+            </div>
+           
             <div
                 class="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center text-gray-400 border border-gray-100 hover:cursor-pointer">
                 <a href="{{ route('auth.logout') }}"

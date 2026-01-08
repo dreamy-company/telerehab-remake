@@ -25,34 +25,38 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin User',
             'email' => 'admin@gmail.com',
             'role' => 'admin',
+            'country' => 'Indonesia',
             'telephone' => '081234567890',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('admintelerehab'),
         ]);
 
         // Doctor User
         User::factory()->create([
             'name' => 'Doctor User',
-            'email' => 'doctor@me',
+            'email' => 'doctor@gmail.com',
             'role' => 'doctor',
+            'country' => 'Indonesia',
             'telephone' => '089876543210',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('doctortelerehab'),
         ]);
 
         // Patient User
         $patientUser = User::factory()->create([
             'name' => 'Patient User',
-            'email' => 'patient@me',
+            'email' => 'patient@gmail.com',
             'role' => 'patient',
+            'country' => 'Indonesia',
             'telephone' => '087654321098',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('patienttelerehab'),
         ]);
 
         User::factory()->create([
             'name' => 'Therapist User',
-            'email' => 'therapist@me',
+            'email' => 'therapist@gmail.com',
             'role' => 'therapist',
+            'country' => 'Indonesia',
             'telephone' => '081122334455',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('therapisttelerehab'),
         ]);
 
         // patient data
@@ -71,39 +75,33 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Phase
-        RehabType::insert(
-            [
-                ['name' => 'Isometric Exercise'],
-                ['name' => 'Range of Motion Exercise'],
-                ['name' => 'Strengthening Exercise'],
-                ['name' => 'Balance and Coordination Training'],
-                ['name' => 'Gait Training'],
-                ['name' => 'Functional Training'],
-            ]
-        );
-        Rehab::insert(
-            [
-                [
-                    'rehabilitation_type_id' => 1,
-                    'name' => 'Isometric Exercise for Upper Limb',
-                    'description' => 'An exercise to strengthen upper limb muscles without joint movement.',
-                    'video_url' => 'https://www.youtube.com/embed/2-Ferf2Nyq8?si=LznlquPVw2WTo7ZB'
-                ],
-                [
-                    'rehabilitation_type_id' => 2,
-                    'name' => 'Range of Motion Exercise for Knee',
-                    'description' => 'An exercise to improve knee joint flexibility and movement range.',
-                    'video_url' => 'https://www.youtube.com/embed/2-Ferf2Nyq8?si=LznlquPVw2WTo7ZB'
+        RehabType::insert([
+            ['name' => 'Isometric'],
+            ['name' => 'Proprioceptive'],
+        ]);
 
-                ],
-                [
-                    'rehabilitation_type_id' => 3,
-                    'name' => 'Strengthening Exercise for Core Muscles',
-                    'description' => 'An exercise to enhance core muscle strength and stability.',
-                    'video_url' => 'https://www.youtube.com/embed/2-Ferf2Nyq8?si=LznlquPVw2WTo7ZB'
+        $rehabs = [
+            ['type' => 1, 'name' => 'Knee Isometric Exercise', 'desc' => 'Exercise for thigh muscle strength with constant pressure'],
+            ['type' => 1, 'name' => 'Hip Isometric', 'desc' => 'Strengthening the muscles around the hip after amputation'],
+            ['type' => 2, 'name' => 'Leg Proprioceptive', 'desc' => 'Training balance and orientation with prosthetics'],
+            ['type' => 2, 'name' => 'Bosu Ball Exercise', 'desc' => 'Training proprioception and posture control'],
+            ['type' => 1, 'name' => 'Thigh Muscle Contraction', 'desc' => 'Exercise to hold thigh muscle contraction for 10 seconds'],
+            ['type' => 2, 'name' => 'Walking with a Cane', 'desc' => 'Training weight distribution and balance'],
+            ['type' => 1, 'name' => 'Sit to Stand Exercise', 'desc' => 'Improving stability during position transition'],
+            ['type' => 2, 'name' => 'Side Stepping', 'desc' => 'Lateral mobility training for prosthetic patients'],
+            ['type' => 1, 'name' => 'Calf Muscle Pressure', 'desc' => 'Isometric exercise for prosthetic calf strength'],
+            ['type' => 2, 'name' => 'Standing with Eyes Closed', 'desc' => 'Training proprioceptive system with reduced visual input'],
+        ];
 
-                ],
-            ]
-        );
+        foreach ($rehabs as $i => $r) {
+            Rehab::create([
+                'rehabilitation_type_id' => $r['type'],
+                'name' => $r['name'],
+                'description' => $r['desc'],
+                'video_url' => "https://www.youtube.com/embed/2-Ferf2Nyq8?si=LznlquPVw2WTo7ZB",
+                'isDeleted' => false,
+                'deleted_by' => null,
+            ]);
+        }
     }
 }

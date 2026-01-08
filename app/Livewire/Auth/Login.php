@@ -27,6 +27,11 @@ class Login extends Component
                 return;
             }
 
+            if($user->email_verified_at === null){
+                $this->dispatch('alert-error', 'Email not verified. Please verify your email before logging in.');
+                return;
+            }
+
             if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
                 session()->regenerate();
                 return redirect()->route('dashboard');
