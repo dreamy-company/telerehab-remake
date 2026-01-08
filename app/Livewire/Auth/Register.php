@@ -36,18 +36,18 @@ class Register extends Component
     public function getStepTitleProperty()
     {
         return match ($this->currentStep) {
-            1 => 'Buat Akun Baru',
-            2 => 'Informasi Medis',
-            3 => 'Dokumen Pendukung',
+            1 => 'Create New Account',
+            2 => 'Medical Information',
+            3 => 'Supporting Documents',
         };
     }
 
     public function getStepDescriptionProperty()
     {
         return match ($this->currentStep) {
-            1 => 'Lengkapi data diri dan kontak Anda.',
-            2 => 'Detail alamat dan kebutuhan prostetik.',
-            3 => 'Upload foto kondisi & kartu BPJS.',
+            1 => 'Complete your personal and contact information.',
+            2 => 'Provide address and prosthetic requirements.',
+            3 => 'Upload condition photos and BPJS card.',
         };
     }
 

@@ -85,118 +85,170 @@
             <div class="{{ $currentStep != 1 ? 'hidden' : 'block' }} space-y-4 md:space-y-5 animate-fade-in-up">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                     <!-- Name -->
-                    <div class="col-span-1 md:col-span-2">
+                    <div class="col-span-2">
                         <label class="block text-sm font-bold text-slate-700 mb-2">Full Name <span class="text-red-500">*</span></label>
                         <!-- Hapus atribut 'required' HTML agar tombol Lanjut berfungsi -->
-                        <input type="text" wire:model="name" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="Masukkan nama sesuai KTP">
+                        <input type="text" wire:model="name" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="Enter your name as per ID" required>
                         @error('name') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Email -->
-                    <div>
+                    <div class="col-span-2">
                         <label class="block text-sm font-bold text-slate-700 mb-2">Email <span class="text-red-500">*</span></label>
-                        <input type="email" wire:model="email" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="contoh@email.com">
+                        <input type="email" wire:model="email" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="example@email.com">
                         @error('email') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
 
-                   
-<div class="">
- <!-- Phone -->
-                   <div class="w-full"
-     x-data="{ 
-        iti: null,
-        sync() {
-            // 1. Ambil data negara yang terpilih
-            let countryData = this.iti.getSelectedCountryData();
-            let dialCode = countryData.dialCode; 
-            let countryName = countryData.name; // Mengambil nama negara (misal: Indonesia)
-            
-            // 2. Proses nomor telepon
-            let inputNumber = this.$refs.phone.value.replace(/^0+/, '').replace(/\D/g, '');
-            let fullNumber = dialCode + inputNumber;
-            
-            // 3. Set nomor telepon ke Livewire
-            this.$refs.hiddenPhone.value = fullNumber;
-            this.$refs.hiddenPhone.dispatchEvent(new Event('input'));
 
-            // 4. Set nama negara ke Livewire
-            this.$refs.hiddenCountry.value = countryName;
-            this.$refs.hiddenCountry.dispatchEvent(new Event('input'));
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 col-span-2"
+                        x-data="{ 
+        iti: null,
+        countries: [],
+        search: '',
+        open: false,
+        selectedCountry: @entangle('country'),
+        selectedIso: '',
+
+        get filteredCountries() {
+            return this.countries.filter(c => 
+                c.name.toLowerCase().includes(this.search.toLowerCase())
+            );
         },
+
         init() {
+            // 1. Inisialisasi library
             this.iti = window.intlTelInput(this.$refs.phone, {
                 initialCountry: 'id',
                 separateDialCode: true,
                 utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js',
             });
 
-            // Jalankan sync sekali saat init untuk set default country (Indonesia)
-            setTimeout(() => this.sync(), 500);
+            // 2. Ambil list negara untuk dropdown
+            this.countries = window.intlTelInput.getCountryData();
 
-            // Update setiap kali ada perubahan
-            this.$refs.phone.addEventListener('input', () => this.sync());
-            this.$refs.phone.addEventListener('countrychange', () => this.sync());
-        }
-     }"
-     wire:ignore>
+            // 3. Fungsi Sinkronisasi (Hanya kirim ke Livewire tanpa render ulang input)
+            const syncData = () => {
+                let countryData = this.iti.getSelectedCountryData();
+                let inputNumber = this.$refs.phone.value.replace(/^0+/, '').replace(/\D/g, '');
+                
+                // Gunakan .set dengan parameter 'false' agar tidak selalu memicu re-render total jika tidak perlu
+                @this.set('telephone', countryData.dialCode + inputNumber, false);
+            };
 
-    <label class="block text-sm font-bold text-slate-700 mb-2">
-        WhatsApp/HP Number <span class="text-red-500">*</span>
-    </label>
-
-    <div class="relative">
-        <input
-            x-ref="phone"
-            type="tel"
-            class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all"
-            placeholder="882xxxx">
+            // Listener: Gunakan input agar real-time tapi tidak merusak fokus
+            this.$refs.phone.addEventListener('input', syncData);
             
-        <input 
-            type="hidden" 
-            x-ref="hiddenPhone" 
-            wire:model.live="telephone">
+            // Listener: Saat bendera di input phone berubah
+            this.$refs.phone.addEventListener('countrychange', () => {
+                syncData();
+                // Opsional: Jika ingin country dropdown kiri ikut berubah otomatis:
+                // let data = this.iti.getSelectedCountryData();
+                // this.selectedCountry = data.name;
+                // this.selectedIso = data.iso2;
+            });
 
-        <input 
-            type="hidden" 
-            x-ref="hiddenCountry" 
-            wire:model.live="country">
-    </div>
+            // 4. Set Initial State untuk Edit Profile
+            if (this.selectedCountry) {
+                let found = this.countries.find(c => c.name === this.selectedCountry);
+                if (found) this.selectedIso = found.iso2;
+            }
 
-    @error('telephone')
-        <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
-    @enderror
-    
-    @error('country')
-        <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
-    @enderror
-</div>
-@error('telephone')
-    <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
-@enderror
-<style>
-                        /* Menyesuaikan style intl-tel-input agar menyatu dengan desain Anda */
+            let initialPhone = @js($telephone);
+            if (initialPhone) {
+                // Berikan jeda sedikit agar utilsScript siap
+                setTimeout(() => {
+                    let formatted = initialPhone.startsWith('+') ? initialPhone : '+' + initialPhone;
+                    this.iti.setNumber(formatted);
+                }, 100);
+            }
+        }
+     }">
+
+                        <div class="w-full relative">
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Country Origin</label>
+
+                            <div @click="open = !open"
+                                class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer flex justify-between items-center transition-all hover:border-slate-300"
+                                :class="open ? 'border-[#17B8A6] ring-4 ring-[#17B8A6]/10' : ''">
+                                <div class="flex items-center gap-3">
+                                    <template x-if="selectedIso">
+                                        <div :class="'iti__flag iti__' + selectedIso"></div>
+                                    </template>
+                                    <span x-text="selectedCountry || 'Select Country'" :class="!selectedCountry ? 'text-slate-400' : 'text-slate-700'"></span>
+                                </div>
+                                <svg class="w-5 h-5 text-slate-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                                @error('country') <span class="text-red-500 text-xs mt-1 block absolute -bottom-5 left-0">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div x-show="open" @click.away="open = false" x-cloak
+                                class="absolute z-[60] mt-2 w-full bg-white border-2 border-slate-100 rounded-xl shadow-xl overflow-hidden">
+                                <div class="p-2 border-b border-slate-50">
+                                    <input type="text" x-model="search" placeholder="Search country..."
+                                        class="w-full px-3 py-2 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-[#17B8A6]/20 text-sm">
+                                </div>
+                                <div class="max-h-60 overflow-y-auto custom-scrollbar">
+                                    <template x-for="c in filteredCountries" :key="c.iso2">
+                                        <div @click="selectedCountry = c.name; selectedIso = c.iso2; open = false; search = ''"
+                                            class="px-4 py-2 text-sm text-slate-600 hover:bg-[#17B8A6]/10 hover:text-[#17B8A6] cursor-pointer flex items-center gap-3 transition-colors"
+                                            :class="selectedCountry === c.name ? 'bg-slate-50 font-bold text-[#17B8A6]' : ''">
+                                            <div :class="'iti__flag iti__' + c.iso2"></div>
+                                            <span x-text="c.name"></span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- PENTING: wire:ignore harus di pembungkus paling luar input phone agar Livewire tidak menyentuh DOM ini --}}
+                        <div class="w-full" wire:ignore>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">
+                                WhatsApp Number <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <input
+                                    x-ref="phone"
+                                    type="tel"
+                                    {{-- JANGAN pakai wire:model di sini karena merusak fokus saat re-render --}}
+                                    class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all"
+                                    placeholder="812xxxx">
+                            </div>
+                        </div>
+                        @error('telephone') <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <style>
                         .iti {
                             width: 100%;
                         }
 
-                        .iti__active {
-                            background-color: rgba(23, 184, 166, 0.1) !important;
+                        .iti__flag {
+                            transform: scale(1.2);
                         }
 
-                        .iti__country-list {
-                            border-radius: 12px;
-                            border: 2px solid #e2e8f0;
-                            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-                            z-index: 50;
+                        [x-cloak] {
+                            display: none !important;
+                        }
+
+                        .custom-scrollbar::-webkit-scrollbar {
+                            width: 5px;
+                        }
+
+                        .custom-scrollbar::-webkit-scrollbar-thumb {
+                            background: #e2e8f0;
+                            border-radius: 10px;
                         }
                     </style>
-</div>
 
                     <!-- Password -->
                     <div class="col-span-1 md:col-span-2" x-data="{ show: false }">
                         <label class="block text-sm font-bold text-slate-700 mb-2">Password <span class="text-red-500">*</span></label>
                         <div class="relative">
-                            <input :type="show ? 'text' : 'password'" wire:model="password" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all pr-10" placeholder="Minimal 6 karakter">
+                            <input :type="show ? 'text' : 'password'" wire:model="password" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all pr-10" placeholder="Minimum 8 characters">
                             <button type="button" @click="show = !show" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
                                 <i :class="show ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
                             </button>

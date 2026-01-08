@@ -56,34 +56,34 @@
     @livewireScripts
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <div id="google_translate_element" class="hidden"></div>
+    <!-- <div id="google_translate_element" class="hidden"></div> -->
     <script>
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,id',
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
+        // function googleTranslateElementInit() {
+        //     new google.translate.TranslateElement({
+        //         pageLanguage: 'en',
+        //         includedLanguages: 'en,id',
+        //         autoDisplay: false
+        //     }, 'google_translate_element');
+        // }
 
-        function triggerGoogleTranslate(lang) {
-            const select = document.querySelector('.goog-te-combo');
-            if (select) {
-                select.value = lang;
-                select.dispatchEvent(new Event('change'));
-            }
-        }
+        // function triggerGoogleTranslate(lang) {
+        //     const select = document.querySelector('.goog-te-combo');
+        //     if (select) {
+        //         select.value = lang;
+        //         select.dispatchEvent(new Event('change'));
+        //     }
+        // }
 
         // Listener Alert
         document.addEventListener('livewire:init', function() {
             Livewire.on('alert-error', (message) => {
-                Swal.fire({ title: "Gagal!", text: message, icon: "error", confirmButtonColor: '#17B8A6' });
+                Swal.fire({ title: "Error!", text: message, icon: "error", confirmButtonColor: '#17B8A6' });
             });
             Livewire.on('alert-success', (message) => {
                 Swal.fire({ title: "Success!", text: message, icon: "success", confirmButtonColor: '#17B8A6' });
             });
         });
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <!-- <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>  -->
 </body>
 </html>

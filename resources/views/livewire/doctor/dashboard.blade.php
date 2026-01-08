@@ -421,7 +421,7 @@
                     <div>
                         <p class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-0.5">Patient</p>
                         <h4 class="font-bold text-slate-800">
-                            {{ $patientData ? $patientData->patient->user->name : 'Loading...' }}
+                            {{ $patientData ? $patientData->patient?->user?->name : 'Loading...' }}
                         </h4>
                         <p class="text-xs text-slate-500 mt-1">Medical Record: <span
                                 class="font-mono">{{ $patientData->patient->medical_record_number ?? '-' }}</span></p>
@@ -484,9 +484,10 @@
                         Cancel
                     </button>
                 </form>
-                <button wire:click="saveSchedule"
+                <button type="button" wire:click="saveSchedule" wire:loading.attr="disabled"
                     class="px-6 py-2.5 rounded-xl bg-primary-600 text-white font-bold shadow-lg shadow-primary-500/30 hover:bg-primary-700 hover:shadow-primary-500/40 transform active:scale-95 transition-all text-sm flex items-center gap-2">
-                    <i class="fas fa-check"></i> Confirm Schedule
+                    <span wire:loading.remove wire:target="saveSchedule"><i class="fas fa-check"></i> Confirm Schedule</span>
+                    <span wire:loading wire:target="saveSchedule"><i class="fas fa-spinner fa-spin"></i> Processing...</span>
                 </button>
             </div>
 
