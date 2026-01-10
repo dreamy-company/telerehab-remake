@@ -262,7 +262,7 @@
             <div class="{{ $currentStep != 2 ? 'hidden' : 'block' }} space-y-4 md:space-y-5 animate-fade-in-up">
                 <!-- Address -->
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">Full Address <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Full Address (Optional)</label>
                     <textarea wire:model="address" rows="3" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="Nama jalan, RT/RW, Kelurahan, Kecamatan..."></textarea>
                     @error('address') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                 </div>
@@ -278,7 +278,7 @@
 
                     <!-- Prosthetic Since -->
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2">Using Prosthetic Since <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Using Prosthetic Since (Optional)</label>
                         <div class="relative">
                             <input type="date" wire:model="prosthetic_since" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all">
                             <i class="fas fa-calendar absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
@@ -288,7 +288,7 @@
 
                     <!-- Prosthetic Description -->
                     <div class="col-span-1 md:col-span-2">
-                        <label class="block text-sm font-bold text-slate-700 mb-2">Type of Prosthetic Used <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Type of Prosthetic Used (Optional)</label>
                         <input type="text" wire:model="prosthetic" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="Contoh: Kaki Palsu Bawah Lutut (Transtibial)">
                         @error('prosthetic') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
@@ -298,9 +298,9 @@
             <!-- STEP 3: Documents -->
             <div class="{{ $currentStep != 3 ? 'hidden' : 'block' }} space-y-5 md:space-y-6 animate-fade-in-up">
 
-                <!-- BPJS Number -->
+                <!-- Insurance Number -->
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">BPJS Number (Optional, Indonesia Only)</label>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Insurance Number (Optional, like BPJS, etc)</label>
                     <input type="number" wire:model="bpjs_number" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#17B8A6] focus:ring-[#17B8A6]/20 bg-white transition-all" placeholder="000123456789">
                     @error('bpjs_number') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                 </div>
@@ -308,12 +308,13 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                     <!-- Upload Patient Condition -->
                     <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 md:p-6 text-center hover:border-[#17B8A6] hover:bg-teal-50/50 transition-all cursor-pointer relative group">
-                        <input type="file" wire:model="patient_condition" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        <input type="file" wire:model="patient_condition" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept=".jpg,.jpeg,.png">
                         <div class="space-y-2">
                             <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
                                 <i class="fas fa-camera text-lg md:text-xl"></i>
                             </div>
                             <h5 class="text-xs md:text-sm font-bold text-slate-700">Patient Condition Photos</h5>
+                            <p class="text-[10px] md:text-xs text-slate-400">.jpg, .jpeg, .png</p>
                             <p class="text-[10px] md:text-xs text-slate-400">Upload multiple photos (Max 2MB/photo)</p>
                         </div>
 
@@ -328,12 +329,13 @@
 
                     <!-- Upload BPJS Card -->
                     <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 md:p-6 text-center hover:border-[#17B8A6] hover:bg-teal-50/50 transition-all cursor-pointer relative group">
-                        <input type="file" wire:model="bpjs_card" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        <input type="file" wire:model="bpjs_card" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept=".jpg,.jpeg,.png">
                         <div class="space-y-2">
                             <div class="w-10 h-10 md:w-12 md:h-12 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
                                 <i class="fas fa-id-card text-lg md:text-xl"></i>
                             </div>
-                            <h5 class="text-xs md:text-sm font-bold text-slate-700">BPJS Card Photo (Optional, Indonesia Only)</h5>
+                            <h5 class="text-xs md:text-sm font-bold text-slate-700">Insurance Card Photo (Optional, like BPJS, etc)</h5>
+                            <p class="text-[10px] md:text-xs text-slate-400">.jpg, .jpeg, .png</p>
                             <p class="text-[10px] md:text-xs text-slate-400">Upload (Max 2MB)</p>
                         </div>
                         @if($bpjs_card)
@@ -383,6 +385,9 @@
             </div>
 
         </form>
+        <a href="{{ route('welcome') }}" class="inline-flex items-center justify-center w-full px-8 py-3 rounded-2xl border-2 bg-blue-500 border-blue-500 text-white font-bold hover:border-blue-600 hover:bg-blue-600 transition-all duration-300 mt-4">
+            Back to Home
+        </a>
     </div>
 
     <style>

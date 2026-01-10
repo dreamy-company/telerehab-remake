@@ -24,6 +24,8 @@ class Dashboard extends Component
             $this->render();
         } elseif ($message === 'New Schedule') {
             $this->dispatch('toaster-info', 'There is a new consultation schedule.');
+        } elseif( $message === 'Schedule Updated') {
+            $this->dispatch('toaster-info', 'A consultation schedule has been updated.');
         }
     }
 

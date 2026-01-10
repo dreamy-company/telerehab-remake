@@ -14,13 +14,14 @@ class ScheduleEmail extends Mailable
     use Queueable, SerializesModels;
 
     public function __construct(
+        public $subject,
         public $scheduleDetails
     ) {}
 
     public function build()
     {
         return $this
-            ->subject('Your Consultation Schedule Details')
+            ->subject($this->subject)
             ->markdown('livewire.doctor.schedule-email', [
                 'scheduleDetails' => $this->scheduleDetails
             ]);

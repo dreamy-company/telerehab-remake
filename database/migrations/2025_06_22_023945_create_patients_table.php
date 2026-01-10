@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('bpjs_card')->nullable();
             $table->string('prosthetic')->nullable();
             $table->date('prosthetic_since')->nullable();
-            $table->text('address');
+            $table->text('address')->nullable();
             $table->boolean('isDeleted')->default(false);
             $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
             $table->softDeletes();

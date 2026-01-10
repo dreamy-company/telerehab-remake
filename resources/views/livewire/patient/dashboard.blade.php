@@ -245,11 +245,11 @@
                                 </div>
                             </div>
 
-                            <div class="mt-4 text-center md:text-right">
+                            <!-- <div class="mt-4 text-center md:text-right">
                                 <a href="#" class="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors">
                                     View Details <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
-                            </div>
+                            </div> -->
                         </div>
                     @endif
                 @else

@@ -13,13 +13,15 @@ class RehabilitationExercise extends Component
 {
     use WithFileUploads;
 
-    public $rehabRoutineId, $rehabData, $results, $video, $feedback;
+    public $rehabRoutineId, $rehabData, $results, $video, $feedback, $rehabOverdue = false;
 
     public function mount($id)
     {
         $this->rehabRoutineId = $id;
         $this->rehabData = RehabRoutine::with('rehabilitation')->findOrFail($this->rehabRoutineId);
         $this->results = $this->rehabData->routineResults()->orderBy('created_at', 'desc')->get();
+       
+       
     }
 
     public function uploadVideo()
