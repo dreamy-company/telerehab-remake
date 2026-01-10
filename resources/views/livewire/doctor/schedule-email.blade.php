@@ -21,11 +21,11 @@
 
                     <tr>
                         <td style="padding: 0 40px 40px 40px; text-align: center;">
-                            <h1 style="margin: 0 0 16px 0; color: #1e293b; font-size: 28px; font-weight: 800; letter-spacing: -0.5px;">Consultation Scheduled</h1>
+                            <h1 style="margin: 0 0 16px 0; color: #1e293b; font-size: 28px; font-weight: 800; letter-spacing: -0.5px;">{{ $scheduleDetails['title'] }}</h1>
 
                             <p style="margin: 0 0 32px 0; color: #64748b; font-size: 16px; line-height: 1.6;">
                                 Hi <strong>{{ $scheduleDetails['name'] }}</strong>,<br>
-                                Your consultation has been scheduled. Please find the details below.
+                                {{ $scheduleDetails['description'] }}
                             </p>
 
                             <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border-radius: 12px; margin-bottom: 24px;">
@@ -36,7 +36,6 @@
 
                                         <p style="margin: 0 0 12px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;"><strong>Date & Time</strong></p>
                                         <p style="margin: 0 0 16px 0; color: #1e293b; font-size: 16px; font-weight: 600;">{{ \Carbon\Carbon::parse($scheduleDetails['date'])->format('j F Y') }} at {{ $scheduleDetails['time'] }}</p>
-
                                         <p style="margin: 0 0 12px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;"><strong>Location</strong></p>
                                         <p style="margin: 0; color: #1e293b; font-size: 16px; font-weight: 600;">{{ $scheduleDetails['location'] }}</p>
                                     </td>

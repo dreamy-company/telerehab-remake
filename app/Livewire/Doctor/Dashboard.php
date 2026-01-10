@@ -17,7 +17,7 @@ use Livewire\Component;
 class Dashboard extends Component
 {
 
-    public $search = '', $patientData = null, $date, $time, $category, $location;
+    public $search = '', $patientData = null, $date, $time, $category, $location, $meetingData;
 
     #[On('echo:update-channel,.update-event')]
     public function handleUpdate($payload)
@@ -28,11 +28,21 @@ class Dashboard extends Component
             $this->render();
         } elseif ($message === 'Request Consultation') {
             $this->dispatch('toaster-info', 'There is a new consultation request.');
-        } 
+        }
     }
     public function detail($idPatient)
     {
         $this->patientData = Patient::find($idPatient);
+    }
+
+    public function scheduleDetail($idMeeting)
+    {
+        $this->meetingData = Meeting::with('patient.user')->find($idMeeting);
+        $this->patientData = Meeting::with('patient.user')->find($idMeeting);;
+        $this->date = $this->meetingData->date;
+        $this->time = $this->meetingData->time;
+        $this->category = $this->meetingData->meeting_category;
+        $this->location = $this->meetingData->location;
     }
 
     public function setConsultation($id)
@@ -59,19 +69,58 @@ class Dashboard extends Component
         ]);
 
         $scheduleDetails = [
+            'title' => 'Consultation Schedule Confirmed',
+            'description' => 'Your consultation schedule has been confirmed. Please find the details below:',
             'name' => $this->patientData->patient->user->name,
             'date' => $this->date,
             'time' => $this->time,
             'location' => $this->location,
             'doctor' => Auth::user()->name,
         ];
+        $subject = 'Your Consultation Schedule Details';
         Mail::to($this->patientData->patient->user->email)->send(
-            new ScheduleEmail($scheduleDetails)
+            new ScheduleEmail($subject, $scheduleDetails)
         );
-       
+
         broadcast(new UpdateEvent('New Schedule'))->toOthers();
         $this->patientData = null;
         return redirect()->route('doctor.dashboard')->with('success-alert', 'Consultation schedule saved successfully.');
+    }
+
+    public function updateSchedule()
+    {
+        
+        $this->validate([
+            'date' => 'required|date',
+            'time' => 'required',
+            'location' => 'required|string',
+        ]);
+
+        $this->patientData->update([
+            'date' => $this->date,
+            'time' => $this->time,
+            'category' => 'Offline',
+            'meeting_category' => $this->category,
+            'location' => $this->location,
+        ]);
+
+        $scheduleDetails = [
+            'title' => 'Consultation Schedule Updated',
+            'description' => 'Your consultation schedule has been updated with the following details:',
+            'name' => $this->patientData->patient->user->name,
+            'date' => $this->date,
+            'time' => $this->time,
+            'location' => $this->location,
+            'doctor' => Auth::user()->name,
+        ];
+        $subject = 'Your Consultation Schedule Updated';
+        Mail::to($this->patientData->patient->user->email)->send(
+            new ScheduleEmail($subject, $scheduleDetails)
+        );
+
+        broadcast(new UpdateEvent('Schedule Updated'))->toOthers();
+        $this->patientData = null;
+        return redirect()->route('doctor.dashboard')->with('success-alert', 'Consultation schedule updated successfully.');
     }
     public function render()
     {

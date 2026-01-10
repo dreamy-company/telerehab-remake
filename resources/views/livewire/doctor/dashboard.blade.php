@@ -5,7 +5,7 @@
     <div x-data
         @echo:update-channel,.update-event.window="window.toast.success($event.detail.message)">
     </div>
-    
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div
             class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center group hover:border-blue-300 transition-all">
@@ -134,7 +134,12 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-right">
+                            <td class="px-6 py-4 text-right flex gap-1">
+
+                                <button wire:click="scheduleDetail({{ $item->id }})" onclick="consultationModal.showModal()"
+                                    class="text-xs font-bold px-3 py-2 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 transition-colors hover:cursor-pointer">
+                                    Edit Schedule
+                                </button>
                                 <a href="{{ route('doctor.meeting-schedule.consultation', ['id' => $item->id]) }}"
                                     class="text-xs font-bold px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">
                                     Start Consultation
@@ -400,7 +405,7 @@
 
             <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
                 <div>
-                    <h3 class="font-bold text-lg text-slate-800">Set Appointment</h3>
+                    <h3 class="font-bold text-lg text-slate-800">{{ $meetingData ? 'Update Appointment' : 'Set Appointment' }}</h3>
                     <p class="text-xs text-slate-500">Confirm details for the patient.</p>
                 </div>
                 <form method="dialog">
@@ -484,14 +489,16 @@
                         Cancel
                     </button>
                 </form>
-                <button type="button" wire:click="saveSchedule" wire:loading.attr="disabled"
+                <button type="button" wire:click="{{ $meetingData ? 'updateSchedule' : 'saveSchedule' }}" wire:loading.attr="disabled"
                     class="px-6 py-2.5 rounded-xl bg-primary-600 text-white font-bold shadow-lg shadow-primary-500/30 hover:bg-primary-700 hover:shadow-primary-500/40 transform active:scale-95 transition-all text-sm flex items-center gap-2">
-                    <span wire:loading.remove wire:target="saveSchedule"><i class="fas fa-check"></i> Confirm Schedule</span>
-                    <span wire:loading wire:target="saveSchedule"><i class="fas fa-spinner fa-spin"></i> Processing...</span>
+                    <span wire:loading.remove wire:target="{{ $meetingData ? 'updateSchedule' : 'saveSchedule' }}"><i class="fas fa-check"></i> {{ $meetingData ? 'Update' : 'Confirm' }} Schedule</span>
+                    <span wire:loading wire:target="{{ $meetingData ? 'updateSchedule' : 'saveSchedule' }}"><i class="fas fa-spinner fa-spin"></i> Processing...</span>
                 </button>
             </div>
 
         </div>
     </dialog>
+
+
 
 </div>

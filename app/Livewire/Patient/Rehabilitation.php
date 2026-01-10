@@ -15,7 +15,6 @@ class Rehabilitation extends Component
     {
         return view('livewire.patient.rehabilitation.index',[
             'data' => RehabRoutine::where('patient_id', Auth::user()->patient->id)
-                
                 ->orderBy('created_at', 'desc')
                 ->get(),
         ]);

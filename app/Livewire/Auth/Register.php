@@ -82,10 +82,10 @@ class Register extends Component
             
         } elseif ($this->currentStep == 2) {
             $this->validate([
-                'address' => 'required|string|min:10',
+                'address' => 'nullable|string|min:10',
                 'medical_record_number' => 'nullable|string|unique:patients,medical_record_number',
-                'prosthetic' => 'required|string',
-                'prosthetic_since' => 'required|date',
+                'prosthetic' => 'nullable|string',
+                'prosthetic_since' => 'nullable|date',
             ]);
         }
     }

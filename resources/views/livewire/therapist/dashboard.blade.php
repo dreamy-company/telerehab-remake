@@ -111,7 +111,7 @@
                                 </span>
                                 <span class="text-xs text-slate-500">Routines Submitted</span>
                                 @if($item->rehab_routine_id)
-                                <a href="{{ route('doctor.patient.rehabilitation.exercise', ['id' => $item->id, 'rehabRoutineId' => $item->rehab_routine_id]) }}"
+                                <a href="{{ route(Auth::user()->role . '.patient.rehabilitation.exercise', ['id' => $item->id, 'rehabRoutineId' => $item->rehab_routine_id]) }}"
                                     class="text-indigo-600 hover:text-indigo-800 transition-colors">
                                     <i class="fas fa-external-link-alt text-xs"></i>
                                 </a>
