@@ -15,15 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->foreignId('doctor_id')->nullable()->constrained('users');
-            $table->foreignId('patient_id')->constrained('users');
+            $table->foreignId('patient_id')->constrained('patients');
             $table->text('description')->nullable();
             $table->string('meeting_category')->nullable();
             $table->string('location')->nullable();
             $table->date('date')->nullable();
             $table->time('time')->nullable();
             $table->string('status')->nullable();
-            $table->string('diagnosis')->nullable(); 
-            $table->string('medicine')->nullable(); 
+            $table->string('diagnosis')->nullable();
+            $table->string('medicine')->nullable();
             $table->boolean('isDeleted')->default(false);
             $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
             $table->softDeletes();
