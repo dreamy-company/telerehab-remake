@@ -4,10 +4,10 @@
         <div
             class="p-5 border-b border-slate-100 flex flex-col sm:flex-row justify-end items-center gap-4 bg-slate-50/50">
             @if(Auth::user()->role !== 'therapist')
-            <a @if(Auth::user()->role === 'admin') href="{{ route('admin.patient.create') }}"
-                @elseif(Auth::user()->role === 'doctor') href="{{ route('doctor.patient.create') }}" @endif
+            <a href="{{ route(Auth::user()->role . '.patient.create') }}"
                 class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-bold rounded-xl text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all shadow-sm hover:shadow-md">
-                <i class="fas fa-plus mr-2"></i> Add Patient
+                <i class="fas fa-plus mr-2"></i>
+                Add Patient
             </a>
             @endif
         </div>
@@ -95,8 +95,8 @@
                                     </span>
                                     <span class="text-xs text-slate-500">Routines Submitted</span>
                                     @if($item->rehab_routine_id)
-                                    <a href="{{ route('doctor.patient.rehabilitation.exercise', ['id' => $item->id, 'rehabRoutineId' => $item->rehab_routine_id]) }}"
-                                        class="text-indigo-600 hover:text-indigo-800 transition-colors">
+                                    <a href="{{ route(Auth::user()->role . '.patient.rehabilitation.exercise', ['id' => $item->id, 'rehabRoutineId' => $item->rehab_routine_id]) }}"
+                                        class="text-indigo-600 hover:text-indigo-800 transition-all">
                                         <i class="fas fa-external-link-alt text-xs"></i>
                                     </a>
                                     @endif
@@ -119,15 +119,12 @@
                                         <i class="fas fa-eye text-xs"></i>
                                     </button>
 
-                                    @if (Auth::user()->role !== 'therapist')
-
-                                    <a href="{{ Auth::user()->role === 'admin' ? route('admin.patient.edit', $item->id) : route('doctor.patient.edit', $item->id) }}"
+                                    @if(Auth::user()->role !== 'therapist')
+                                    <a href="{{ route(Auth::user()->role . '.patient.edit', $item->id) }}"
                                         class="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-50 text-amber-600 hover:bg-amber-100 transition-colors tooltip"
                                         data-tip="Edit">
                                         <i class="fas fa-edit text-xs"></i>
                                     </a>
-
-
                                     @endif
                                     @if (Auth::user()->role === 'admin')
                                     <button wire:click="delete({{ $item->id }})"
