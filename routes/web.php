@@ -119,8 +119,6 @@ Route::middleware(['auth', 'verified', 'role:therapist'])->prefix('therapist')->
 
     // PATIENT
     Route::get('/patient', Patient::class)->name('patient');
-    Route::get('/patient/create', PatientForm::class)->name('patient.create');
-    Route::get('/patient/{id}/edit', PatientForm::class)->name(name: 'patient.edit');
     Route::get('/patient/{id}/rehabilitation', AdminPatientRehabilitation::class)->name('patient.rehabilitation');
     Route::get('/patient/{id}/rehabilitation/{rehabRoutineId}/exercise', PatientRehabilitationExercise::class)->name('patient.rehabilitation.exercise');
 });

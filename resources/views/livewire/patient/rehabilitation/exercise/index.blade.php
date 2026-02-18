@@ -90,7 +90,7 @@
             <h3 class="font-bold text-lg mb-4">Upload Video Latihan</h3>
 
             <div>
-                <label for="video" class="block text-sm font-medium text-gray-700 mb-1">Choose Your Exercise Video</label>
+                <label for="video" class="block text-sm font-medium text-gray-700 mb-1">Choose Your Exercise Video <span class="font-bold text-primary-500">Max 10 MB</span></label>
 
                 <div class="relative w-full">
                     <label for="video"
