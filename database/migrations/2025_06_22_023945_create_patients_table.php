@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('medical_record_number')->unique()->nullable();
             $table->string('bpjs_number')->unique()->nullable();
             $table->string('bpjs_card')->nullable();
-            $table->string('prosthetic')->nullable();
+            $table->string('prosthetic')->nullable();   
             $table->date('prosthetic_since')->nullable();
             $table->text('address')->nullable();
             $table->boolean('isDeleted')->default(false);
