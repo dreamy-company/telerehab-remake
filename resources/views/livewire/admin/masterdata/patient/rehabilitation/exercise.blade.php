@@ -126,7 +126,214 @@
             <p class="text-gray-500 font-medium">No exercise videos uploaded yet.</p>
         </div>
         @endforelse
-        <dialog id="feedbackModal" class="modal backdrop-blur-sm transition-all duration-300" wire:ignore.self>
+        {{-- ================================================================
+     MOVEMENT TRACKING DATA PANEL
+     ================================================================ --}}
+@if($movementSessions->isNotEmpty())
+<div class="bg-white shadow-lg rounded-2xl border border-gray-100 overflow-hidden mt-8">
+    <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+        <h4 class="font-bold text-xl flex items-center gap-3 text-gray-800">
+            <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center">
+                <i class="fas fa-chart-line" aria-hidden="true"></i>
+            </div>
+            Movement Tracking Data
+        </h4>
+        <span class="badge badge-outline text-indigo-600 border-indigo-300 font-bold px-3 py-2">
+            {{ $movementSessions->count() }} session(s)
+        </span>
+    </div>
+
+    <div class="divide-y divide-gray-100">
+    @foreach($movementSessions as $ms)
+    <div class="p-6 space-y-4">
+
+        {{-- Session header --}}
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+                <h5 class="font-extrabold text-gray-900 text-base">
+                    {{ $ms->exercise->name }}
+                </h5>
+                <span class="text-xs text-gray-400 font-bold">
+                    {{ $ms->session_date->format('d F Y') }}
+                </span>
+            </div>
+            <div class="flex items-center gap-2">
+                @php
+                    $statusColors = [
+                        'completed' => 'bg-green-100 text-green-700 border-green-200',
+                        'flagged'   => 'bg-red-100 text-red-700 border-red-200',
+                        'in_progress' => 'bg-yellow-100 text-yellow-700 border-yellow-200',
+                    ];
+                @endphp
+                <span class="badge border font-bold text-xs px-3 py-2 {{ $statusColors[$ms->status] ?? '' }}">
+                    @if($ms->status === 'completed') <i class="fas fa-check-circle mr-1" aria-hidden="true"></i> Completed
+                    @elseif($ms->status === 'flagged') <i class="fas fa-flag mr-1" aria-hidden="true"></i> Flagged
+                    @else <i class="fas fa-clock mr-1" aria-hidden="true"></i> In Progress
+                    @endif
+                </span>
+            </div>
+        </div>
+
+        {{-- Summary stats --}}
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
+                <p class="text-[10px] font-black text-gray-400 uppercase mb-1">Total Reps</p>
+                <p class="text-2xl font-black text-teal-600">{{ $ms->total_reps }}</p>
+                <p class="text-[10px] text-gray-400">/ {{ $ms->exercise->thresholds['target_reps'] }}</p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
+                <p class="text-[10px] font-black text-gray-400 uppercase mb-1">Completion</p>
+                <p class="text-2xl font-black text-indigo-600">{{ $ms->completion_rate }}%</p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
+                <p class="text-[10px] font-black text-gray-400 uppercase mb-1">Avg Angle</p>
+                <p class="text-2xl font-black text-gray-700">
+                    {{ $ms->avg_angle !== null ? number_format($ms->avg_angle, 1) . '°' : '—' }}
+                </p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
+                <p class="text-[10px] font-black text-gray-400 uppercase mb-1">Max Angle</p>
+                <p class="text-2xl font-black text-gray-700">
+                    {{ $ms->max_angle !== null ? number_format($ms->max_angle, 1) . '°' : '—' }}
+                </p>
+            </div>
+        </div>
+
+        {{-- Rep-by-rep log table --}}
+        @if($ms->logs->isNotEmpty())
+        <div class="overflow-x-auto rounded-xl border border-gray-100">
+            <table class="table table-zebra table-sm w-full text-sm" aria-label="Rep-by-rep movement log">
+                <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                    <tr>
+                        <th scope="col">Rep</th>
+                        <th scope="col">Angle</th>
+                        <th scope="col">In Range</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($ms->logs->sortBy('rep_number') as $log)
+                    <tr class="{{ $log->within_threshold ? '' : 'bg-red-50' }}">
+                        <td class="font-bold">{{ $log->rep_number }}</td>
+                        <td>{{ number_format($log->joint_angle, 1) }}&deg;</td>
+                        <td>
+                            @if($log->within_threshold)
+                                <span class="badge bg-green-100 text-green-700 border-green-200 font-bold text-xs gap-1">
+                                    <i class="fas fa-check" aria-hidden="true"></i> Yes
+                                </span>
+                            @else
+                                <span class="badge bg-red-100 text-red-700 border-red-200 font-bold text-xs gap-1">
+                                    <i class="fas fa-times" aria-hidden="true"></i> No
+                                </span>
+                            @endif
+                        </td>
+                        <td class="text-gray-400">{{ $log->recorded_at->format('H:i:s') }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @else
+        <p class="text-sm text-gray-400 italic">No rep logs recorded yet.</p>
+        @endif
+
+        {{-- Existing flags --}}
+        @if($ms->flags->isNotEmpty())
+        <div class="space-y-2">
+            <p class="text-xs font-black text-gray-500 uppercase">Clinical Flags</p>
+            @foreach($ms->flags as $flag)
+            <div class="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-3">
+                <i class="fas fa-flag text-red-500 mt-0.5" aria-hidden="true"></i>
+                <div>
+                    <p class="text-xs font-bold text-red-700 uppercase">
+                        {{ str_replace('_', ' ', $flag->flag_type) }}
+                        <span class="text-gray-400 font-normal ml-2">by {{ $flag->flaggedBy->name }}</span>
+                    </p>
+                    @if($flag->note)
+                    <p class="text-sm text-gray-700 mt-0.5">{{ $flag->note }}</p>
+                    @endif
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @endif
+
+        {{-- Flag button --}}
+        @if(Auth::user()->role === 'doctor' || Auth::user()->role === 'therapist')
+        <button wire:click="openFlagModal({{ $ms->id }})"
+                onclick="flagModal.showModal()"
+                class="btn btn-sm border border-red-300 text-red-600 hover:bg-red-50 rounded-lg font-bold flex items-center gap-2"
+                aria-label="Flag this movement session">
+            <i class="fas fa-flag" aria-hidden="true"></i> Flag Session
+        </button>
+        @endif
+
+    </div>
+    @endforeach
+    </div>
+</div>
+@endif
+
+{{-- Flag Modal --}}
+<dialog id="flagModal" class="modal backdrop-blur-sm" wire:ignore.self>
+    <div class="modal-box max-w-lg bg-white rounded-2xl shadow-2xl border border-gray-100 p-0 overflow-hidden">
+        <div class="bg-red-600 p-5 text-white flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-flag text-xl" aria-hidden="true"></i>
+                <h3 class="font-bold text-lg">Flag Movement Session</h3>
+            </div>
+            <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost text-white" aria-label="Close">✕</button>
+            </form>
+        </div>
+        <div class="p-6 space-y-4">
+            <div>
+                <label class="text-xs font-black text-gray-500 uppercase tracking-widest" for="flagTypeSelect">
+                    Flag Type
+                </label>
+                <select id="flagTypeSelect"
+                        wire:model="flagType"
+                        class="select select-bordered w-full mt-1 rounded-xl"
+                        aria-label="Select flag type">
+                    <option value="wrong_form">Wrong Form</option>
+                    <option value="incomplete_range">Incomplete Range of Motion</option>
+                    <option value="missed_reps">Missed Reps</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-xs font-black text-gray-500 uppercase tracking-widest" for="flagNoteArea">
+                    Clinical Note (optional)
+                </label>
+                <textarea id="flagNoteArea"
+                          wire:model="flagNote"
+                          rows="3"
+                          class="textarea textarea-bordered w-full mt-1 rounded-xl text-sm"
+                          placeholder="Describe the issue in detail..."></textarea>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button wire:click="submitFlag"
+                        wire:loading.attr="disabled"
+                        class="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white py-3 rounded-xl font-bold transition flex items-center justify-center gap-2"
+                        aria-label="Submit flag">
+                    <span wire:loading.remove wire:target="submitFlag">
+                        <i class="fas fa-flag mr-1" aria-hidden="true"></i> Submit Flag
+                    </span>
+                    <span wire:loading wire:target="submitFlag">
+                        <i class="fas fa-circle-notch fa-spin mr-1" aria-hidden="true"></i> Saving...
+                    </span>
+                </button>
+                <form method="dialog" class="flex-1">
+                    <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-bold transition">
+                        Cancel
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop bg-gray-900/40 backdrop-blur-sm"><button>close</button></form>
+</dialog>
+
+<dialog id="feedbackModal" class="modal backdrop-blur-sm transition-all duration-300" wire:ignore.self>
     <div class="modal-box max-w-2xl p-0 overflow-hidden bg-white rounded-2xl shadow-2xl border border-gray-100">
         
         <div class="bg-teal-600 p-6 text-white flex justify-between items-center">

@@ -47,9 +47,10 @@ class AuthController extends Controller
                 'id'       => $user->id,
                 'name'     => $user->name,
                 'email'    => $user->email,
-                'telephone'=> $user->telephone,
-                'country'  => $user->country,
-                'role'     => $user->role,
+                'telephone'  => $user->telephone,
+                'country'    => $user->country?->name,
+                'country_id' => $user->country_id,
+                'role'       => $user->role,
             ],
         ]);
     }
@@ -60,7 +61,7 @@ class AuthController extends Controller
             // Step 1
             'name'      => 'required|string|min:3',
             'email'     => 'required|email|unique:users,email',
-            'country'   => 'required|string',
+            'country_id' => 'required|exists:countries,id',
             'telephone' => 'required|numeric|unique:users,telephone',
             'password'  => 'required|min:6',
             // Step 2
@@ -79,7 +80,7 @@ class AuthController extends Controller
             'name'      => $request->name,
             'email'     => $request->email,
             'password'  => Hash::make($request->password),
-            'country'   => $request->country,
+            'country_id' => $request->country_id,
             'telephone' => $request->telephone,
             'role'      => 'patient',
         ]);
@@ -138,8 +139,9 @@ class AuthController extends Controller
                 'id'        => $user->id,
                 'name'      => $user->name,
                 'email'     => $user->email,
-                'telephone' => $user->telephone,
-                'country'   => $user->country,
+                'telephone'  => $user->telephone,
+                'country'    => $user->country?->name,
+                'country_id' => $user->country_id,
             ],
             'patient' => $patient ? [
                 'id'                    => $patient->id,

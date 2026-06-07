@@ -107,7 +107,8 @@
         countries: [],
         search: '',
         open: false,
-        selectedCountry: @entangle('country'),
+        countryId: @entangle('countryId'),
+        selectedCountry: '',
         selectedIso: '',
 
         get filteredCountries() {
@@ -124,8 +125,8 @@
                 utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js',
             });
 
-            // 2. Ambil list negara untuk dropdown
-            this.countries = window.intlTelInput.getCountryData();
+            // 2. Ambil list negara dari database (dipass server-side)
+            this.countries = @json($countries);
 
             // 3. Fungsi Sinkronisasi (Hanya kirim ke Livewire tanpa render ulang input)
             const syncData = () => {
@@ -133,7 +134,7 @@
                 let inputNumber = this.$refs.phone.value.replace(/^0+/, '').replace(/\D/g, '');
                 
                 // Gunakan .set dengan parameter 'false' agar tidak selalu memicu re-render total jika tidak perlu
-                @this.set('telephone', countryData.dialCode + inputNumber, false);
+                $wire.set('telephone', countryData.dialCode + inputNumber, false);
             };
 
             // Listener: Gunakan input agar real-time tapi tidak merusak fokus
@@ -149,12 +150,12 @@
             });
 
             // 4. Set Initial State untuk Edit Profile
-            if (this.selectedCountry) {
-                let found = this.countries.find(c => c.name === this.selectedCountry);
-                if (found) this.selectedIso = found.iso2;
+            if (this.countryId) {
+                let found = this.countries.find(c => c.id === this.countryId);
+                if (found) { this.selectedCountry = found.name; this.selectedIso = found.iso2; }
             }
 
-            let initialPhone = @js($telephone);
+            let initialPhone = @json($telephone);
             if (initialPhone) {
                 // Berikan jeda sedikit agar utilsScript siap
                 setTimeout(() => {
@@ -180,7 +181,7 @@
                                 <svg class="w-5 h-5 text-slate-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
-                                @error('country') <span class="text-red-500 text-xs mt-1 block absolute -bottom-5 left-0">{{ $message }}</span>
+                                @error('countryId') <span class="text-red-500 text-xs mt-1 block absolute -bottom-5 left-0">{{ $message }}</span>
                                 @enderror
                             </div>
 
@@ -192,9 +193,9 @@
                                 </div>
                                 <div class="max-h-60 overflow-y-auto custom-scrollbar">
                                     <template x-for="c in filteredCountries" :key="c.iso2">
-                                        <div @click="selectedCountry = c.name; selectedIso = c.iso2; open = false; search = ''"
+                                        <div @click="selectedCountry = c.name; selectedIso = c.iso2; countryId = c.id; open = false; search = ''"
                                             class="px-4 py-2 text-sm text-slate-600 hover:bg-[#17B8A6]/10 hover:text-[#17B8A6] cursor-pointer flex items-center gap-3 transition-colors"
-                                            :class="selectedCountry === c.name ? 'bg-slate-50 font-bold text-[#17B8A6]' : ''">
+                                            :class="countryId === c.id ? 'bg-slate-50 font-bold text-[#17B8A6]' : ''">
                                             <div :class="'iti__flag iti__' + c.iso2"></div>
                                             <span x-text="c.name"></span>
                                         </div>

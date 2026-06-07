@@ -24,7 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'country',
+        'country_id',
         'telephone',
         'role',
         'isDeleted',
@@ -55,6 +55,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
+
     public function patients()
     {
         return $this->hasMany(Patient::class, 'user_id');

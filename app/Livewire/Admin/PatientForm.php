@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Country;
 use App\Models\Patient;
 use App\Models\PatientPhoto;
 use App\Models\User;
@@ -18,7 +19,7 @@ use Livewire\WithFileUploads;
 class PatientForm extends Component
 {
     use WithFileUploads;
-    public $patientId, $userId, $name, $email, $password, $country, $telephone, $medical_record_number, $bpjs_number, $bpjs_card, $patient_condition = [], $address, $prosthetic, $prosthetic_since, $old_patient_condition, $old_bpjs_card;
+    public $patientId, $userId, $name, $email, $password, $countryId, $telephone, $medical_record_number, $bpjs_number, $bpjs_card, $patient_condition = [], $address, $prosthetic, $prosthetic_since, $old_patient_condition, $old_bpjs_card;
 
 
 
@@ -30,7 +31,7 @@ class PatientForm extends Component
             $this->userId = $patientData->user->id;
             $this->name = $patientData->user->name;
             $this->email = $patientData->user->email;
-            $this->country = $patientData->user->country;
+            $this->countryId = $patientData->user->country_id;
             $this->telephone = $patientData->user->telephone;
             $this->medical_record_number = $patientData->medical_record_number;
             $this->bpjs_number = $patientData->bpjs_number;
@@ -57,7 +58,7 @@ class PatientForm extends Component
                     : 'required|min:6',
 
                 'telephone' => 'required',
-                'country' => 'required',
+                'countryId' => 'required|exists:countries,id',
 
                 'medical_record_number' => [
                     'required',
@@ -89,7 +90,7 @@ class PatientForm extends Component
                 [
                     'name' => $this->name,
                     'email' => $this->email,
-                    'country' => $this->country,
+                    'country_id' => $this->countryId,
                     'telephone' => $this->telephone,
                     'role' => 'patient',
                     'password' => $this->password
@@ -167,6 +168,12 @@ class PatientForm extends Component
     }
     public function render()
     {
-        return view('livewire.admin.masterdata.patient.form');
+        return view('livewire.admin.masterdata.patient.form', [
+            'countries' => Country::orderBy('name')
+                ->get(['id', 'name', 'code'])
+                ->map(fn($c) => ['id' => $c->id, 'name' => $c->name, 'iso2' => strtolower($c->code)])
+                ->values()
+                ->toArray(),
+        ]);
     }
 }

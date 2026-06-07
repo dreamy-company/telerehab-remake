@@ -3,6 +3,7 @@
 namespace App\Livewire\Auth;
 
 use App\Mail\VerifyEmailMail;
+use App\Models\Country;
 use App\Models\Patient;
 use App\Models\PatientPhoto;
 use App\Models\User;
@@ -25,7 +26,7 @@ class Register extends Component
     public $totalSteps = 3;
 
     // Data Properties
-    public $name, $email, $password,$country, $telephone; // Step 1
+    public $name, $email, $password, $countryId, $telephone; // Step 1
     public $address, $medical_record_number, $prosthetic, $prosthetic_since; // Step 2
     public $bpjs_number, $bpjs_card; // Step 3
 
@@ -75,7 +76,7 @@ class Register extends Component
             $this->validate([
                 'name' => 'required|string|min:3',
                 'email' => 'required|email|unique:users,email',
-                'country' => 'required|string',
+                'countryId' => 'required|exists:countries,id',
                 'telephone' => 'required|numeric|min:10|unique:users,telephone',
                 'password' => 'required|min:6',
             ]);
@@ -108,7 +109,7 @@ class Register extends Component
                 'name' => $this->name,
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
-                'country' => $this->country,
+                'country_id' => $this->countryId,
                 'telephone' => $this->telephone,
                 'role' => 'patient',
             ]);
@@ -152,6 +153,12 @@ class Register extends Component
 
     public function render()
     {
-        return view('livewire.auth.register');
+        return view('livewire.auth.register', [
+            'countries' => Country::orderBy('name')
+                ->get(['id', 'name', 'code'])
+                ->map(fn($c) => ['id' => $c->id, 'name' => $c->name, 'iso2' => strtolower($c->code)])
+                ->values()
+                ->toArray(),
+        ]);
     }
 }

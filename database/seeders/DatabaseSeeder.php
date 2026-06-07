@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Country;
 use App\Models\Rehab;
 use App\Models\RehabType;
 use App\Models\User;
+use Database\Seeders\MovementExerciseSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Testing\Fluent\Concerns\Has;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,13 +20,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $indonesiaId = Country::where('name', 'Indonesia')->value('id');
 
         // Admin User
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@gmail.com',
             'role' => 'admin',
-            'country' => 'Indonesia',
+            'country_id' => $indonesiaId,
             'telephone' => '081234567890',
             'password' => Hash::make('admintelerehab'),
         ]);
@@ -35,7 +37,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Doctor User',
             'email' => 'doctor@gmail.com',
             'role' => 'doctor',
-            'country' => 'Indonesia',
+            'country_id' => $indonesiaId,
             'telephone' => '089876543210',
             'password' => Hash::make('doctortelerehab'),
         ]);
@@ -45,7 +47,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Patient User',
             'email' => 'patient@gmail.com',
             'role' => 'patient',
-            'country' => 'Indonesia',
+            'country_id' => $indonesiaId,
             'telephone' => '087654321098',
             'password' => Hash::make('patienttelerehab'),
         ]);
@@ -54,7 +56,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Therapist User',
             'email' => 'therapist@gmail.com',
             'role' => 'therapist',
-            'country' => 'Indonesia',
+            'country_id' => $indonesiaId,
             'telephone' => '081122334455',
             'password' => Hash::make('therapisttelerehab'),
         ]);
@@ -93,7 +95,7 @@ class DatabaseSeeder extends Seeder
             ['type' => 2, 'name' => 'Standing with Eyes Closed', 'desc' => 'Training proprioceptive system with reduced visual input'],
         ];
 
-        foreach ($rehabs as $i => $r) {
+        foreach ($rehabs as $r) {
             Rehab::create([
                 'rehabilitation_type_id' => $r['type'],
                 'name' => $r['name'],
@@ -103,5 +105,7 @@ class DatabaseSeeder extends Seeder
                 'deleted_by' => null,
             ]);
         }
+
+        $this->call(MovementExerciseSeeder::class);
     }
 }

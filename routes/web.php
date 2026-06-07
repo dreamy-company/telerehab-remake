@@ -8,6 +8,13 @@ use App\Livewire\Admin\Rehabilitation;
 use App\Livewire\Admin\RehabilitationForm;
 use App\Livewire\Admin\RehabType as AdminRehabType;
 use App\Livewire\Admin\RehabTypeForm;
+use App\Livewire\Admin\Country as AdminCountry;
+use App\Livewire\Admin\CountryForm;
+use App\Livewire\Admin\MeetingList;
+use App\Livewire\Admin\MovementExercise as AdminMovementExercise;
+use App\Livewire\Admin\MovementExerciseForm;
+use App\Livewire\Admin\RehabRoutineList;
+use App\Livewire\Admin\ScheduleList;
 use App\Livewire\Admin\User;
 use App\Livewire\Admin\UserForm;
 use App\Livewire\Auth\Login;
@@ -17,6 +24,7 @@ use App\Livewire\Doctor\Dashboard as DoctorDashboard;
 use App\Livewire\Doctor\MeetingSchedule;
 use App\Livewire\Doctor\MeetingScheduleConsultation;
 use App\Livewire\Patient\Dashboard as PatientDashboard;
+use App\Livewire\Patient\MovementTracking;
 use App\Livewire\Patient\Rehabilitation as PatientRehabilitation;
 use App\Livewire\Patient\RehabilitationExercise;
 use App\Livewire\Admin\PatientRehabilitationExercise;
@@ -83,6 +91,19 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('/masterdata/rehabilitation', Rehabilitation::class)->name('rehabilitation');
     Route::get('/masterdata/rehabilitation/create', RehabilitationForm::class)->name('rehabilitation.create');
     Route::get('/masterdata/rehabilitation/{id}/edit', RehabilitationForm::class)->name('rehabilitation.edit');
+    Route::get('/masterdata/movement-exercise', AdminMovementExercise::class)->name('movement-exercise');
+    Route::get('/masterdata/movement-exercise/create', MovementExerciseForm::class)->name('movement-exercise.create');
+    Route::get('/masterdata/movement-exercise/{id}/edit', MovementExerciseForm::class)->name('movement-exercise.edit');
+
+    // Country CRUD
+    Route::get('/masterdata/country', AdminCountry::class)->name('country');
+    Route::get('/masterdata/country/create', CountryForm::class)->name('country.create');
+    Route::get('/masterdata/country/{id}/edit', CountryForm::class)->name('country.edit');
+
+    // Operational views
+    Route::get('/meetings', MeetingList::class)->name('meetings');
+    Route::get('/schedules', ScheduleList::class)->name('schedules');
+    Route::get('/rehab-routines', RehabRoutineList::class)->name('rehab-routines');
 });
 
 // Doctor
@@ -110,6 +131,7 @@ Route::middleware(['auth', 'verified', 'role:patient'])->prefix('patient')->name
     Route::get('/dashboard', PatientDashboard::class)->name('dashboard');
     Route::get('/rehabilitation', PatientRehabilitation::class)->name('rehabilitation');
     Route::get('/rehabilitation/{id}/exercise', RehabilitationExercise::class)->name('rehabilitation.exercise');
+    Route::get('/movement/{sessionId}/track', MovementTracking::class)->name('movement.track');
 });
 
 

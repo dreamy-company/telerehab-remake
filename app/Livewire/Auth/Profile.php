@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Auth;
 
+use App\Models\Country;
 use App\Models\Patient;
 use App\Models\PatientPhoto;
 use App\Models\User;
@@ -19,7 +20,7 @@ use Livewire\WithFileUploads;
 class Profile extends Component
 {
     use WithFileUploads;
-    public $userId, $patientId, $userData, $name, $email, $country, $telephone, $password, $medical_record_number, $bpjs_number, $bpjs_card, $patient_condition = [], $address, $prosthetic, $prosthetic_since, $old_patient_condition, $old_bpjs_card;
+    public $userId, $patientId, $userData, $name, $email, $countryId, $telephone, $password, $medical_record_number, $bpjs_number, $bpjs_card, $patient_condition = [], $address, $prosthetic, $prosthetic_since, $old_patient_condition, $old_bpjs_card;
 
     public function mount($id = null)
     {
@@ -31,7 +32,7 @@ class Profile extends Component
             $this->userId = Auth::user()->id;
             $this->name = Auth::user()->name;
             $this->email = Auth::user()->email;
-            $this->country = Auth::user()->country;
+            $this->countryId = Auth::user()->country_id;
             $this->telephone = Auth::user()->telephone;
             $this->medical_record_number = $patient->medical_record_number;
             $this->bpjs_number = $patient->bpjs_number;
@@ -45,7 +46,7 @@ class Profile extends Component
             $userData = User::find($this->userId);
             $this->name = $userData->name;
             $this->email = $userData->email;
-            $this->country = $userData->country;
+            $this->countryId = $userData->country_id;
             $this->telephone = $userData->telephone;
         }
     }
@@ -55,7 +56,7 @@ class Profile extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'email' => "required|email|max:255|unique:users,email,{$this->userId}",
-            'country' => 'required|string|max:255',
+            'countryId' => 'required|exists:countries,id',
             'telephone' => 'required|string|max:20',
             'password' => 'nullable|string|min:8|confirmed',
         ]);
@@ -63,7 +64,7 @@ class Profile extends Component
         $user = User::find($this->userId);
         $user->name = $this->name;
         $user->email = $this->email;
-        $user->country = $this->country;
+        $user->country_id = $this->countryId;
         $user->telephone = $this->telephone;
 
         if (!empty($this->password)) {
@@ -90,7 +91,7 @@ class Profile extends Component
                     : 'required|min:6',
 
                 'telephone' => 'required',
-                'country' => 'required|string|max:255',
+                'countryId' => 'required|exists:countries,id',
 
                 'medical_record_number' => [
                     'required',
@@ -122,7 +123,7 @@ class Profile extends Component
                 [
                     'name' => $this->name,
                     'email' => $this->email,
-                    'country' => $this->country,
+                    'country_id' => $this->countryId,
                     'telephone' => $this->telephone,
                     'role' => 'patient',
                     'password' => $this->password
@@ -199,6 +200,12 @@ class Profile extends Component
     }
     public function render()
     {
-        return view('livewire.auth.profile');
+        return view('livewire.auth.profile', [
+            'countries' => Country::orderBy('name')
+                ->get(['id', 'name', 'code'])
+                ->map(fn($c) => ['id' => $c->id, 'name' => $c->name, 'iso2' => strtolower($c->code)])
+                ->values()
+                ->toArray(),
+        ]);
     }
 }

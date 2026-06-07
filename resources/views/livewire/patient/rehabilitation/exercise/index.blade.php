@@ -3,7 +3,7 @@
     <!-- Video Panduan & Upload Video Side by Side -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
-        <!-- Video Tutorial (lebih besar) -->
+        <!-- Video Tutorial (2 of 3 cols) -->
         <div id="videoTutorial" class="lg:col-span-2 bg-white shadow-lg rounded-md p-5 w-full">
             <h4 class="font-bold text-gray-800 mb-4 px-3 flex items-center gap-2">
                 <i class="fas fa-video text-teal-500"></i> Video Tutorial For {{ $rehabData->rehabilitation->name }}
@@ -79,6 +79,52 @@
         </div>
 
     </div>
+    {{-- Live Movement Tracking --}}
+    <div id="trackingZone" class="bg-white shadow-lg rounded-xl p-8 border border-gray-100 flex flex-col">
+        <div class="mb-4">
+            <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-1 block">
+                <i class="fas fa-running mr-1" aria-hidden="true"></i> Live Movement Tracking
+            </span>
+            <h3 class="text-lg font-extrabold text-gray-900 leading-tight mb-1">
+                Track Your Movement in Real Time
+            </h3>
+            <p class="text-sm text-gray-500">
+                Use your webcam to count repetitions and measure joint angles automatically. Data is saved and visible to your doctor.
+            </p>
+        </div>
+
+        <div class="space-y-3 mt-2">
+            <label for="movementExerciseSelect" class="text-xs font-black text-gray-500 uppercase tracking-widest">
+                Select Exercise Type
+            </label>
+            <select id="movementExerciseSelect"
+                    wire:model="selectedMovementExerciseId"
+                    class="select select-bordered w-full rounded-xl text-sm"
+                    aria-label="Select movement exercise type">
+                <option value="">-- Choose an exercise --</option>
+                @foreach($movementExercises as $me)
+                    <option value="{{ $me->id }}">{{ $me->name }}</option>
+                @endforeach
+            </select>
+            @error('selectedMovementExerciseId')
+                <span class="text-red-600 text-sm" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <button wire:click="startTracking"
+                wire:loading.attr="disabled"
+                {{ ($rehabData->target && $rehabData->status === 'process' && now()->greaterThanOrEqualTo(\Carbon\Carbon::parse($rehabData->target))) || $rehabData->status === 'complete' ? 'disabled' : '' }}
+                class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 px-4 rounded-xl transition flex items-center justify-center gap-3 shadow-md"
+                aria-label="Start live movement tracking session">
+            <span wire:loading.remove wire:target="startTracking">
+                <i class="fas fa-camera mr-2" aria-hidden="true"></i> Start Live Tracking
+            </span>
+            <span wire:loading wire:target="startTracking">
+                <i class="fas fa-circle-notch fa-spin mr-2" aria-hidden="true"></i> Starting...
+            </span>
+        </button>
+    </div>
+
     <dialog id="uploadModal" class="modal" wire:ignore.self>
         <form method="dialog" class="modal-box w-full max-w-lg"
             x-data="{ isUploading: false, progress: 0 }"

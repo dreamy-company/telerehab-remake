@@ -29,6 +29,38 @@
                 "name": "Rehabilitations",
                 "icon": "fa-procedures",
                 "route": "/admin/masterdata/rehabilitation"
+            },
+            {
+                "name": "Movement Exercises",
+                "icon": "fa-running",
+                "route": "/admin/masterdata/movement-exercise"
+            },
+            {
+                "name": "Countries",
+                "icon": "fa-globe-asia",
+                "route": "/admin/masterdata/country"
+            }
+        ]
+    },
+    {
+        "name": "Operational",
+        "icon": "fa-calendar-alt",
+        "route": null,
+        "subMenu": [
+            {
+                "name": "Meetings",
+                "icon": "fa-calendar-check",
+                "route": "/admin/meetings"
+            },
+            {
+                "name": "Schedules",
+                "icon": "fa-clock",
+                "route": "/admin/schedules"
+            },
+            {
+                "name": "Rehab Routines",
+                "icon": "fa-file-medical-alt",
+                "route": "/admin/rehab-routines"
             }
         ]
     }
