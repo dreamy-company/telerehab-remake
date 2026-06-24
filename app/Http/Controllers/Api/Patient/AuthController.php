@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Api\Patient;
 
 use App\Http\Controllers\Controller;
+use App\Mail\VerifyEmailMail;
 use App\Models\Patient;
 use App\Models\PatientPhoto;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -109,8 +112,19 @@ class AuthController extends Controller
             }
         }
 
-        // Kirim email verifikasi jika perlu
-        // $user->sendEmailVerificationNotification();
+        // Kirim email verifikasi (signed route, sama seperti flow web)
+        $url = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id'   => $user->id,
+                'hash' => sha1($user->email),
+            ]
+        );
+
+        Mail::to($user->email)->send(
+            new VerifyEmailMail($url, $user->name)
+        );
 
         return response()->json([
             'message' => 'Registration successful. Please verify your email.',
