@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="light">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
 
 <!-- Mirrored from telerehab-prototype-new.gretiva.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 27 Dec 2025 08:40:47 GMT -->
 

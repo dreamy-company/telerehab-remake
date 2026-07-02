@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="light">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
 
 <!-- Mirrored from telerehab-prototype-new.gretiva.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 27 Dec 2025 08:40:47 GMT -->
 
@@ -48,7 +48,7 @@
         <!-- Header -->
         @include('layouts.partials.navbar')
 
-        <div id="mainContainer" class="w-full px-8 mt-6">
+        <div id="mainContainer" class="w-full px-4 sm:px-6 lg:px-8 mt-6">
             {{ $slot }}
         </div>
     </main>

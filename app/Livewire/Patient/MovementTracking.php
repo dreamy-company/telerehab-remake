@@ -12,8 +12,11 @@ use Livewire\Component;
 class MovementTracking extends Component
 {
     public int $sessionId;
+
     public int $repCount = 0;
+
     public float $currentAngle = 0;
+
     public string $status = 'ready'; // ready | tracking | done
 
     public function mount(int $sessionId): void
@@ -27,6 +30,19 @@ class MovementTracking extends Component
 
         $this->sessionId = $sessionId;
         $this->repCount = $session->total_reps;
+    }
+
+    public function beginTracking(): void
+    {
+        $session = MovementSession::findOrFail($this->sessionId);
+        $patient = Auth::user()->patient;
+        abort_if($patient === null || $session->patient_id !== $patient->id, 403);
+
+        if ($session->status === 'completed') {
+            return;
+        }
+
+        $this->status = 'tracking';
     }
 
     public function logMovement(array $data): void
@@ -47,11 +63,11 @@ class MovementTracking extends Component
             && $angle <= ($thresholds['max_angle'] ?? 360);
 
         $session->logs()->create([
-            'rep_number'       => $rep,
-            'joint_angle'      => $angle,
+            'rep_number' => $rep,
+            'joint_angle' => $angle,
             'within_threshold' => $withinThreshold,
             'landmark_snapshot' => null,
-            'recorded_at'      => now(),
+            'recorded_at' => now(),
         ]);
 
         $this->repCount = $rep;
@@ -69,6 +85,7 @@ class MovementTracking extends Component
 
         if ($session->status === 'completed') {
             $this->status = 'done';
+
             return;
         }
 
@@ -77,7 +94,7 @@ class MovementTracking extends Component
         $maxAngle = $logs->isNotEmpty() ? round($logs->max('joint_angle'), 2) : null;
 
         $session->update([
-            'status'    => 'completed',
+            'status' => 'completed',
             'avg_angle' => $avgAngle,
             'max_angle' => $maxAngle,
             'total_reps' => $logs->count(),
@@ -89,11 +106,19 @@ class MovementTracking extends Component
         broadcast(new MovementSessionCompleted($session));
 
         $this->dispatch('session-done');
+
+        $target = $session->rehab_routine_id
+            ? route('patient.rehabilitation.exercise', ['id' => $session->rehab_routine_id])
+            : route('patient.rehabilitation');
+
+        session()->flash('success-alert', __('Movement session completed. Your data has been saved.'));
+        $this->redirect($target);
     }
 
     public function render()
     {
         $session = MovementSession::with('exercise', 'logs')->findOrFail($this->sessionId);
+
         return view('livewire.patient.movement-tracking', compact('session'));
     }
 }

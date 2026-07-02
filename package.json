@@ -18,6 +18,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "@mediapipe/tasks-vision": "^0.10.14",
         "intl-tel-input": "^25.14.1",
         "nice-select2": "^2.4.1",
         "toastify-js": "^1.12.0",

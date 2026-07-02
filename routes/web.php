@@ -1,24 +1,28 @@
 <?php
 
-use App\Livewire\Admin\Dashboard;
-use App\Livewire\Admin\Patient;
-use App\Livewire\Admin\PatientForm;
-use App\Livewire\Admin\PatientRehabilitation as AdminPatientRehabilitation;
-use App\Livewire\Admin\Rehabilitation;
-use App\Livewire\Admin\RehabilitationForm;
-use App\Livewire\Admin\RehabType as AdminRehabType;
-use App\Livewire\Admin\RehabTypeForm;
 use App\Livewire\Admin\Country as AdminCountry;
 use App\Livewire\Admin\CountryForm;
+use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\MeetingList;
 use App\Livewire\Admin\MovementExercise as AdminMovementExercise;
 use App\Livewire\Admin\MovementExerciseForm;
+use App\Livewire\Admin\Patient;
+use App\Livewire\Admin\PatientForm;
+use App\Livewire\Admin\PatientRehabilitation as AdminPatientRehabilitation;
+use App\Livewire\Admin\PatientRehabilitationExercise;
+use App\Livewire\Admin\Rehabilitation;
+use App\Livewire\Admin\RehabilitationForm;
 use App\Livewire\Admin\RehabRoutineList;
+use App\Livewire\Admin\RehabType as AdminRehabType;
+use App\Livewire\Admin\RehabTypeForm;
 use App\Livewire\Admin\ScheduleList;
 use App\Livewire\Admin\User;
 use App\Livewire\Admin\UserForm;
+use App\Livewire\Auth\EmailVerifed;
 use App\Livewire\Auth\Login;
+use App\Livewire\Auth\Profile;
 use App\Livewire\Auth\Register;
+use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Doctor\Consultation;
 use App\Livewire\Doctor\Dashboard as DoctorDashboard;
 use App\Livewire\Doctor\MeetingSchedule;
@@ -27,18 +31,21 @@ use App\Livewire\Patient\Dashboard as PatientDashboard;
 use App\Livewire\Patient\MovementTracking;
 use App\Livewire\Patient\Rehabilitation as PatientRehabilitation;
 use App\Livewire\Patient\RehabilitationExercise;
-use App\Livewire\Admin\PatientRehabilitationExercise;
-use App\Livewire\Auth\EmailVerifed;
-use App\Livewire\Auth\Profile;
-use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Therapist\Dashboard as TherapistDashboard;
 use App\Livewire\Welcome;
-use App\Models\RehabType;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', action: Welcome::class)->name('welcome');
+
+// Language switcher (public so guests can switch too)
+Route::get('/locale/{locale}', function (string $locale) {
+    if (in_array($locale, \App\Http\Middleware\SetLocale::SUPPORTED, true)) {
+        session(['locale' => $locale]);
+    }
+
+    return redirect()->back();
+})->name('locale.switch');
 
 // Authentication Routes
 Route::middleware(['not-authenticated'])->group(function () {
@@ -54,7 +61,6 @@ Route::get('/email/verify/{id}/{hash}', EmailVerifed::class
 // Logout
 Route::get('/auth/logout', [Login::class, 'logout'])->name('auth.logout');
 
-
 // Profile
 Route::get('/{role}/{id}/profile', Profile::class)->middleware(['auth', 'verified'])->name('auth.profile');
 // Redirect Dashboard
@@ -63,11 +69,11 @@ Route::get('/dashboard', function () {
 
     if ($checkUser->role === 'admin') {
         return redirect()->route('admin.dashboard');
-    } else if ($checkUser->role === 'doctor') {
+    } elseif ($checkUser->role === 'doctor') {
         return redirect()->route('doctor.dashboard');
-    } else if ($checkUser->role === 'patient') {
+    } elseif ($checkUser->role === 'patient') {
         return redirect()->route('patient.dashboard');
-    } else if ($checkUser->role === 'therapist') {
+    } elseif ($checkUser->role === 'therapist') {
         return redirect()->route('therapist.dashboard');
     }
 })->name('dashboard');
@@ -125,7 +131,6 @@ Route::middleware(['auth', 'verified', 'role:doctor'])->prefix('doctor')->name('
     Route::get('/meeting-schedule/{id}/consultation', MeetingScheduleConsultation::class)->name('meeting-schedule.consultation');
 });
 
-
 // Patient
 Route::middleware(['auth', 'verified', 'role:patient'])->prefix('patient')->name('patient.')->group(function () {
     Route::get('/dashboard', PatientDashboard::class)->name('dashboard');
@@ -133,7 +138,6 @@ Route::middleware(['auth', 'verified', 'role:patient'])->prefix('patient')->name
     Route::get('/rehabilitation/{id}/exercise', RehabilitationExercise::class)->name('rehabilitation.exercise');
     Route::get('/movement/{sessionId}/track', MovementTracking::class)->name('movement.track');
 });
-
 
 // Therapist
 Route::middleware(['auth', 'verified', 'role:therapist'])->prefix('therapist')->name('therapist.')->group(function () {
@@ -144,4 +148,4 @@ Route::middleware(['auth', 'verified', 'role:therapist'])->prefix('therapist')->
     Route::get('/patient/{id}/rehabilitation', AdminPatientRehabilitation::class)->name('patient.rehabilitation');
     Route::get('/patient/{id}/rehabilitation/{rehabRoutineId}/exercise', PatientRehabilitationExercise::class)->name('patient.rehabilitation.exercise');
 });
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

@@ -17,6 +17,7 @@ class RehabilitationExercise extends Component
 
     public $rehabRoutineId, $rehabData, $results, $video, $feedback, $rehabOverdue = false;
     public $movementExercises, $selectedMovementExerciseId;
+    public $movementSessions;
 
     public function mount($id)
     {
@@ -24,6 +25,10 @@ class RehabilitationExercise extends Component
         $this->rehabData = RehabRoutine::with('rehabilitation')->findOrFail($this->rehabRoutineId);
         $this->results = $this->rehabData->routineResults()->orderBy('created_at', 'desc')->get();
         $this->movementExercises = MovementExercise::all();
+        $this->movementSessions = MovementSession::with('exercise', 'logs', 'flags')
+            ->where('rehab_routine_id', $this->rehabRoutineId)
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     public function uploadVideo()
@@ -53,6 +58,17 @@ class RehabilitationExercise extends Component
         $this->validate(['selectedMovementExerciseId' => 'required|exists:movement_exercises,id']);
 
         $patient = Auth::user()->patient;
+
+        $existing = MovementSession::where('patient_id', $patient->id)
+            ->where('rehab_routine_id', $this->rehabRoutineId)
+            ->where('status', 'in_progress')
+            ->latest()
+            ->first();
+
+        if ($existing) {
+            $this->redirect(route('patient.movement.track', $existing->id));
+            return;
+        }
 
         $session = MovementSession::create([
             'patient_id'           => $patient->id,
