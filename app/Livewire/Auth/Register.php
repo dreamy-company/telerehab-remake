@@ -73,14 +73,19 @@ class Register extends Component
     public function validateCurrentStep()
     {
         if ($this->currentStep == 1) {
+            // Country & telephone are optional for now: coerce blanks to null so the
+            // `nullable` rules short-circuit numeric/digits/unique checks when empty.
+            $this->telephone = filled($this->telephone) ? $this->telephone : null;
+            $this->countryId = filled($this->countryId) ? $this->countryId : null;
+
             $this->validate([
                 'name' => 'required|string|min:3',
                 'email' => 'required|email|unique:users,email',
-                'countryId' => 'required|exists:countries,id',
-                'telephone' => 'required|numeric|digits_between:7,15|unique:users,telephone',
+                'countryId' => 'nullable|exists:countries,id',
+                'telephone' => 'nullable|numeric|digits_between:7,15|unique:users,telephone',
                 'password' => 'required|min:6',
             ]);
-            
+
         } elseif ($this->currentStep == 2) {
             $this->validate([
                 'address' => 'nullable|string|min:10',
@@ -110,7 +115,7 @@ class Register extends Component
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
                 'country_id' => $this->countryId,
-                'telephone' => $this->telephone,
+                'telephone' => $this->telephone ?? '', // column is NOT NULL; store '' when blank
                 'role' => 'patient',
             ]);
 

@@ -68,7 +68,8 @@
             this.iti = window.intlTelInput(this.$refs.phone, {
                 initialCountry: 'id',
                 separateDialCode: true,
-                utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js',
+                // v25: 'utilsScript' was removed. Utils (formatting/validation) load via loadUtils.
+                loadUtils: () => import('https://cdn.jsdelivr.net/npm/intl-tel-input@25.14.1/build/js/utils.js'),
             });
 
             // 2. Ambil list negara dari database (dipass server-side)
@@ -427,7 +428,8 @@
             this.iti = window.intlTelInput(this.$refs.phone, {
                 initialCountry: 'id',
                 separateDialCode: true,
-                utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js',
+                // v25: 'utilsScript' was removed. Utils (formatting/validation) load via loadUtils.
+                loadUtils: () => import('https://cdn.jsdelivr.net/npm/intl-tel-input@25.14.1/build/js/utils.js'),
             });
 
             // 2. Ambil list negara dari database (dipass server-side)
