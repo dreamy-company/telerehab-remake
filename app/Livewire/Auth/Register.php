@@ -77,7 +77,7 @@ class Register extends Component
                 'name' => 'required|string|min:3',
                 'email' => 'required|email|unique:users,email',
                 'countryId' => 'required|exists:countries,id',
-                'telephone' => 'required|numeric|min:10|unique:users,telephone',
+                'telephone' => 'required|numeric|digits_between:7,15|unique:users,telephone',
                 'password' => 'required|min:6',
             ]);
             

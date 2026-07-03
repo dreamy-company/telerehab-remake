@@ -25,7 +25,7 @@
                 <div class="flex justify-center lg:justify-start hero-badge">
                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 border border-[#17B8A6]/20 shadow-sm">
                     <span class="w-2 h-2 rounded-full bg-[#17B8A6] animate-pulse"></span>
-                    <span class="text-xs font-bold text-[#17B8A6] tracking-widest uppercase">Future of Mobility</span>
+                    <span class="text-xs font-bold text-[#17B8A6] tracking-widest uppercase">AI-Powered Telerehabilitation</span>
                 </div>
                 </div>
 
@@ -62,6 +62,93 @@
                  alt="Prosthetic Landing"
                  class="w-full max-w-xs sm:max-w-md lg:max-w-lg object-contain drop-shadow-xl floating-image rounded-3xl relative z-10">
             </div>
+            </div>
+        </section>
+
+        <!-- =============================================== -->
+        <!--              KEY FEATURES SECTION               -->
+        <!-- =============================================== -->
+        <section class="py-24 relative">
+            <div class="container mx-auto px-6 md:px-12">
+                <!-- Header -->
+                <div class="text-center max-w-3xl mx-auto mb-16 feature-header opacity-0">
+                    <span class="text-[#17B8A6] font-bold tracking-wider text-sm uppercase mb-2 block">Platform Capabilities</span>
+                    <h2 class="text-3xl md:text-5xl font-bold text-slate-800 mb-6">Built for Every Step</h2>
+                    <p class="text-slate-500 text-lg">
+                        Everything you need — from your first consultation to mastering your prosthetic — in one platform.
+                    </p>
+                </div>
+
+                <!-- Feature Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <!-- Feature 1: Pose Tracking -->
+                    <div class="feature-card group bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-[#17B8A6]/30">
+                        <div class="w-14 h-14 bg-[#17B8A6]/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#17B8A6] transition-colors duration-300">
+                            <i class="fas fa-camera text-xl text-[#17B8A6] group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">Real-Time Pose Tracking</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">
+                            AI joint-angle detection via Google MediaPipe — counts reps and checks form directly in your browser, no extra app needed.
+                        </p>
+                    </div>
+
+                    <!-- Feature 2: Progress Analytics -->
+                    <div class="feature-card group bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-cyan-400/30">
+                        <div class="w-14 h-14 bg-cyan-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 transition-colors duration-300">
+                            <i class="fas fa-chart-line text-xl text-cyan-500 group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">Progress Analytics</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">
+                            Every session logs joint angles, rep counts, and completion rates so your care team sees your real data, not just self-reports.
+                        </p>
+                    </div>
+
+                    <!-- Feature 3: Video Reviews -->
+                    <div class="feature-card group bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-sky-400/30">
+                        <div class="w-14 h-14 bg-sky-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-sky-500 transition-colors duration-300">
+                            <i class="fas fa-video text-xl text-sky-500 group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">Exercise Video Reviews</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">
+                            Record your sessions, upload them, and receive personalised text and video feedback from your doctor or therapist.
+                        </p>
+                    </div>
+
+                    <!-- Feature 4: Online Consultation -->
+                    <div class="feature-card group bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-emerald-400/30">
+                        <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-500 transition-colors duration-300">
+                            <i class="fas fa-calendar-check text-xl text-emerald-500 group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">Online Consultation</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">
+                            Request a consultation in one tap. A doctor accepts, sets the schedule, delivers a diagnosis, and assigns your rehab plan — all in the platform.
+                        </p>
+                    </div>
+
+                    <!-- Feature 5: Mobile App -->
+                    <div class="feature-card group bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-violet-400/30">
+                        <div class="w-14 h-14 bg-violet-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-violet-500 transition-colors duration-300">
+                            <i class="fas fa-mobile-alt text-xl text-violet-500 group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">Mobile App Ready</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">
+                            A full REST API powers a companion mobile app so patients can view routines, request consultations, and track progress from anywhere.
+                        </p>
+                    </div>
+
+                    <!-- Feature 6: Clinical Flags -->
+                    <div class="feature-card group bg-gradient-to-br from-[#17B8A6]/5 to-slate-50 p-8 rounded-3xl border border-[#17B8A6]/30 shadow-lg shadow-[#17B8A6]/10 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ring-1 ring-[#17B8A6]/20">
+                        <div class="w-14 h-14 bg-[#17B8A6]/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#17B8A6] transition-colors duration-300">
+                            <i class="fas fa-flag text-xl text-[#17B8A6] group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3">Clinical Flags</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Doctors and therapists can flag sessions for wrong form, incomplete range, or missed reps — keeping every deviation on record for safer care.
+                        </p>
+                    </div>
+
+                </div>
             </div>
         </section>
 
@@ -150,7 +237,7 @@
                         </div>
                         <h3 class="text-xl font-bold text-slate-800 mb-3">Routine Rehabilitation</h3>
                         <p class="text-sm text-slate-600 leading-relaxed">
-                            The journey continues. Engage in guided therapy sessions to master your new device and regain strength.
+                            The journey continues. Engage in guided therapy sessions, track your joint angles live with AI pose detection, and upload exercise videos for expert review.
                         </p>
                     </div>
 
@@ -270,7 +357,39 @@
                 ease: "sine.inOut"
             });
 
-            // 3. Section Header (ScrollTrigger)
+            // 3. Feature Section Header (ScrollTrigger)
+            gsap.fromTo(".feature-header",
+                { autoAlpha: 0, y: 50 },
+                {
+                    scrollTrigger: {
+                        trigger: ".feature-header",
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    },
+                    autoAlpha: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: "power2.out"
+                }
+            );
+
+            // 4. Staggered Feature Cards (ScrollTrigger)
+            gsap.fromTo(".feature-card",
+                { autoAlpha: 0, y: 60 },
+                {
+                    scrollTrigger: {
+                        trigger: ".feature-card",
+                        start: "top 80%",
+                    },
+                    autoAlpha: 1,
+                    y: 0,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: "back.out(1.5)"
+                }
+            );
+
+            // 6. Step Section Header (ScrollTrigger)
             gsap.fromTo(".step-header",
                 { autoAlpha: 0, y: 50 },
                 {
@@ -286,7 +405,7 @@
                 }
             );
 
-            // 4. Staggered Steps (ScrollTrigger)
+            // 7. Staggered Steps (ScrollTrigger)
             gsap.fromTo(".step-card",
                 { autoAlpha: 0, y: 60 },
                 {

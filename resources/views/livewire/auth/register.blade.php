@@ -122,7 +122,7 @@
             this.iti = window.intlTelInput(this.$refs.phone, {
                 initialCountry: 'id',
                 separateDialCode: true,
-                utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js',
+                utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.0/build/js/utils.js',
             });
 
             // 2. Ambil list negara dari database (dipass server-side)
@@ -155,7 +155,7 @@
                 if (found) { this.selectedCountry = found.name; this.selectedIso = found.iso2; }
             }
 
-            let initialPhone = @json($telephone);
+            let initialPhone = @json($telephone ?? '');
             if (initialPhone) {
                 // Berikan jeda sedikit agar utilsScript siap
                 setTimeout(() => {
