@@ -17,6 +17,8 @@ Route::prefix('patient')->middleware(['auth:sanctum', 'role:patient'])->group(fu
     // Auth
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [AuthController::class, 'profile']);
+    Route::get('/{id}/profile', [AuthController::class, 'profile']);
+    Route::post('/{id}/profile', [AuthController::class, 'updateProfile']);
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index']);
