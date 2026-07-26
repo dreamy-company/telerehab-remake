@@ -21,6 +21,11 @@ class RehabRoutine extends Model
         return $this->belongsTo(Rehab::class, 'rehabilitation_id');
     }
 
+    public function doctor()
+    {
+        return $this->belongsTo(User::class, 'doctor_id');
+    }
+
     public function deletedBy()
     {
         return $this->belongsTo(User::class, 'deleted_by');
