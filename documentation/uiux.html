@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TeleRehab — UI/UX Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: { DEFAULT: '#17B8A6', dark: '#109382', light: '#d1f5f1' },
+        },
+        fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+      }
+    }
+  }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  * { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .screen { display: none; }
+  .screen.active { display: flex; }
+  .nav-item { transition: all 0.15s; }
+  .nav-item:hover { background: rgba(23,184,166,.12); }
+  .nav-item.active { background: rgba(23,184,166,.18); border-left: 3px solid #17B8A6; }
+  .app-sidebar-icon { transition: all 0.15s; }
+  .app-sidebar-icon:hover { background: rgba(255,255,255,.1); }
+  .badge-new { background: linear-gradient(135deg,#17B8A6,#0ea5a0); }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: #f1f5f9; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  .skeleton-line { background: rgba(23,184,166,.6); position: absolute; }
+  @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(1.15)} }
+  .pulse-dot { animation: pulse-dot 1.4s infinite; }
+  @keyframes bar-fill { from{width:0} to{width:var(--w)} }
+  .rep-badge { display: inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; font-size:11px; font-weight:700; }
+</style>
+</head>
+<body class="bg-slate-100 min-h-screen" style="font-family:'Plus Jakarta Sans',sans-serif">
+
+<!-- ─── Outer Shell ──────────────────────────────────────────────── -->
+<div class="flex min-h-screen">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       LEFT NAV — Screen Selector
+  ══════════════════════════════════════════════════════════════ -->
+  <aside class="w-72 bg-white border-r border-slate-200 flex flex-col fixed top-0 left-0 bottom-0 z-30 shadow-sm">
+    <div class="px-5 py-4 border-b border-slate-100">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#17B8A6">
+          <i class="fa-solid fa-person-walking text-white text-sm"></i>
+        </div>
+        <div>
+          <div class="font-bold text-slate-800 text-sm leading-tight">TeleRehab</div>
+          <div class="text-xs text-slate-400">UI/UX Mockups</div>
+        </div>
+      </div>
+    </div>
+    <div class="flex-1 overflow-y-auto py-3 px-2">
+      <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">Screens</div>
+
+      <button onclick="showScreen(0)" class="nav-item active w-full text-left flex items-start gap-3 px-3 py-2.5 rounded-lg mb-0.5" id="nav-0">
+        <span class="text-brand mt-0.5"><i class="fa-solid fa-house fa-fw text-xs"></i></span>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-semibold text-slate-700">Landing Page</div>
+          <div class="text-xs text-slate-400">Public · Tracking showcase</div>
+        </div>
+        <span class="text-xs text-slate-400 mt-0.5">1</span>
+      </button>
+
+      <button onclick="showScreen(1)" class="nav-item w-full text-left flex items-start gap-3 px-3 py-2.5 rounded-lg mb-0.5" id="nav-1">
+        <span class="text-slate-500 mt-0.5"><i class="fa-solid fa-gauge-high fa-fw text-xs"></i></span>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-semibold text-slate-700">Admin Dashboard</div>
+          <div class="text-xs text-slate-400">+Movement Sessions stat</div>
+        </div>
+        <span class="text-xs text-slate-400 mt-0.5">2</span>
+      </button>
+
+      <button onclick="showScreen(2)" class="nav-item w-full text-left flex items-start gap-3 px-3 py-2.5 rounded-lg mb-0.5" id="nav-2">
+        <span class="text-slate-500 mt-0.5"><i class="fa-solid fa-dumbbell fa-fw text-xs"></i></span>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5">
+            <div class="text-sm font-semibold text-slate-700">Exercise Management</div>
+            <span class="badge-new text-white text-[9px] font-bold px-1.5 py-0.5 rounded">★ NEW</span>
+          </div>
+          <div class="text-xs text-slate-400">Admin · CRUD</div>
+        </div>
+        <span class="text-xs text-slate-400 mt-0.5">3</span>
+      </button>
+
+      <button onclick="showScreen(3)" class="nav-item w-full text-left flex items-start gap-3 px-3 py-2.5 rounded-lg mb-0.5" id="nav-3">
+        <span class="text-slate-500 mt-0.5"><i class="fa-solid fa-clipboard-list fa-fw text-xs"></i></span>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-semibold text-slate-700">Rehab Exercise</div>
+          <div class="text-xs text-slate-400">Patient · +Tracking section</div>
+        </div>
+        <span class="text-xs text-slate-400 mt-0.5">4</span>
+      </button>
+
+      <button onclick="showScreen(4)" class="nav-item w-full text-left flex items-start gap-3 px-3 py-2.5 rounded-lg mb-0.5" id="nav-4">
+        <span class="text-slate-500 mt-0.5"><i class="fa-solid fa-video fa-fw text-xs"></i></span>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5">
+            <div class="text-sm font-semibold text-slate-700">Live Tracking</div>
+            <span class="badge-new text-white text-[9px] font-bold px-1.5 py-0.5 rounded">★ NEW</span>
+          </div>
+          <div class="text-xs text-slate-400">Patient · MediaPipe</div>
+        </div>
+        <span class="text-xs text-slate-400 mt-0.5">5</span>
+      </button>
+
+      <button onclick="showScreen(5)" class="nav-item w-full text-left flex items-start gap-3 px-3 py-2.5 rounded-lg mb-0.5" id="nav-5">
+        <span class="text-slate-500 mt-0.5"><i class="fa-solid fa-stethoscope fa-fw text-xs"></i></span>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5">
+            <div class="text-sm font-semibold text-slate-700">Exercise Review & Flag</div>
+            <span class="badge-new text-white text-[9px] font-bold px-1.5 py-0.5 rounded">★ NEW</span>
+          </div>
+          <div class="text-xs text-slate-400">Doctor · Movement data</div>
+        </div>
+        <span class="text-xs text-slate-400 mt-0.5">6</span>
+      </button>
+
+      <button onclick="showScreen(6)" class="nav-item w-full text-left flex items-start gap-3 px-3 py-2.5 rounded-lg mb-0.5" id="nav-6">
+        <span class="text-slate-500 mt-0.5"><i class="fa-solid fa-notes-medical fa-fw text-xs"></i></span>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-semibold text-slate-700">Consultation & Rehab</div>
+          <div class="text-xs text-slate-400">Doctor · Assignment flow</div>
+        </div>
+        <span class="text-xs text-slate-400 mt-0.5">7</span>
+      </button>
+    </div>
+    <div class="px-4 py-3 border-t border-slate-100 text-xs text-slate-400">
+      TeleRehab Upgrade — 2026
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       MAIN AREA
+  ══════════════════════════════════════════════════════════════ -->
+  <main class="ml-72 flex-1 min-h-screen bg-slate-100 relative">
+
+    <!-- Download button — fixed top-right -->
+    <button onclick="downloadPNG()" class="fixed top-4 right-6 z-50 flex items-center gap-2 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-lg hover:opacity-90 transition" style="background:#17B8A6">
+      <i class="fa-solid fa-download"></i> Download PNG
+    </button>
+
+    <!-- ────────────────────────────────────────────────────────────
+         SCREEN 1 — Landing Page
+    ──────────────────────────────────────────────────────────── -->
+    <div id="screen-0" class="screen active flex-col" style="min-height:100vh">
+      <div id="mockup-capture" class="flex-1">
+
+        <!-- Public top nav -->
+        <nav class="bg-white border-b border-slate-200 px-10 py-3 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#17B8A6">
+              <i class="fa-solid fa-person-walking text-white text-sm"></i>
+            </div>
+            <span class="font-bold text-slate-800 text-lg">TeleRehab</span>
+          </div>
+          <div class="flex items-center gap-6 text-sm font-medium text-slate-600">
+            <a class="hover:text-brand">Features</a>
+            <a class="hover:text-brand">How it Works</a>
+            <a class="hover:text-brand">About</a>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="text-sm font-semibold text-slate-600 hover:text-brand px-3 py-1.5">Log In</button>
+            <button class="text-sm font-semibold text-white px-4 py-2 rounded-xl" style="background:#17B8A6">Get Started</button>
+          </div>
+        </nav>
+
+        <!-- Hero -->
+        <section class="bg-gradient-to-br from-slate-50 via-cyan-50 to-teal-50 px-10 py-16 flex items-center gap-12">
+          <div class="flex-1">
+            <div class="inline-flex items-center gap-2 bg-white border border-teal-200 text-brand text-xs font-semibold px-3 py-1 rounded-full mb-5 shadow-sm">
+              <i class="fa-solid fa-sparkles"></i> AI-Powered Rehabilitation
+            </div>
+            <h1 class="text-4xl font-extrabold text-slate-900 leading-tight mb-4">
+              Recover Smarter with<br/><span style="color:#17B8A6">Real-Time Movement Tracking</span>
+            </h1>
+            <p class="text-slate-500 text-base mb-7 max-w-md">Connect patients with doctors and therapists. Track rehabilitation exercises using AI pose detection — no wearables required.</p>
+            <div class="flex gap-3">
+              <button class="font-semibold text-white px-6 py-3 rounded-xl shadow-md hover:opacity-90 text-sm" style="background:#17B8A6">Start Free Trial</button>
+              <button class="font-semibold text-slate-700 bg-white border border-slate-200 px-6 py-3 rounded-xl shadow-sm hover:bg-slate-50 text-sm">Watch Demo <i class="fa-solid fa-play ml-1 text-xs"></i></button>
+            </div>
+          </div>
+          <!-- Hero illustration -->
+          <div class="flex-shrink-0 w-96 h-60 bg-white rounded-3xl shadow-xl border border-slate-100 flex items-center justify-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-teal-50 to-cyan-100 opacity-60"></div>
+            <!-- Skeleton figure SVG mockup -->
+            <svg width="160" height="200" viewBox="0 0 160 200" class="relative z-10">
+              <!-- Head -->
+              <circle cx="80" cy="25" r="15" fill="none" stroke="#17B8A6" stroke-width="2.5"/>
+              <!-- Spine -->
+              <line x1="80" y1="40" x2="80" y2="100" stroke="#17B8A6" stroke-width="2.5"/>
+              <!-- Shoulders -->
+              <line x1="80" y1="50" x2="40" y2="70" stroke="#17B8A6" stroke-width="2.5"/>
+              <line x1="80" y1="50" x2="120" y2="70" stroke="#17B8A6" stroke-width="2.5"/>
+              <!-- Left arm -->
+              <line x1="40" y1="70" x2="25" y2="105" stroke="#17B8A6" stroke-width="2.5"/>
+              <!-- Right arm — raised -->
+              <line x1="120" y1="70" x2="140" y2="45" stroke="#17B8A6" stroke-width="2.5"/>
+              <!-- Hips -->
+              <line x1="80" y1="100" x2="55" y2="115" stroke="#17B8A6" stroke-width="2.5"/>
+              <line x1="80" y1="100" x2="105" y2="115" stroke="#17B8A6" stroke-width="2.5"/>
+              <!-- Legs -->
+              <line x1="55" y1="115" x2="45" y2="160" stroke="#17B8A6" stroke-width="2.5"/>
+              <line x1="105" y1="115" x2="115" y2="160" stroke="#17B8A6" stroke-width="2.5"/>
+              <!-- Feet -->
+              <line x1="45" y1="160" x2="32" y2="170" stroke="#17B8A6" stroke-width="2.5"/>
+              <line x1="115" y1="160" x2="128" y2="170" stroke="#17B8A6" stroke-width="2.5"/>
+              <!-- Joints -->
+              <circle cx="40" cy="70" r="4" fill="#17B8A6"/><circle cx="120" cy="70" r="4" fill="#17B8A6"/>
+              <circle cx="55" cy="115" r="4" fill="#17B8A6"/><circle cx="105" cy="115" r="4" fill="#17B8A6"/>
+              <circle cx="25" cy="105" r="3" fill="#17B8A6"/><circle cx="140" cy="45" r="3" fill="#17B8A6"/>
+              <circle cx="45" cy="160" r="3" fill="#17B8A6"/><circle cx="115" cy="160" r="3" fill="#17B8A6"/>
+              <!-- Angle arc -->
+              <path d="M 120 70 A 20 20 0 0 0 105 53" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,2"/>
+              <text x="125" y="58" font-size="9" fill="#f59e0b" font-weight="bold">142°</text>
+            </svg>
+            <!-- Tracking badge -->
+            <div class="absolute bottom-4 left-4 bg-white rounded-xl px-3 py-2 shadow-md flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full pulse-dot" style="background:#17B8A6"></span>
+              <span class="text-xs font-semibold text-slate-700">Tracking Active</span>
+            </div>
+            <div class="absolute top-4 right-4 bg-white rounded-xl px-3 py-2 shadow-md">
+              <div class="text-xs text-slate-500">Reps</div>
+              <div class="text-lg font-extrabold" style="color:#17B8A6">8/12</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ★ NEW: Tracking Showcase -->
+        <section class="bg-white px-10 py-12 border-t border-b border-slate-100">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="badge-new text-white text-xs font-bold px-2 py-0.5 rounded-full">★ NEW</span>
+            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Upgrade Feature</span>
+          </div>
+          <div class="flex items-start gap-12">
+            <div class="flex-1">
+              <h2 class="text-2xl font-bold text-slate-900 mb-3">AI Movement Tracking</h2>
+              <p class="text-slate-500 text-sm mb-6">No wearables. No extra hardware. Just your camera and our browser-based AI model powered by Google MediaPipe.</p>
+              <ul class="space-y-3">
+                <li class="flex items-center gap-3"><div class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs" style="background:#17B8A6"><i class="fa-solid fa-check"></i></div><span class="text-sm text-slate-700 font-medium">Real-time joint angle measurement</span></li>
+                <li class="flex items-center gap-3"><div class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs" style="background:#17B8A6"><i class="fa-solid fa-check"></i></div><span class="text-sm text-slate-700 font-medium">Automatic rep counting with threshold validation</span></li>
+                <li class="flex items-center gap-3"><div class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs" style="background:#17B8A6"><i class="fa-solid fa-check"></i></div><span class="text-sm text-slate-700 font-medium">Doctor-reviewable session logs &amp; clinical flags</span></li>
+                <li class="flex items-center gap-3"><div class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs" style="background:#17B8A6"><i class="fa-solid fa-check"></i></div><span class="text-sm text-slate-700 font-medium">Works in any modern browser — no app install</span></li>
+              </ul>
+            </div>
+            <!-- Mini tracking UI preview -->
+            <div class="flex-shrink-0 grid grid-cols-3 gap-3 w-72">
+              <div class="col-span-3 bg-slate-900 rounded-xl h-36 flex items-center justify-center relative overflow-hidden">
+                <svg width="120" height="120" viewBox="0 0 120 130" class="opacity-80">
+                  <circle cx="60" cy="18" r="10" fill="none" stroke="#17B8A6" stroke-width="2"/>
+                  <line x1="60" y1="28" x2="60" y2="70" stroke="#17B8A6" stroke-width="2"/>
+                  <line x1="60" y1="38" x2="30" y2="55" stroke="#17B8A6" stroke-width="2"/>
+                  <line x1="60" y1="38" x2="90" y2="55" stroke="#17B8A6" stroke-width="2"/>
+                  <line x1="30" y1="55" x2="18" y2="80" stroke="#17B8A6" stroke-width="2"/>
+                  <line x1="90" y1="55" x2="102" y2="80" stroke="#17B8A6" stroke-width="2"/>
+                  <line x1="60" y1="70" x2="42" y2="90" stroke="#17B8A6" stroke-width="2"/>
+                  <line x1="60" y1="70" x2="78" y2="90" stroke="#17B8A6" stroke-width="2"/>
+                  <line x1="42" y1="90" x2="36" y2="115" stroke="#17B8A6" stroke-width="2"/>
+                  <line x1="78" y1="90" x2="84" y2="115" stroke="#17B8A6" stroke-width="2"/>
+                  <circle cx="30" cy="55" r="3" fill="#17B8A6"/><circle cx="90" cy="55" r="3" fill="#17B8A6"/>
+                </svg>
+                <div class="absolute top-2 left-2 text-xs text-green-400 font-semibold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span> LIVE</div>
+              </div>
+              <div class="bg-teal-50 rounded-xl p-3 text-center">
+                <div class="text-xl font-extrabold text-brand">12</div>
+                <div class="text-xs text-slate-500">Reps</div>
+              </div>
+              <div class="bg-amber-50 rounded-xl p-3 text-center">
+                <div class="text-xl font-extrabold text-amber-600">138°</div>
+                <div class="text-xs text-slate-500">Angle</div>
+              </div>
+              <div class="bg-green-50 rounded-xl p-3 text-center">
+                <div class="text-xl font-extrabold text-green-600"><i class="fa-solid fa-circle-check text-lg"></i></div>
+                <div class="text-xs text-slate-500">In Range</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Key Features -->
+        <section class="px-10 py-12 bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-100">
+          <h2 class="text-xl font-bold text-slate-900 mb-6 text-center">Everything Your Rehab Team Needs</h2>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><div class="w-9 h-9 rounded-xl mb-3 flex items-center justify-center text-white text-sm" style="background:#17B8A6"><i class="fa-solid fa-video"></i></div><div class="font-bold text-slate-800 text-sm mb-1">Video Consultations</div><div class="text-xs text-slate-500">Schedule and conduct remote consultations.</div></div>
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><div class="w-9 h-9 rounded-xl mb-3 flex items-center justify-center text-white text-sm" style="background:#6366f1"><i class="fa-solid fa-person-running"></i></div><div class="font-bold text-slate-800 text-sm mb-1">Pose Tracking</div><div class="text-xs text-slate-500">AI-powered joint tracking with no hardware.</div></div>
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><div class="w-9 h-9 rounded-xl mb-3 flex items-center justify-center text-white text-sm" style="background:#f59e0b"><i class="fa-solid fa-chart-line"></i></div><div class="font-bold text-slate-800 text-sm mb-1">Progress Reports</div><div class="text-xs text-slate-500">Track rep counts, angle history, and trends.</div></div>
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><div class="w-9 h-9 rounded-xl mb-3 flex items-center justify-center text-white text-sm" style="background:#ec4899"><i class="fa-solid fa-mobile-screen"></i></div><div class="font-bold text-slate-800 text-sm mb-1">Mobile App</div><div class="text-xs text-slate-500">Native mobile access via REST API.</div></div>
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><div class="w-9 h-9 rounded-xl mb-3 flex items-center justify-center text-white text-sm" style="background:#14b8a6"><i class="fa-solid fa-flag"></i></div><div class="font-bold text-slate-800 text-sm mb-1">Clinical Flags</div><div class="text-xs text-slate-500">Doctors flag wrong form, missed reps, and more.</div></div>
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><div class="w-9 h-9 rounded-xl mb-3 flex items-center justify-center text-white text-sm" style="background:#64748b"><i class="fa-solid fa-shield-halved"></i></div><div class="font-bold text-slate-800 text-sm mb-1">Secure & HIPAA-Ready</div><div class="text-xs text-slate-500">Role-based access, email verification, Sanctum auth.</div></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────────────────────────
+         SCREEN 2 — Admin Dashboard
+    ──────────────────────────────────────────────────────────── -->
+    <div id="screen-1" class="screen flex-row" style="min-height:100vh">
+      <div id="mockup-capture" class="flex flex-1">
+        <!-- App sidebar -->
+        <div class="flex-shrink-0 w-[72px] bg-slate-900 flex flex-col items-center py-4 gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-2" style="background:#17B8A6"><i class="fa-solid fa-person-walking text-white text-sm"></i></div>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-white" style="background:rgba(23,184,166,.2)"><i class="fa-solid fa-gauge-high text-sm" style="color:#17B8A6"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-white"><i class="fa-solid fa-users text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-white"><i class="fa-solid fa-user-doctor text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-white"><i class="fa-solid fa-dumbbell text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-white"><i class="fa-solid fa-calendar text-sm"></i></button>
+          <div class="flex-1"></div>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-gear text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-right-from-bracket text-sm"></i></button>
+        </div>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 overflow-auto">
+          <!-- Top header -->
+          <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between">
+            <div>
+              <div class="font-bold text-slate-800">Dashboard</div>
+              <div class="text-xs text-slate-400">Welcome back, Administrator</div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 text-sm"><i class="fa-solid fa-bell"></i></button>
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background:#17B8A6">A</div>
+                <span class="text-sm font-semibold text-slate-700">Admin</span>
+              </div>
+            </div>
+          </header>
+
+          <div class="p-6">
+            <!-- Large stat cards -->
+            <div class="grid grid-cols-4 gap-4 mb-5">
+              <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                <div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold text-slate-500">Total Patients</span><div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:#e0faf7"><i class="fa-solid fa-users" style="color:#17B8A6"></i></div></div>
+                <div class="text-3xl font-extrabold text-slate-900 mb-1">128</div>
+                <div class="text-xs text-green-600 font-medium"><i class="fa-solid fa-arrow-up"></i> +5 this month</div>
+              </div>
+              <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                <div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold text-slate-500">Doctors</span><div class="w-9 h-9 rounded-xl flex items-center justify-center bg-indigo-50"><i class="fa-solid fa-user-doctor text-indigo-500"></i></div></div>
+                <div class="text-3xl font-extrabold text-slate-900 mb-1">14</div>
+                <div class="text-xs text-slate-400 font-medium">Across 3 specialties</div>
+              </div>
+              <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                <div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold text-slate-500">Rehab Programs</span><div class="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-50"><i class="fa-solid fa-list-check text-amber-500"></i></div></div>
+                <div class="text-3xl font-extrabold text-slate-900 mb-1">47</div>
+                <div class="text-xs text-slate-400 font-medium">8 types</div>
+              </div>
+              <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                <div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold text-slate-500">Meetings</span><div class="w-9 h-9 rounded-xl flex items-center justify-center bg-rose-50"><i class="fa-solid fa-calendar-check text-rose-500"></i></div></div>
+                <div class="text-3xl font-extrabold text-slate-900 mb-1">32</div>
+                <div class="text-xs text-green-600 font-medium">12 scheduled</div>
+              </div>
+            </div>
+
+            <!-- Small stat cards -->
+            <div class="grid grid-cols-4 gap-3 mb-5">
+              <div class="bg-white rounded-xl px-4 py-3 shadow-sm border border-slate-100 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-green-50"><i class="fa-solid fa-circle-play text-green-500 text-sm"></i></div>
+                <div><div class="text-xs text-slate-500">Active Routines</div><div class="font-bold text-slate-800 text-lg">64</div></div>
+              </div>
+              <div class="bg-white rounded-xl px-4 py-3 shadow-sm border border-slate-100 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-sky-50"><i class="fa-solid fa-clock text-sky-500 text-sm"></i></div>
+                <div><div class="text-xs text-slate-500">Schedules</div><div class="font-bold text-slate-800 text-lg">18</div></div>
+              </div>
+              <div class="bg-white rounded-xl px-4 py-3 shadow-sm border border-slate-100 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-purple-50"><i class="fa-solid fa-film text-purple-500 text-sm"></i></div>
+                <div><div class="text-xs text-slate-500">Video Uploads</div><div class="font-bold text-slate-800 text-lg">215</div></div>
+              </div>
+              <!-- ★ NEW Movement Sessions -->
+              <div class="rounded-xl px-4 py-3 shadow-sm border-2 flex items-center gap-3 relative overflow-hidden" style="background:linear-gradient(135deg,#e0faf7,#ccf7f0);border-color:#17B8A6">
+                <div class="absolute top-1.5 right-2"><span class="badge-new text-white text-[9px] font-bold px-1.5 py-0.5 rounded">★ NEW</span></div>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm" style="background:#17B8A6"><i class="fa-solid fa-person-running"></i></div>
+                <div><div class="text-xs font-semibold" style="color:#17B8A6">Movement Sessions</div><div class="font-bold text-slate-800 text-lg">89</div></div>
+              </div>
+            </div>
+
+            <!-- Tables row -->
+            <div class="grid grid-cols-3 gap-4">
+              <!-- Recent Patients -->
+              <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+                  <span class="font-bold text-slate-800 text-sm">Recent Patients</span>
+                  <a class="text-xs font-semibold" style="color:#17B8A6">View All</a>
+                </div>
+                <table class="w-full text-xs">
+                  <thead><tr class="bg-slate-50"><th class="px-4 py-2 text-left text-slate-500 font-medium">Name</th><th class="px-4 py-2 text-left text-slate-500 font-medium">Doctor</th></tr></thead>
+                  <tbody>
+                    <tr class="border-t border-slate-50 hover:bg-slate-50"><td class="px-4 py-2.5 font-medium text-slate-800">Budi Santoso</td><td class="px-4 py-2.5 text-slate-500">Dr. Ahmad</td></tr>
+                    <tr class="border-t border-slate-50 hover:bg-slate-50"><td class="px-4 py-2.5 font-medium text-slate-800">Siti Rahayu</td><td class="px-4 py-2.5 text-slate-500">Dr. Maria</td></tr>
+                    <tr class="border-t border-slate-50 hover:bg-slate-50"><td class="px-4 py-2.5 font-medium text-slate-800">Eko Prasetyo</td><td class="px-4 py-2.5 text-slate-500">Dr. Ahmad</td></tr>
+                    <tr class="border-t border-slate-50 hover:bg-slate-50"><td class="px-4 py-2.5 font-medium text-slate-800">Dewi Lestari</td><td class="px-4 py-2.5 text-slate-500">Dr. Budi</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Meetings -->
+              <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+                  <span class="font-bold text-slate-800 text-sm">Upcoming Meetings</span>
+                  <a class="text-xs font-semibold" style="color:#17B8A6">View All</a>
+                </div>
+                <table class="w-full text-xs">
+                  <thead><tr class="bg-slate-50"><th class="px-4 py-2 text-left text-slate-500 font-medium">Patient</th><th class="px-4 py-2 text-left text-slate-500 font-medium">Status</th></tr></thead>
+                  <tbody>
+                    <tr class="border-t border-slate-50"><td class="px-4 py-2.5 font-medium text-slate-800">Budi Santoso</td><td class="px-4 py-2.5"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">Scheduled</span></td></tr>
+                    <tr class="border-t border-slate-50"><td class="px-4 py-2.5 font-medium text-slate-800">Eko Prasetyo</td><td class="px-4 py-2.5"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">Done</span></td></tr>
+                    <tr class="border-t border-slate-50"><td class="px-4 py-2.5 font-medium text-slate-800">Dewi Lestari</td><td class="px-4 py-2.5"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">Scheduled</span></td></tr>
+                    <tr class="border-t border-slate-50"><td class="px-4 py-2.5 font-medium text-slate-800">Rina Agustina</td><td class="px-4 py-2.5"><span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-semibold">Pending</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Rehab Routines -->
+              <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+                  <span class="font-bold text-slate-800 text-sm">Rehab Routines</span>
+                  <a class="text-xs font-semibold" style="color:#17B8A6">View All</a>
+                </div>
+                <table class="w-full text-xs">
+                  <thead><tr class="bg-slate-50"><th class="px-4 py-2 text-left text-slate-500 font-medium">Patient</th><th class="px-4 py-2 text-left text-slate-500 font-medium">Status</th></tr></thead>
+                  <tbody>
+                    <tr class="border-t border-slate-50"><td class="px-4 py-2.5 font-medium text-slate-800">Siti Rahayu</td><td class="px-4 py-2.5"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">Active</span></td></tr>
+                    <tr class="border-t border-slate-50"><td class="px-4 py-2.5 font-medium text-slate-800">Budi Santoso</td><td class="px-4 py-2.5"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">Active</span></td></tr>
+                    <tr class="border-t border-slate-50"><td class="px-4 py-2.5 font-medium text-slate-800">Eko Prasetyo</td><td class="px-4 py-2.5"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">Complete</span></td></tr>
+                    <tr class="border-t border-slate-50"><td class="px-4 py-2.5 font-medium text-slate-800">Dewi Lestari</td><td class="px-4 py-2.5"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">Pending</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────────────────────────
+         SCREEN 3 — Admin: Movement Exercise Management ★ NEW
+    ──────────────────────────────────────────────────────────── -->
+    <div id="screen-2" class="screen flex-row" style="min-height:100vh">
+      <div id="mockup-capture" class="flex flex-1">
+        <!-- App sidebar -->
+        <div class="flex-shrink-0 w-[72px] bg-slate-900 flex flex-col items-center py-4 gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-2" style="background:#17B8A6"><i class="fa-solid fa-person-walking text-white text-sm"></i></div>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-gauge-high text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-users text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-user-doctor text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-white" style="background:rgba(23,184,166,.2)"><i class="fa-solid fa-dumbbell text-sm" style="color:#17B8A6"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-calendar text-sm"></i></button>
+          <div class="flex-1"></div>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-gear text-sm"></i></button>
+        </div>
+
+        <div class="flex-1 flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 overflow-auto">
+          <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div>
+                <div class="flex items-center gap-2">
+                  <div class="font-bold text-slate-800">Movement Exercises</div>
+                  <span class="badge-new text-white text-[9px] font-bold px-2 py-0.5 rounded-full">★ NEW</span>
+                </div>
+                <div class="text-xs text-slate-400">Admin · Master Data</div>
+              </div>
+            </div>
+            <button class="flex items-center gap-2 text-white text-sm font-semibold px-4 py-2 rounded-xl" style="background:#17B8A6">
+              <i class="fa-solid fa-plus"></i> Add Exercise
+            </button>
+          </header>
+
+          <div class="p-6 space-y-5">
+            <!-- Exercise Table -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+              <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between">
+                <span class="font-bold text-slate-800 text-sm">Exercise Library</span>
+                <div class="flex items-center gap-2">
+                  <div class="flex items-center gap-2 bg-slate-50 rounded-xl px-3 py-1.5 border border-slate-200 text-xs">
+                    <i class="fa-solid fa-search text-slate-400"></i>
+                    <span class="text-slate-400">Search exercises…</span>
+                  </div>
+                </div>
+              </div>
+              <table class="w-full text-xs">
+                <thead><tr class="bg-slate-50 border-b border-slate-100">
+                  <th class="px-5 py-3 text-left text-slate-500 font-semibold">#</th>
+                  <th class="px-5 py-3 text-left text-slate-500 font-semibold">Exercise Name</th>
+                  <th class="px-5 py-3 text-left text-slate-500 font-semibold">Target Joint</th>
+                  <th class="px-5 py-3 text-left text-slate-500 font-semibold">Min Angle</th>
+                  <th class="px-5 py-3 text-left text-slate-500 font-semibold">Max Angle</th>
+                  <th class="px-5 py-3 text-left text-slate-500 font-semibold">Target Reps</th>
+                  <th class="px-5 py-3 text-right text-slate-500 font-semibold">Actions</th>
+                </tr></thead>
+                <tbody>
+                  <tr class="border-t border-slate-50 hover:bg-slate-50"><td class="px-5 py-3 text-slate-400">1</td><td class="px-5 py-3 font-semibold text-slate-800">Knee Flexion</td><td class="px-5 py-3"><span class="bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-semibold">Left Knee</span></td><td class="px-5 py-3 text-slate-700">30°</td><td class="px-5 py-3 text-slate-700">130°</td><td class="px-5 py-3 text-slate-700">15</td><td class="px-5 py-3 text-right"><button class="text-indigo-500 hover:text-indigo-700 mr-2"><i class="fa-solid fa-pen-to-square"></i></button><button class="text-rose-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                  <tr class="border-t border-slate-50 hover:bg-slate-50"><td class="px-5 py-3 text-slate-400">2</td><td class="px-5 py-3 font-semibold text-slate-800">Shoulder Abduction</td><td class="px-5 py-3"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">Right Shoulder</span></td><td class="px-5 py-3 text-slate-700">0°</td><td class="px-5 py-3 text-slate-700">180°</td><td class="px-5 py-3 text-slate-700">10</td><td class="px-5 py-3 text-right"><button class="text-indigo-500 hover:text-indigo-700 mr-2"><i class="fa-solid fa-pen-to-square"></i></button><button class="text-rose-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                  <tr class="border-t border-slate-50 hover:bg-slate-50"><td class="px-5 py-3 text-slate-400">3</td><td class="px-5 py-3 font-semibold text-slate-800">Hip Extension</td><td class="px-5 py-3"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">Left Hip</span></td><td class="px-5 py-3 text-slate-700">0°</td><td class="px-5 py-3 text-slate-700">30°</td><td class="px-5 py-3 text-slate-700">12</td><td class="px-5 py-3 text-right"><button class="text-indigo-500 hover:text-indigo-700 mr-2"><i class="fa-solid fa-pen-to-square"></i></button><button class="text-rose-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                  <tr class="border-t border-slate-50 hover:bg-slate-50"><td class="px-5 py-3 text-slate-400">4</td><td class="px-5 py-3 font-semibold text-slate-800">Elbow Curl</td><td class="px-5 py-3"><span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">Right Elbow</span></td><td class="px-5 py-3 text-slate-700">10°</td><td class="px-5 py-3 text-slate-700">145°</td><td class="px-5 py-3 text-slate-700">20</td><td class="px-5 py-3 text-right"><button class="text-indigo-500 hover:text-indigo-700 mr-2"><i class="fa-solid fa-pen-to-square"></i></button><button class="text-rose-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                  <tr class="border-t border-slate-50 hover:bg-slate-50"><td class="px-5 py-3 text-slate-400">5</td><td class="px-5 py-3 font-semibold text-slate-800">Ankle Dorsiflexion</td><td class="px-5 py-3"><span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-semibold">Left Ankle</span></td><td class="px-5 py-3 text-slate-700">-10°</td><td class="px-5 py-3 text-slate-700">20°</td><td class="px-5 py-3 text-slate-700">15</td><td class="px-5 py-3 text-right"><button class="text-indigo-500 hover:text-indigo-700 mr-2"><i class="fa-solid fa-pen-to-square"></i></button><button class="text-rose-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Add/Edit Form -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+              <div class="flex items-center gap-2 mb-5">
+                <div class="font-bold text-slate-800 text-sm">Add New Exercise</div>
+                <span class="badge-new text-white text-[9px] font-bold px-1.5 py-0.5 rounded">★ NEW</span>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="text-xs font-semibold text-slate-600 block mb-1.5">Exercise Name</label>
+                  <input class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-300 bg-slate-50" placeholder="e.g. Knee Flexion" />
+                </div>
+                <div>
+                  <label class="text-xs font-semibold text-slate-600 block mb-1.5">Target Joint</label>
+                  <select class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-300">
+                    <option>Left Knee</option><option>Right Knee</option><option>Left Shoulder</option><option>Right Shoulder</option><option>Left Elbow</option><option>Right Elbow</option><option>Left Hip</option><option>Right Hip</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-xs font-semibold text-slate-600 block mb-1.5">Min Angle (°)</label>
+                  <input class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-300" type="number" placeholder="0" />
+                </div>
+                <div>
+                  <label class="text-xs font-semibold text-slate-600 block mb-1.5">Max Angle (°)</label>
+                  <input class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-300" type="number" placeholder="180" />
+                </div>
+                <div>
+                  <label class="text-xs font-semibold text-slate-600 block mb-1.5">Target Reps</label>
+                  <input class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-300" type="number" placeholder="12" />
+                </div>
+                <div>
+                  <label class="text-xs font-semibold text-slate-600 block mb-1.5">Description (optional)</label>
+                  <input class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-300" placeholder="Brief exercise description" />
+                </div>
+              </div>
+              <div class="flex gap-3 mt-5">
+                <button class="text-sm font-semibold text-white px-5 py-2.5 rounded-xl" style="background:#17B8A6">Save Exercise</button>
+                <button class="text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 px-5 py-2.5 rounded-xl">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────────────────────────
+         SCREEN 4 — Patient: Rehab Exercise
+    ──────────────────────────────────────────────────────────── -->
+    <div id="screen-3" class="screen flex-row" style="min-height:100vh">
+      <div id="mockup-capture" class="flex flex-1">
+        <!-- Patient App sidebar -->
+        <div class="flex-shrink-0 w-[72px] bg-slate-900 flex flex-col items-center py-4 gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-2" style="background:#17B8A6"><i class="fa-solid fa-person-walking text-white text-sm"></i></div>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-house text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-calendar text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-white" style="background:rgba(23,184,166,.2)"><i class="fa-solid fa-clipboard-list text-sm" style="color:#17B8A6"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-video text-sm"></i></button>
+          <div class="flex-1"></div>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-right-from-bracket text-sm"></i></button>
+        </div>
+
+        <div class="flex-1 flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 overflow-auto">
+          <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between">
+            <div>
+              <div class="font-bold text-slate-800">Rehabilitation Exercise</div>
+              <div class="text-xs text-slate-400">Knee Flexion Program — Active</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Active</span>
+              <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background:#17B8A6">B</div>
+            </div>
+          </header>
+
+          <div class="p-5">
+            <!-- Top 2-col -->
+            <div class="grid grid-cols-3 gap-4 mb-5">
+              <!-- Video -->
+              <div class="col-span-2 bg-slate-900 rounded-2xl overflow-hidden relative h-52">
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center cursor-pointer hover:bg-opacity-30 transition">
+                    <i class="fa-solid fa-play text-white text-2xl ml-1"></i>
+                  </div>
+                </div>
+                <div class="absolute bottom-4 left-4 text-white text-sm font-semibold">Tutorial: Knee Flexion</div>
+                <div class="absolute top-4 right-4 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded-lg">03:42</div>
+              </div>
+
+              <!-- Program card -->
+              <div class="flex flex-col gap-3">
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                  <div class="text-xs font-semibold text-slate-500 mb-2">Current Program</div>
+                  <div class="font-bold text-slate-800 text-sm mb-1">Knee Rehabilitation</div>
+                  <div class="text-xs text-slate-500 mb-3">Physiotherapy · Dr. Ahmad</div>
+                  <div class="w-full bg-slate-100 rounded-full h-1.5 mb-1">
+                    <div class="h-1.5 rounded-full" style="background:#17B8A6;width:60%"></div>
+                  </div>
+                  <div class="text-xs text-slate-500">Session 6 / 10</div>
+                </div>
+                <!-- Upload zone -->
+                <div class="bg-white rounded-2xl p-4 shadow-sm border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center h-28 hover:border-teal-300 transition cursor-pointer">
+                  <i class="fa-solid fa-cloud-arrow-up text-slate-300 text-2xl mb-2"></i>
+                  <div class="text-xs font-semibold text-slate-500">Upload Exercise Video</div>
+                  <div class="text-xs text-slate-400">MP4, MOV up to 50MB</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ★ NEW: Live Movement Tracking Section -->
+            <div class="bg-white rounded-2xl shadow-sm border-2 p-5 mb-4" style="border-color:#17B8A6;background:linear-gradient(135deg,#f0fdfa,#e0faf7)">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 rounded-xl flex items-center justify-center text-white text-sm" style="background:#17B8A6"><i class="fa-solid fa-person-running"></i></div>
+                  <div>
+                    <div class="font-bold text-slate-800 text-sm flex items-center gap-2">Live Movement Tracking <span class="badge-new text-white text-[9px] font-bold px-1.5 py-0.5 rounded">★ NEW</span></div>
+                    <div class="text-xs text-slate-500">AI-powered rep counting with joint angle tracking</div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-3 items-center">
+                <div class="flex-1">
+                  <label class="text-xs font-semibold text-slate-600 block mb-1.5">Select Exercise</label>
+                  <select class="w-full border border-teal-200 rounded-xl px-3 py-2 text-sm text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-teal-300">
+                    <option>Knee Flexion (Left Knee, 15 reps)</option>
+                    <option>Shoulder Abduction (Right Shoulder, 10 reps)</option>
+                  </select>
+                </div>
+                <div class="flex-shrink-0 mt-5">
+                  <button class="flex items-center gap-2 text-white font-semibold px-5 py-2.5 rounded-xl text-sm" style="background:#17B8A6">
+                    <i class="fa-solid fa-video"></i> Start Tracking Session
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Session History -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+              <div class="px-5 py-3 border-b border-slate-100">
+                <span class="font-bold text-slate-800 text-sm">Tracking Session History</span>
+              </div>
+              <table class="w-full text-xs">
+                <thead><tr class="bg-slate-50 border-b border-slate-100">
+                  <th class="px-5 py-2.5 text-left text-slate-500 font-semibold">Date</th>
+                  <th class="px-5 py-2.5 text-left text-slate-500 font-semibold">Exercise</th>
+                  <th class="px-5 py-2.5 text-left text-slate-500 font-semibold">Reps</th>
+                  <th class="px-5 py-2.5 text-left text-slate-500 font-semibold">Avg Angle</th>
+                  <th class="px-5 py-2.5 text-left text-slate-500 font-semibold">Status</th>
+                </tr></thead>
+                <tbody>
+                  <tr class="border-t border-slate-50"><td class="px-5 py-2.5 text-slate-600">2026-07-26</td><td class="px-5 py-2.5 font-medium text-slate-800">Knee Flexion</td><td class="px-5 py-2.5 text-slate-700">15/15</td><td class="px-5 py-2.5 text-slate-700">128°</td><td class="px-5 py-2.5"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">Completed</span></td></tr>
+                  <tr class="border-t border-slate-50"><td class="px-5 py-2.5 text-slate-600">2026-07-24</td><td class="px-5 py-2.5 font-medium text-slate-800">Knee Flexion</td><td class="px-5 py-2.5 text-slate-700">12/15</td><td class="px-5 py-2.5 text-slate-700">115°</td><td class="px-5 py-2.5"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">Incomplete</span></td></tr>
+                  <tr class="border-t border-slate-50"><td class="px-5 py-2.5 text-slate-600">2026-07-22</td><td class="px-5 py-2.5 font-medium text-slate-800">Knee Flexion</td><td class="px-5 py-2.5 text-slate-700">15/15</td><td class="px-5 py-2.5 text-slate-700">131°</td><td class="px-5 py-2.5"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">Completed</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────────────────────────
+         SCREEN 5 — Patient: Live Movement Tracking ★ NEW
+    ──────────────────────────────────────────────────────────── -->
+    <div id="screen-4" class="screen flex-row" style="min-height:100vh">
+      <div id="mockup-capture" class="flex flex-1">
+        <div class="flex-shrink-0 w-[72px] bg-slate-900 flex flex-col items-center py-4 gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-2" style="background:#17B8A6"><i class="fa-solid fa-person-walking text-white text-sm"></i></div>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-house text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-clipboard-list text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-white" style="background:rgba(23,184,166,.2)"><i class="fa-solid fa-video text-sm" style="color:#17B8A6"></i></button>
+          <div class="flex-1"></div>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-right-from-bracket text-sm"></i></button>
+        </div>
+
+        <div class="flex-1 flex flex-col bg-slate-950 overflow-auto">
+          <!-- HUD Header -->
+          <header class="px-6 py-3 flex items-center justify-between border-b border-slate-800">
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full pulse-dot" style="background:#17B8A6"></span>
+                <span class="text-white font-bold text-sm">LIVE TRACKING</span>
+                <span class="badge-new text-white text-[9px] font-bold px-1.5 py-0.5 rounded ml-1">★ NEW</span>
+              </div>
+              <span class="text-slate-400 text-xs">Knee Flexion — Left Knee</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-slate-400 text-xs">Session: #MS-0089</span>
+              <button class="text-slate-400 text-xs hover:text-white"><i class="fa-solid fa-expand"></i> Fullscreen</button>
+            </div>
+          </header>
+
+          <div class="flex flex-1">
+            <!-- Camera + canvas area -->
+            <div class="flex-1 relative flex items-center justify-center p-4" style="background:#0a0a0a">
+              <!-- Camera viewport -->
+              <div class="w-full max-w-2xl aspect-video bg-slate-900 rounded-2xl relative overflow-hidden border border-slate-800">
+                <!-- Simulated camera feed overlay -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="text-slate-700 text-center">
+                    <i class="fa-solid fa-person text-slate-600" style="font-size:80px"></i>
+                  </div>
+                </div>
+                <!-- Skeleton overlay -->
+                <svg class="absolute inset-0 w-full h-full" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid meet">
+                  <!-- Head -->
+                  <circle cx="320" cy="55" r="22" fill="none" stroke="#17B8A6" stroke-width="3" opacity="0.9"/>
+                  <!-- Spine -->
+                  <line x1="320" y1="77" x2="320" y2="185" stroke="#17B8A6" stroke-width="3" opacity="0.9"/>
+                  <!-- Shoulders -->
+                  <line x1="320" y1="105" x2="230" y2="140" stroke="#17B8A6" stroke-width="3"/>
+                  <line x1="320" y1="105" x2="410" y2="140" stroke="#17B8A6" stroke-width="3"/>
+                  <!-- Left arm -->
+                  <line x1="230" y1="140" x2="195" y2="205" stroke="#17B8A6" stroke-width="3"/>
+                  <!-- Right arm -->
+                  <line x1="410" y1="140" x2="445" y2="200" stroke="#17B8A6" stroke-width="3"/>
+                  <!-- Hips -->
+                  <line x1="320" y1="185" x2="270" y2="215" stroke="#17B8A6" stroke-width="3"/>
+                  <line x1="320" y1="185" x2="370" y2="215" stroke="#17B8A6" stroke-width="3"/>
+                  <!-- Legs -->
+                  <line x1="270" y1="215" x2="255" y2="295" stroke="#f59e0b" stroke-width="3.5"/>
+                  <line x1="255" y1="295" x2="248" y2="340" stroke="#17B8A6" stroke-width="3"/>
+                  <line x1="370" y1="215" x2="385" y2="295" stroke="#17B8A6" stroke-width="3"/>
+                  <line x1="385" y1="295" x2="392" y2="340" stroke="#17B8A6" stroke-width="3"/>
+                  <!-- Joints -->
+                  <circle cx="230" cy="140" r="5" fill="#17B8A6"/><circle cx="410" cy="140" r="5" fill="#17B8A6"/>
+                  <circle cx="270" cy="215" r="5" fill="#17B8A6"/><circle cx="370" cy="215" r="5" fill="#17B8A6"/>
+                  <circle cx="255" cy="295" r="6" fill="#f59e0b" stroke="#fff" stroke-width="2"/>
+                  <circle cx="385" cy="295" r="5" fill="#17B8A6"/>
+                  <!-- Angle arc -->
+                  <path d="M 255 265 A 30 30 0 0 0 230 285" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,2"/>
+                  <text x="220" y="305" font-size="13" fill="#f59e0b" font-weight="bold" font-family="Plus Jakarta Sans">138°</text>
+                </svg>
+                <!-- Top HUD -->
+                <div class="absolute top-3 left-3 flex gap-2">
+                  <div class="bg-black bg-opacity-70 text-green-400 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block pulse-dot"></span> TRACKING
+                  </div>
+                  <div class="bg-black bg-opacity-70 text-white text-xs font-semibold px-3 py-1.5 rounded-xl">
+                    <i class="fa-solid fa-person text-teal-400"></i> Pose Detected
+                  </div>
+                </div>
+              </div>
+
+              <!-- Position bar -->
+              <div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-80 bg-black bg-opacity-70 rounded-2xl p-3">
+                <div class="text-xs text-slate-400 mb-1.5 font-semibold">Position Validation</div>
+                <div class="h-2 bg-slate-700 rounded-full overflow-hidden mb-1">
+                  <div class="h-2 rounded-full" style="background:linear-gradient(90deg,#17B8A6,#34d399);width:78%"></div>
+                </div>
+                <div class="flex justify-between text-xs">
+                  <span class="text-slate-500">Min 30°</span>
+                  <span class="font-bold text-amber-400">138° ←</span>
+                  <span class="text-slate-500">Max 130° <i class="fa-solid fa-triangle-exclamation text-amber-400"></i></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right panel -->
+            <div class="w-64 bg-slate-900 flex flex-col p-4 gap-4 border-l border-slate-800">
+              <!-- Stats -->
+              <div class="grid grid-cols-1 gap-3">
+                <div class="bg-slate-800 rounded-xl p-4 text-center border border-teal-900">
+                  <div class="text-3xl font-extrabold" style="color:#17B8A6">8</div>
+                  <div class="text-xs text-slate-400 mt-1">Reps Completed</div>
+                  <div class="text-xs text-slate-500 mt-0.5">Target: 15</div>
+                  <div class="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div class="h-1 rounded-full" style="background:#17B8A6;width:53%"></div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div class="bg-slate-800 rounded-xl p-3 text-center">
+                    <div class="text-xl font-extrabold text-amber-400">138°</div>
+                    <div class="text-xs text-slate-400 mt-0.5">Joint Angle</div>
+                  </div>
+                  <div class="bg-slate-800 rounded-xl p-3 text-center">
+                    <div class="text-xl font-extrabold text-green-400"><i class="fa-solid fa-circle-check text-base"></i></div>
+                    <div class="text-xs text-slate-400 mt-0.5">In Range</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Feedback -->
+              <div class="bg-slate-800 rounded-xl p-3 flex-1">
+                <div class="text-xs font-semibold text-slate-400 mb-2">Rep Log</div>
+                <div class="space-y-1.5 text-xs">
+                  <div class="flex items-center gap-2"><span class="rep-badge bg-green-900 text-green-400">1</span><span class="text-slate-400">132° — OK</span></div>
+                  <div class="flex items-center gap-2"><span class="rep-badge bg-green-900 text-green-400">2</span><span class="text-slate-400">128° — OK</span></div>
+                  <div class="flex items-center gap-2"><span class="rep-badge bg-amber-900 text-amber-400">3</span><span class="text-slate-400">118° — Low</span></div>
+                  <div class="flex items-center gap-2"><span class="rep-badge bg-green-900 text-green-400">4</span><span class="text-slate-400">135° — OK</span></div>
+                  <div class="flex items-center gap-2"><span class="rep-badge bg-green-900 text-green-400">5</span><span class="text-slate-400">130° — OK</span></div>
+                  <div class="flex items-center gap-2"><span class="rep-badge bg-green-900 text-green-400">6</span><span class="text-slate-400">133° — OK</span></div>
+                  <div class="flex items-center gap-2"><span class="rep-badge bg-amber-900 text-amber-400">7</span><span class="text-slate-400">121° — Low</span></div>
+                  <div class="flex items-center gap-2"><span class="rep-badge bg-green-900 text-green-400">8</span><span class="text-slate-400">138° — OK</span></div>
+                </div>
+              </div>
+
+              <button class="w-full py-3 rounded-xl font-bold text-white text-sm" style="background:#17B8A6">
+                <i class="fa-solid fa-flag-checkered mr-1"></i> Complete Session
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────────────────────────
+         SCREEN 6 — Doctor: Exercise Review & Flag ★ NEW
+    ──────────────────────────────────────────────────────────── -->
+    <div id="screen-5" class="screen flex-row" style="min-height:100vh">
+      <div id="mockup-capture" class="flex flex-1">
+        <div class="flex-shrink-0 w-[72px] bg-slate-900 flex flex-col items-center py-4 gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-2" style="background:#17B8A6"><i class="fa-solid fa-person-walking text-white text-sm"></i></div>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-gauge-high text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-users text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-white" style="background:rgba(23,184,166,.2)"><i class="fa-solid fa-stethoscope text-sm" style="color:#17B8A6"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-calendar text-sm"></i></button>
+          <div class="flex-1"></div>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-right-from-bracket text-sm"></i></button>
+        </div>
+
+        <div class="flex-1 flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 overflow-auto">
+          <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between">
+            <div>
+              <div class="flex items-center gap-2">
+                <div class="font-bold text-slate-800">Exercise Review</div>
+                <span class="badge-new text-white text-[9px] font-bold px-2 py-0.5 rounded-full">★ NEW</span>
+              </div>
+              <div class="text-xs text-slate-400">Patient: Budi Santoso · Knee Rehabilitation</div>
+            </div>
+            <button onclick="document.getElementById('flag-modal').classList.remove('hidden')" class="flex items-center gap-2 bg-rose-500 hover:bg-rose-600 text-white text-sm font-semibold px-4 py-2 rounded-xl">
+              <i class="fa-solid fa-flag"></i> Flag Session
+            </button>
+          </header>
+
+          <div class="p-5 space-y-5">
+            <!-- Top row: Video + Feedback panels -->
+            <div class="grid grid-cols-3 gap-4">
+              <!-- Video history -->
+              <div class="col-span-1 space-y-3">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-3">
+                  <div class="text-xs font-bold text-slate-700 mb-2">Uploaded Videos</div>
+                  <div class="space-y-2">
+                    <div class="bg-slate-50 rounded-xl p-2 flex items-center gap-3 border border-slate-200 cursor-pointer hover:border-teal-300 transition">
+                      <div class="w-14 h-10 bg-slate-700 rounded-lg flex-shrink-0 flex items-center justify-center"><i class="fa-solid fa-play text-white text-xs"></i></div>
+                      <div><div class="text-xs font-semibold text-slate-800">Jul 26, 2026</div><div class="text-xs text-slate-500">Session #3</div><span class="bg-green-100 text-green-700 text-[10px] px-1.5 py-0.5 rounded font-semibold">Reviewed</span></div>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-2 flex items-center gap-3 border border-teal-300 cursor-pointer">
+                      <div class="w-14 h-10 bg-slate-700 rounded-lg flex-shrink-0 flex items-center justify-center"><i class="fa-solid fa-play text-white text-xs"></i></div>
+                      <div><div class="text-xs font-semibold text-slate-800">Jul 24, 2026</div><div class="text-xs text-slate-500">Session #2</div><span class="bg-amber-100 text-amber-700 text-[10px] px-1.5 py-0.5 rounded font-semibold">Pending</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Feedback panels -->
+              <div class="col-span-2 space-y-3">
+                <div class="rounded-2xl p-4 border" style="background:#eef2ff;border-color:#c7d2fe">
+                  <div class="flex items-center gap-2 mb-2"><div class="w-6 h-6 rounded-lg bg-indigo-100 flex items-center justify-center"><i class="fa-solid fa-user-doctor text-indigo-600 text-xs"></i></div><span class="text-xs font-bold text-indigo-700">Doctor's Feedback</span></div>
+                  <div class="text-xs text-indigo-800">Range of motion has improved. Patient is reaching ~130° consistently. Continue program with increased resistance in next session.</div>
+                </div>
+                <div class="rounded-2xl p-4 border" style="background:#fff7ed;border-color:#fed7aa">
+                  <div class="flex items-center gap-2 mb-2"><div class="w-6 h-6 rounded-lg bg-orange-100 flex items-center justify-center"><i class="fa-solid fa-person text-orange-600 text-xs"></i></div><span class="text-xs font-bold text-orange-700">Therapist Notes</span></div>
+                  <div class="text-xs text-orange-800">Patient shows good compliance. Reps 3 and 7 showed incomplete range — advise patient to extend fully before returning.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ★ NEW: Movement Tracking Data -->
+            <div class="bg-white rounded-2xl shadow-sm border-2 overflow-hidden" style="border-color:#17B8A6">
+              <div class="px-5 py-3 border-b flex items-center justify-between" style="background:linear-gradient(135deg,#e0faf7,#ccf7f0);border-color:#a7f3d0">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-person-running" style="color:#17B8A6"></i>
+                  <span class="font-bold text-slate-800 text-sm">Movement Tracking Data</span>
+                  <span class="badge-new text-white text-[9px] font-bold px-1.5 py-0.5 rounded">★ NEW</span>
+                </div>
+                <span class="text-xs text-slate-500">Session #MS-0089 · Jul 26, 2026</span>
+              </div>
+
+              <div class="p-5">
+                <!-- Session stats -->
+                <div class="grid grid-cols-4 gap-3 mb-4">
+                  <div class="bg-slate-50 rounded-xl p-3 text-center">
+                    <div class="text-2xl font-extrabold" style="color:#17B8A6">15/15</div>
+                    <div class="text-xs text-slate-500">Reps</div>
+                  </div>
+                  <div class="bg-slate-50 rounded-xl p-3 text-center">
+                    <div class="text-2xl font-extrabold text-amber-600">128°</div>
+                    <div class="text-xs text-slate-500">Avg Angle</div>
+                  </div>
+                  <div class="bg-slate-50 rounded-xl p-3 text-center">
+                    <div class="text-2xl font-extrabold text-green-600">13</div>
+                    <div class="text-xs text-slate-500">Within Threshold</div>
+                  </div>
+                  <div class="bg-slate-50 rounded-xl p-3 text-center">
+                    <div class="text-2xl font-extrabold text-rose-500">2</div>
+                    <div class="text-xs text-slate-500">Out of Range</div>
+                  </div>
+                </div>
+
+                <!-- Rep log table -->
+                <div class="overflow-auto max-h-48 rounded-xl border border-slate-100">
+                  <table class="w-full text-xs">
+                    <thead class="sticky top-0"><tr class="bg-slate-50">
+                      <th class="px-4 py-2 text-left text-slate-500 font-semibold">Rep</th>
+                      <th class="px-4 py-2 text-left text-slate-500 font-semibold">Angle</th>
+                      <th class="px-4 py-2 text-left text-slate-500 font-semibold">Status</th>
+                    </tr></thead>
+                    <tbody>
+                      <tr class="border-t border-slate-50 bg-white"><td class="px-4 py-2 text-slate-600">1</td><td class="px-4 py-2 text-slate-800 font-medium">132°</td><td class="px-4 py-2"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded font-semibold">OK</span></td></tr>
+                      <tr class="border-t border-slate-50 bg-white"><td class="px-4 py-2 text-slate-600">2</td><td class="px-4 py-2 text-slate-800 font-medium">128°</td><td class="px-4 py-2"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded font-semibold">OK</span></td></tr>
+                      <tr class="border-t border-slate-50 bg-rose-50"><td class="px-4 py-2 text-rose-700 font-bold">3</td><td class="px-4 py-2 text-rose-700 font-bold">118°</td><td class="px-4 py-2"><span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded font-semibold">Out of Range</span></td></tr>
+                      <tr class="border-t border-slate-50 bg-white"><td class="px-4 py-2 text-slate-600">4</td><td class="px-4 py-2 text-slate-800 font-medium">135°</td><td class="px-4 py-2"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded font-semibold">OK</span></td></tr>
+                      <tr class="border-t border-slate-50 bg-rose-50"><td class="px-4 py-2 text-rose-700 font-bold">7</td><td class="px-4 py-2 text-rose-700 font-bold">121°</td><td class="px-4 py-2"><span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded font-semibold">Out of Range</span></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Flags -->
+                <div class="mt-4 flex gap-2">
+                  <div class="flex-1 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex items-center gap-2">
+                    <i class="fa-solid fa-flag text-amber-500 text-xs"></i>
+                    <span class="text-xs font-semibold text-amber-800">incomplete_range</span>
+                    <span class="text-xs text-amber-700">— Reps 3, 7 below threshold</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flag Modal -->
+      <div id="flag-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center" style="background:rgba(0,0,0,0.5)">
+        <div class="bg-white rounded-2xl shadow-2xl w-96 overflow-hidden">
+          <div class="px-5 py-4 flex items-center justify-between" style="background:#fee2e2">
+            <div class="flex items-center gap-2"><i class="fa-solid fa-flag text-rose-600"></i><span class="font-bold text-rose-800">Flag Session</span></div>
+            <button onclick="document.getElementById('flag-modal').classList.add('hidden')" class="text-rose-400 hover:text-rose-600"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <div class="p-5 space-y-4">
+            <div><label class="text-xs font-semibold text-slate-700 block mb-1.5">Flag Type</label>
+              <select class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-rose-300">
+                <option value="wrong_form">Wrong Form</option>
+                <option value="incomplete_range" selected>Incomplete Range</option>
+                <option value="missed_reps">Missed Reps</option>
+              </select>
+            </div>
+            <div><label class="text-xs font-semibold text-slate-700 block mb-1.5">Clinical Note</label>
+              <textarea class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 bg-slate-50 h-24 focus:outline-none focus:ring-2 focus:ring-rose-300" placeholder="Describe the observed issue…"></textarea>
+            </div>
+            <div class="flex gap-2 pt-1">
+              <button class="flex-1 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-sm font-bold">Submit Flag</button>
+              <button onclick="document.getElementById('flag-modal').classList.add('hidden')" class="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────────────────────────
+         SCREEN 7 — Doctor: Consultation & Rehab Assignment
+    ──────────────────────────────────────────────────────────── -->
+    <div id="screen-6" class="screen flex-row" style="min-height:100vh">
+      <div id="mockup-capture" class="flex flex-1">
+        <div class="flex-shrink-0 w-[72px] bg-slate-900 flex flex-col items-center py-4 gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-2" style="background:#17B8A6"><i class="fa-solid fa-person-walking text-white text-sm"></i></div>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-gauge-high text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-users text-sm"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-white" style="background:rgba(23,184,166,.2)"><i class="fa-solid fa-notes-medical text-sm" style="color:#17B8A6"></i></button>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-stethoscope text-sm"></i></button>
+          <div class="flex-1"></div>
+          <button class="app-sidebar-icon w-10 h-10 rounded-xl flex items-center justify-center text-slate-400"><i class="fa-solid fa-right-from-bracket text-sm"></i></button>
+        </div>
+
+        <div class="flex-1 flex bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 overflow-auto">
+          <!-- Patient sidebar -->
+          <div class="w-64 bg-slate-900 flex flex-col p-5 flex-shrink-0">
+            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Patient Profile</div>
+            <div class="text-center mb-5">
+              <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-2" style="background:#17B8A6">B</div>
+              <div class="font-bold text-white text-sm">Budi Santoso</div>
+              <div class="text-xs text-slate-400 mt-0.5">Patient #P-0012</div>
+              <span class="bg-green-800 text-green-300 text-[10px] px-2 py-0.5 rounded-full font-semibold mt-1 inline-block">Active</span>
+            </div>
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between"><span class="text-slate-500">Age</span><span class="text-white font-medium">42</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Gender</span><span class="text-white font-medium">Male</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Diagnosis</span><span class="text-white font-medium">ACL Recovery</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Doctor</span><span class="text-white font-medium">Dr. Ahmad</span></div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-slate-700">
+              <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Current Routine</div>
+              <div class="bg-slate-800 rounded-xl p-3">
+                <div class="text-xs font-bold text-white">Knee Rehabilitation</div>
+                <div class="text-xs text-slate-400">Physiotherapy</div>
+                <div class="mt-2 flex items-center gap-2">
+                  <div class="flex-1 bg-slate-700 rounded-full h-1.5"><div class="h-1.5 rounded-full" style="background:#17B8A6;width:60%"></div></div>
+                  <span class="text-xs text-slate-400">60%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main content -->
+          <div class="flex-1 flex flex-col">
+            <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between">
+              <div>
+                <div class="font-bold text-slate-800">Consultation Record</div>
+                <div class="text-xs text-slate-400">Meeting #M-0034 · Jul 27, 2026</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Done</span>
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background:#6366f1">A</div>
+              </div>
+            </header>
+
+            <div class="p-5 space-y-4 overflow-auto">
+              <!-- Diagnosis -->
+              <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                <div class="font-bold text-slate-800 text-sm mb-4">Consultation Details</div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-xs font-semibold text-slate-600 block mb-1.5">Diagnosis</label>
+                    <textarea class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 bg-slate-50 h-20 focus:outline-none focus:ring-2 focus:ring-teal-300" placeholder="Enter diagnosis details…">ACL partial tear, post-operative week 6. Showing good recovery. ROM improving.</textarea>
+                  </div>
+                  <div>
+                    <label class="text-xs font-semibold text-slate-600 block mb-1.5">Medicines / Notes</label>
+                    <textarea class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 bg-slate-50 h-20 focus:outline-none focus:ring-2 focus:ring-teal-300" placeholder="Medicine or clinical notes…">Ibuprofen 400mg (if pain). Ice pack post-exercise. Avoid high-impact activity.</textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Rehab Action -->
+              <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                <div class="font-bold text-slate-800 text-sm mb-4">Rehabilitation Action</div>
+                <div class="flex gap-3 mb-4">
+                  <button class="flex-1 py-2.5 rounded-xl text-sm font-bold border-2 border-teal-500 text-white" style="background:#17B8A6">Continue Program</button>
+                  <button class="flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 border-slate-200 text-slate-600 hover:bg-slate-50">Complete Program</button>
+                  <button class="flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 border-indigo-200 text-indigo-700 hover:bg-indigo-50">Assign New Program</button>
+                </div>
+
+                <!-- New program form (conditional — shown for "Assign New") -->
+                <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-4">
+                  <div class="text-xs font-bold text-indigo-700 mb-3 flex items-center gap-1"><i class="fa-solid fa-plus-circle"></i> New Rehabilitation Program</div>
+                  <div class="grid grid-cols-2 gap-3">
+                    <div>
+                      <label class="text-xs font-semibold text-slate-600 block mb-1">Rehab Type</label>
+                      <select class="w-full border border-indigo-200 rounded-xl px-3 py-2 text-xs text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300">
+                        <option>Physiotherapy</option><option>Occupational Therapy</option><option>Sports Rehab</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="text-xs font-semibold text-slate-600 block mb-1">Rehabilitation Program</label>
+                      <select class="w-full border border-indigo-200 rounded-xl px-3 py-2 text-xs text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300">
+                        <option>Advanced Knee Rehab</option><option>Post-Op Recovery</option><option>Strength Building</option>
+                      </select>
+                    </div>
+                    <div class="col-span-2">
+                      <label class="text-xs font-semibold text-slate-600 block mb-1">Doctor Notes for Program</label>
+                      <textarea class="w-full border border-indigo-200 rounded-xl px-3 py-2 text-xs text-slate-700 bg-white h-16 focus:outline-none focus:ring-2 focus:ring-indigo-300" placeholder="Instructions for therapist…"></textarea>
+                    </div>
+                  </div>
+                  <button class="mt-3 text-xs font-bold text-white px-4 py-2 rounded-xl" style="background:#6366f1">Assign Program</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const SCREEN_NAMES = [
+    'landing-page',
+    'admin-dashboard',
+    'exercise-management',
+    'patient-rehab-exercise',
+    'live-movement-tracking',
+    'doctor-exercise-review',
+    'doctor-consultation'
+  ]
+
+  function showScreen(idx) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
+    document.querySelectorAll('[id^="nav-"]').forEach(n => n.classList.remove('active'))
+    document.getElementById('screen-' + idx).classList.add('active')
+    document.getElementById('nav-' + idx).classList.add('active')
+  }
+
+  async function downloadPNG() {
+    const btn = document.querySelector('[onclick="downloadPNG()"]')
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Capturing…'
+    btn.disabled = true
+
+    const activeScreen = document.querySelector('.screen.active')
+    const capture = activeScreen.querySelector('#mockup-capture') || activeScreen
+
+    try {
+      const canvas = await html2canvas(capture, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#f1f5f9',
+        logging: false,
+        windowWidth: capture.scrollWidth,
+        windowHeight: capture.scrollHeight,
+      })
+      const link = document.createElement('a')
+      const activeIdx = [...document.querySelectorAll('.screen')].findIndex(s => s.classList.contains('active'))
+      link.download = 'telerehab-' + SCREEN_NAMES[activeIdx] + '.png'
+      link.href = canvas.toDataURL('image/png')
+      link.click()
+    } catch(e) {
+      console.error(e)
+    }
+
+    btn.innerHTML = '<i class="fa-solid fa-download"></i> Download PNG'
+    btn.disabled = false
+  }
+</script>
+</body>
+</html>

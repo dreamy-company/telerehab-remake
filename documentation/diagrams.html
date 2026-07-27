@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleRehab – Documentation Diagrams</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:        #0d1117;
+            --bg2:       #161b22;
+            --bg3:       #1c2128;
+            --border:    #30363d;
+            --accent:    #4a9eff;
+            --accent2:   #22c55e;
+            --purple:    #a371f7;
+            --amber:     #f59e0b;
+            --txt:       #e6edf3;
+            --txt2:      #8b949e;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--txt);
+            min-height: 100vh;
+        }
+
+        /* ── Header ── */
+        header {
+            background: linear-gradient(135deg, #0d1117 0%, #0f2041 50%, #0d1117 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 2rem 2.5rem;
+        }
+        .hd-inner { max-width: 1400px; margin: 0 auto; }
+        .hd-badge {
+            display: inline-block;
+            background: rgba(74,158,255,.12);
+            border: 1px solid rgba(74,158,255,.3);
+            color: var(--accent);
+            font-size: .7rem; font-weight: 700; letter-spacing: .1em;
+            text-transform: uppercase; padding: .25rem .8rem; border-radius: 20px;
+            margin-bottom: .8rem;
+        }
+        header h1 {
+            font-size: 1.9rem; font-weight: 700; margin-bottom: .4rem;
+            background: linear-gradient(90deg,#fff 0%,#4a9eff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        header p { color: var(--txt2); font-size: .9rem; max-width: 640px; line-height: 1.6; }
+        .hd-pills {
+            display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; margin-top: 1rem;
+        }
+        .pill {
+            font-size: .75rem; color: var(--txt2);
+            display: flex; align-items: center; gap: .4rem;
+        }
+        .pill::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--accent); }
+
+        /* ── Tab nav ── */
+        .tab-nav {
+            background: var(--bg2); border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .tab-nav-inner {
+            max-width: 1400px; margin: 0 auto;
+            display: flex; overflow-x: auto; scrollbar-width: none;
+        }
+        .tab-nav-inner::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            flex-shrink: 0; padding: .9rem 1.6rem;
+            background: none; border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--txt2); font-size: .85rem; font-weight: 500;
+            cursor: pointer; transition: all .18s; white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--txt); background: rgba(255,255,255,.03); }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: rgba(74,158,255,.05); }
+        .tab-num {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 20px; height: 20px; border-radius: 4px;
+            background: var(--border); font-size: .68rem; font-weight: 700;
+            margin-right: .45rem; transition: background .18s;
+        }
+        .tab-btn.active .tab-num { background: var(--accent); color: #000; }
+        .badge-new {
+            display: inline-block; background: #238636; color: #fff;
+            font-size: .6rem; font-weight: 700; padding: .1rem .4rem;
+            border-radius: 10px; margin-left: .4rem; vertical-align: middle;
+            text-transform: uppercase;
+        }
+
+        /* ── Content ── */
+        .content { max-width: 1400px; margin: 0 auto; padding: 2rem 2.5rem; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── Diagram card ── */
+        .card {
+            background: var(--bg3); border: 1px solid var(--border);
+            border-radius: 12px; overflow: hidden;
+        }
+        .card-head {
+            padding: 1.4rem 1.8rem; border-bottom: 1px solid var(--border);
+            display: flex; align-items: flex-start; gap: .9rem;
+        }
+        .card-icon {
+            width: 40px; height: 40px; border-radius: 8px;
+            background: rgba(74,158,255,.12);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.15rem; flex-shrink: 0;
+        }
+        .card-title { font-size: 1.05rem; font-weight: 600; margin-bottom: .3rem; }
+        .card-desc { font-size: .82rem; color: var(--txt2); line-height: 1.55; }
+        .card-body {
+            padding: 1.5rem; overflow: auto; max-height: 82vh;
+            background: var(--bg);
+        }
+        .mermaid { display: flex; justify-content: center; min-width: 100%; }
+
+        /* ── Legend ── */
+        .legend {
+            margin-top: 1.2rem; padding: .9rem 1.2rem;
+            background: var(--bg2); border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .legend-title {
+            font-size: .72rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: .06em; color: var(--txt2); margin-bottom: .6rem;
+        }
+        .legend-list { list-style: none; display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+        .legend-item {
+            font-size: .78rem; color: var(--txt2);
+            display: flex; align-items: center; gap: .4rem;
+        }
+        .legend-dot { width: 11px; height: 11px; border-radius: 2px; flex-shrink: 0; }
+
+        /* ── Scrollbar ── */
+        .card-body::-webkit-scrollbar { width: 5px; height: 5px; }
+        .card-body::-webkit-scrollbar-track { background: var(--bg); }
+        .card-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+        @media (max-width: 768px) {
+            header { padding: 1.2rem; }
+            header h1 { font-size: 1.4rem; }
+            .content { padding: .8rem; }
+            .card-body { max-height: 60vh; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+    <div class="hd-inner">
+        <div class="hd-badge">Dokumentasi Perangkat Lunak</div>
+        <h1>Platform TeleRehab – Diagram Arsitektur Sistem</h1>
+        <p>
+            Dokumentasi sistem platform telerehabilitasi yang dibangun dengan Laravel 12 + Livewire 3.
+            Mencakup dua antarmuka: aplikasi web (Livewire) dan REST API untuk aplikasi mobile pasien (Sanctum).
+            Termasuk fitur baru Pelacakan Gerakan Real-time menggunakan MediaPipe Pose Landmarker.
+        </p>
+        <div class="hd-pills">
+            <span class="pill">4 Peran: Admin · Dokter · Terapis · Pasien</span>
+            <span class="pill">Web (Livewire) + API Mobile (Sanctum)</span>
+            <span class="pill">Pelacakan Gerakan Real-time (MediaPipe + Pusher)</span>
+            <span class="pill">10 Entitas Utama Database</span>
+        </div>
+    </div>
+</header>
+
+<!-- ══════════════ TAB NAV ══════════════ -->
+<nav class="tab-nav">
+    <div class="tab-nav-inner">
+        <button class="tab-btn active" onclick="switchTab('usecase',this)">
+            <span class="tab-num">1</span>Use Case Diagram
+        </button>
+        <button class="tab-btn" onclick="switchTab('dfd0',this)">
+            <span class="tab-num">2</span>DFD Level 0
+        </button>
+        <button class="tab-btn" onclick="switchTab('dfd1',this)">
+            <span class="tab-num">3</span>DFD Level 1
+        </button>
+        <button class="tab-btn" onclick="switchTab('erd',this)">
+            <span class="tab-num">4</span>ERD <span class="badge-new">10 Entitas</span>
+        </button>
+    </div>
+</nav>
+
+<!-- ══════════════ CONTENT ══════════════ -->
+<div class="content">
+
+<!-- ───────────────────────────────────────
+     TAB 1 – USE CASE DIAGRAM
+──────────────────────────────────────── -->
+<div id="tab-usecase" class="tab-panel active">
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon">👤</div>
+            <div>
+                <div class="card-title">Diagram Use Case</div>
+                <div class="card-desc">
+                    Empat aktor berinteraksi dengan Sistem TeleRehab: Admin, Dokter, Terapis, dan Pasien.
+                    Sistem mengirimkan notifikasi email melalui Server Email eksternal dan menyiarkan kejadian real-time melalui Server Pusher.
+                    Pasien adalah aktor utama untuk fitur baru Pelacakan Gerakan Real-time menggunakan MediaPipe di sisi browser.
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+<div class="mermaid">
+flowchart TB
+    classDef actor  fill:#1e3a5f,stroke:#4a9eff,stroke-width:2px,color:#cce4ff
+    classDef uc     fill:#0f2d4a,stroke:#2d6a9f,color:#cce4ff
+    classDef svc    fill:#2d1f00,stroke:#f59e0b,stroke-width:2px,color:#fde68a
+
+    ADMIN([Admin]):::actor
+    DOKTER([Dokter]):::actor
+    TERAPIS([Terapis]):::actor
+    PASIEN([Pasien]):::actor
+    EMAIL([Server Email]):::svc
+    PUSHER([Server Pusher]):::svc
+
+    subgraph SYS ["  Sistem TeleRehab  "]
+        direction TB
+
+        subgraph G_ADMIN ["Fungsi Admin"]
+            direction TB
+            UC1["Kelola Pengguna"]:::uc
+            UC2["Kelola Data Pasien"]:::uc
+            UC3["Kelola Data Master"]:::uc
+        end
+
+        subgraph G_DOKTER ["Fungsi Dokter & Terapis"]
+            direction TB
+            UC4["Jadwalkan Pertemuan Konsultasi"]:::uc
+            UC5["Tugaskan Program Rehabilitasi"]:::uc
+            UC6["Tinjau Hasil Latihan Pasien"]:::uc
+            UC7["Tandai Masalah Sesi Gerakan ★BARU"]:::uc
+        end
+
+        subgraph G_PASIEN ["Fungsi Pasien"]
+            direction TB
+            UC8["Daftar & Masuk Akun"]:::uc
+            UC9["Ajukan Permintaan Konsultasi"]:::uc
+            UC10["Lihat Program Rehabilitasi"]:::uc
+            UC11["Unggah Video Latihan"]:::uc
+            UC12["Lacak Gerakan Real-time ★BARU"]:::uc
+        end
+
+        G_ADMIN ~~~ G_DOKTER
+        G_DOKTER ~~~ G_PASIEN
+    end
+
+    ADMIN   --> G_ADMIN
+    DOKTER  --> G_DOKTER
+    TERAPIS --> G_DOKTER
+    PASIEN  --> G_PASIEN
+
+    G_ADMIN  -.->|"Notifikasi Email"| EMAIL
+    G_DOKTER -.->|"Notifikasi Jadwal"| EMAIL
+    G_PASIEN -.->|"Verifikasi Email"| EMAIL
+    G_PASIEN -.->|"Siaran Real-time"| PUSHER
+    PUSHER   -.->|"Notifikasi ke Pasien"| G_PASIEN
+</div>
+        </div>
+    </div>
+    <div class="legend">
+        <div class="legend-title">Keterangan</div>
+        <ul class="legend-list">
+            <li class="legend-item"><div class="legend-dot" style="background:#1e3a5f;border:1px solid #4a9eff"></div>Aktor (eksternal)</li>
+            <li class="legend-item"><div class="legend-dot" style="background:#0f2d4a;border:1px solid #2d6a9f"></div>Use Case</li>
+            <li class="legend-item"><div class="legend-dot" style="background:#2d1f00;border:1px solid #f59e0b"></div>Layanan Eksternal</li>
+            <li class="legend-item">Panah putus-putus = interaksi dengan layanan eksternal</li>
+            <li class="legend-item">Panah solid = asosiasi aktor–use case</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ───────────────────────────────────────
+     TAB 2 – DFD LEVEL 0
+──────────────────────────────────────── -->
+<div id="tab-dfd0" class="tab-panel">
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon">🌐</div>
+            <div>
+                <div class="card-title">DFD Level 0 — Diagram Konteks</div>
+                <div class="card-desc">
+                    Tampilan tingkat atas Sistem TeleRehab sebagai satu proses tunggal. Menampilkan 5 entitas eksternal
+                    beserta aliran data yang masuk dan keluar sistem. Server Email dan Server Pusher adalah layanan eksternal
+                    yang hanya menerima data keluar dari sistem.
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+<div class="mermaid">
+flowchart TB
+    classDef entity  fill:#1a2f45,stroke:#4a9eff,stroke-width:2px,color:#cce4ff
+    classDef process fill:#0a3a1e,stroke:#22c55e,stroke-width:2px,color:#d1fae5
+    classDef svc     fill:#2d1f00,stroke:#f59e0b,stroke-width:2px,color:#fde68a
+
+    subgraph STAF ["Staf Klinis"]
+        direction TB
+        ADMIN["Admin"]:::entity
+        DOKTER["Dokter"]:::entity
+        TERAPIS["Terapis"]:::entity
+    end
+
+    SYS(("0\nSistem\nTeleRehab")):::process
+
+    PASIEN["Pasien"]:::entity
+
+    subgraph EXT ["Layanan Eksternal"]
+        direction TB
+        EMAIL["Server Email"]:::svc
+        PUSHER["Server Pusher"]:::svc
+    end
+
+    STAF    ~~~ SYS
+    SYS     ~~~ PASIEN
+    PASIEN  ~~~ EXT
+
+    ADMIN   -->|"Data Pengguna & Master"| SYS
+    SYS     -->|"Laporan & Statistik"| ADMIN
+
+    DOKTER  -->|"Jadwal & Program Rehab"| SYS
+    SYS     -->|"Data Pasien & Hasil Latihan"| DOKTER
+
+    TERAPIS -->|"Umpan Balik & Tanda Klinis"| SYS
+    SYS     -->|"Data Pasien & Hasil Latihan"| TERAPIS
+
+    PASIEN  -->|"Data Registrasi & Sesi Latihan"| SYS
+    SYS     -->|"Program Rehab & Notifikasi"| PASIEN
+
+    SYS     -->|"Notifikasi Email"| EMAIL
+    SYS     -->|"Siaran Real-time"| PUSHER
+</div>
+        </div>
+    </div>
+    <div class="legend">
+        <div class="legend-title">Keterangan</div>
+        <ul class="legend-list">
+            <li class="legend-item"><div class="legend-dot" style="background:#1a2f45;border:1px solid #4a9eff"></div>Entitas Eksternal</li>
+            <li class="legend-item"><div class="legend-dot" style="background:#0a3a1e;border:1px solid #22c55e"></div>Proses (Sistem Pusat)</li>
+            <li class="legend-item"><div class="legend-dot" style="background:#2d1f00;border:1px solid #f59e0b"></div>Layanan Eksternal (hanya keluar)</li>
+            <li class="legend-item">Panah berlabel = aliran data antar entitas dan sistem</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ───────────────────────────────────────
+     TAB 3 – DFD LEVEL 1
+──────────────────────────────────────── -->
+<div id="tab-dfd1" class="tab-panel">
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon">⚙️</div>
+            <div>
+                <div class="card-title">DFD Level 1 — Dekomposisi Proses</div>
+                <div class="card-desc">
+                    Sistem TeleRehab diuraikan menjadi 5 sub-proses dan 6 penyimpanan data. Proses 5.0 (Pelacakan Gerakan)
+                    adalah fitur yang baru ditambahkan: menerima data telemetri dari browser (sudut sendi, jumlah repetisi),
+                    menyimpan log, dan menyiarkan notifikasi melalui Pusher saat sesi selesai.
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+<div class="mermaid">
+flowchart TB
+    classDef entity  fill:#1a2f45,stroke:#4a9eff,stroke-width:2px,color:#cce4ff
+    classDef process fill:#0a3a1e,stroke:#22c55e,stroke-width:2px,color:#d1fae5
+    classDef store   fill:#2d1a45,stroke:#a371f7,stroke-width:2px,color:#e9d5ff
+    classDef svc     fill:#2d1f00,stroke:#f59e0b,stroke-width:2px,color:#fde68a
+
+    ADMIN["Admin"]:::entity
+    DOKTER["Dokter"]:::entity
+    TERAPIS["Terapis"]:::entity
+    PASIEN["Pasien"]:::entity
+    EMAIL["Server Email"]:::svc
+    PUSHER["Server Pusher"]:::svc
+
+    P1["1.0\nAutentikasi &\nRegistrasi"]:::process
+    P2["2.0\nManajemen\nKonsultasi"]:::process
+    P3["3.0\nManajemen\nRehabilitasi"]:::process
+    P4["4.0\nPelacakan\nLatihan"]:::process
+    P5["5.0\nPelacakan\nGerakan ★BARU"]:::process
+
+    DS1[(D1: Data\nPengguna)]:::store
+    DS2[(D2: Data\nPasien)]:::store
+    DS3[(D3: Data\nPertemuan)]:::store
+    DS4[(D4: Program\nRehabilitasi)]:::store
+    DS5[(D5: Hasil\nLatihan)]:::store
+    DS6[(D6: Sesi\nGerakan ★BARU)]:::store
+
+    P1 ~~~ P2
+    P2 ~~~ P3
+    P3 ~~~ P4
+    P4 ~~~ P5
+
+    PASIEN  -->|"Data Registrasi"| P1
+    P1      --> DS1
+    P1      --> DS2
+    P1      -->|"Email Verifikasi"| EMAIL
+
+    PASIEN  -->|"Permintaan Konsultasi"| P2
+    DOKTER  -->|"Terima & Jadwalkan"| P2
+    P2      --> DS3
+    P2      -->|"Notifikasi Jadwal"| EMAIL
+    P2      -->|"Siaran Pembaruan"| PUSHER
+    DS3     -->|"Data Jadwal"| PASIEN
+    DS3     -->|"Daftar Pertemuan"| DOKTER
+
+    DOKTER  -->|"Tugaskan Program"| P3
+    ADMIN   -->|"Kelola Data Master"| P3
+    P3      --> DS4
+    DS4     -->|"Program Aktif"| PASIEN
+
+    PASIEN  -->|"Unggah Video Latihan"| P4
+    P4      --> DS5
+    DS5     -->|"Hasil & Umpan Balik"| DOKTER
+    DS5     -->|"Hasil & Umpan Balik"| TERAPIS
+
+    PASIEN  -->|"Data Sudut & Repetisi"| P5
+    DS4     -->|"Batas Sudut Latihan"| P5
+    P5      --> DS6
+    P5      -->|"Sesi Selesai"| PUSHER
+    DS6     -->|"Data Sesi Gerakan"| DOKTER
+    DS6     -->|"Data Sesi Gerakan"| TERAPIS
+</div>
+        </div>
+    </div>
+    <div class="legend">
+        <div class="legend-title">Keterangan</div>
+        <ul class="legend-list">
+            <li class="legend-item"><div class="legend-dot" style="background:#1a2f45;border:1px solid #4a9eff"></div>Entitas Eksternal / Aktor</li>
+            <li class="legend-item"><div class="legend-dot" style="background:#0a3a1e;border:1px solid #22c55e"></div>Proses</li>
+            <li class="legend-item"><div class="legend-dot" style="background:#2d1a45;border:1px solid #a371f7"></div>Penyimpanan Data (tabel database)</li>
+            <li class="legend-item"><div class="legend-dot" style="background:#2d1f00;border:1px solid #f59e0b"></div>Layanan Eksternal</li>
+            <li class="legend-item">★BARU = Fitur Pelacakan Gerakan yang ditambahkan pada iterasi ini</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ───────────────────────────────────────
+     TAB 4 – ERD
+──────────────────────────────────────── -->
+<div id="tab-erd" class="tab-panel">
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon">🗄️</div>
+            <div>
+                <div class="card-title">Diagram Hubungan Entitas (ERD) — Konseptual</div>
+                <div class="card-desc">
+                    Skema database konseptual dengan 10 entitas utama. Mencakup 3 entitas baru Pelacakan Gerakan
+                    (latihan_gerakan, sesi_gerakan, tanda_klinis). Setiap entitas menampilkan atribut kunci saja
+                    untuk kemudahan pemahaman struktur sistem secara keseluruhan.
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+<div class="mermaid">
+erDiagram
+    pengguna {
+        int id PK
+        string nama
+        string email
+        string peran
+        string kata_sandi
+        int negara_id FK
+    }
+
+    pasien {
+        int id PK
+        int pengguna_id FK
+        int dokter_id FK
+        string no_rekam_medis
+        string no_bpjs
+        string alamat
+    }
+
+    pertemuan {
+        int id PK
+        int dokter_id FK
+        int pasien_id FK
+        string judul
+        date tanggal
+        string status
+        string diagnosis
+    }
+
+    tipe_rehabilitasi {
+        int id PK
+        string nama
+    }
+
+    program_rehabilitasi {
+        int id PK
+        int tipe_id FK
+        string nama
+        string deskripsi
+    }
+
+    rutinitas_rehab {
+        int id PK
+        int dokter_id FK
+        int pasien_id FK
+        int program_id FK
+        string status
+        string tujuan
+        date target
+    }
+
+    hasil_latihan {
+        int id PK
+        int pasien_id FK
+        int rutinitas_id FK
+        date tanggal
+        string url_video
+        string umpan_balik
+    }
+
+    latihan_gerakan {
+        int id PK
+        string nama
+        string sendi_target
+        int sudut_min
+        int sudut_max
+        int target_repetisi
+    }
+
+    sesi_gerakan {
+        int id PK
+        int pasien_id FK
+        int latihan_id FK
+        int rutinitas_id FK
+        int total_repetisi
+        float rata_sudut
+        string status
+    }
+
+    tanda_klinis {
+        int id PK
+        int sesi_id FK
+        int ditandai_oleh FK
+        string jenis_tanda
+        string catatan
+    }
+
+    pengguna         ||--o{ pasien           : "akun pasien"
+    pengguna         ||--o{ pasien           : "dokter pemegang"
+    pengguna         ||--o{ pertemuan        : "dokter"
+    pasien           ||--o{ pertemuan        : "pasien"
+    tipe_rehabilitasi ||--o{ program_rehabilitasi : "tipe"
+    program_rehabilitasi ||--o{ rutinitas_rehab : "program"
+    pengguna         ||--o{ rutinitas_rehab  : "dokter"
+    pasien           ||--o{ rutinitas_rehab  : "pasien"
+    rutinitas_rehab  ||--o{ hasil_latihan    : "rutinitas"
+    pasien           ||--o{ hasil_latihan    : "pasien"
+    latihan_gerakan  ||--o{ sesi_gerakan     : "latihan"
+    pasien           ||--o{ sesi_gerakan     : "pasien"
+    rutinitas_rehab  ||--o{ sesi_gerakan     : "rutinitas (opsional)"
+    sesi_gerakan     ||--o{ tanda_klinis     : "sesi"
+    pengguna         ||--o{ tanda_klinis     : "ditandai oleh"
+</div>
+        </div>
+    </div>
+    <div class="legend">
+        <div class="legend-title">Kelompok Entitas</div>
+        <ul class="legend-list">
+            <li class="legend-item"><div class="legend-dot" style="background:#1e3a5f"></div>Akun: pengguna</li>
+            <li class="legend-item"><div class="legend-dot" style="background:#2a1a3e"></div>Pasien: pasien</li>
+            <li class="legend-item"><div class="legend-dot" style="background:#3a2a1a"></div>Konsultasi: pertemuan</li>
+            <li class="legend-item"><div class="legend-dot" style="background:#1a3a1e"></div>Rehabilitasi: tipe_rehabilitasi · program_rehabilitasi · rutinitas_rehab · hasil_latihan</li>
+            <li class="legend-item"><div class="legend-dot" style="background:#3a1a2a"></div>Gerakan ★BARU: latihan_gerakan · sesi_gerakan · tanda_klinis</li>
+        </ul>
+    </div>
+</div>
+
+</div><!-- .content -->
+
+<script>
+    mermaid.initialize({
+        startOnLoad: false,
+        theme: 'dark',
+        darkMode: true,
+        themeVariables: {
+            primaryColor:        '#1a3a5c',
+            primaryTextColor:    '#e6edf3',
+            primaryBorderColor:  '#4a9eff',
+            lineColor:           '#4a9eff',
+            secondaryColor:      '#0a2a1e',
+            tertiaryColor:       '#2d1a45',
+            background:          '#0d1117',
+            mainBkg:             '#161b22',
+            nodeBorder:          '#30363d',
+            clusterBkg:          '#161b22',
+            clusterBorder:       '#30363d',
+            titleColor:          '#e6edf3',
+            edgeLabelBackground: '#161b22',
+            attributeBackgroundColorEven: '#1c2128',
+            attributeBackgroundColorOdd:  '#161b22',
+        },
+        flowchart: { curve: 'basis', padding: 20, htmlLabels: true },
+        er: { layoutDirection: 'TB', minEntityWidth: 100, minEntityHeight: 75,
+              entityPadding: 15, useMaxWidth: false },
+    });
+
+    async function renderAll() {
+        await mermaid.run({ querySelector: '.mermaid' });
+    }
+    renderAll();
+
+    function switchTab(name, btn) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-' + name).classList.add('active');
+        btn.classList.add('active');
+    }
+</script>
+</body>
+</html>
