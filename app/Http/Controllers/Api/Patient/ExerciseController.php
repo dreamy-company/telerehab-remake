@@ -36,7 +36,7 @@ class ExerciseController extends Controller
             ],
             'results' => $rehabData->routineResults->map(fn($result) => [
                 'id'         => $result->id,
-                'video_url'  => asset('storage/' . $result->video_url),
+                'video_url'  => $result->video_url ? asset('storage/' . $result->video_url) : null,
                 'feedback'   => $result->feedback,
                 'created_at' => $result->created_at,
                 'rating_response' => $result->ratingResponse ? [
@@ -57,7 +57,7 @@ class ExerciseController extends Controller
     public function uploadVideo(Request $request, $id)
     {
         $request->validate([
-            'video'    => 'required|file|mimes:mp4,mov,avi,webm|max:10240',
+            'video'    => 'required|file|mimes:mp4,mov,avi,webm,mkv,3gp|max:102400',
             'feedback' => 'nullable|string',
         ]);
 
@@ -81,10 +81,13 @@ class ExerciseController extends Controller
 
         $videoPath = $request->file('video')->store('exercise_videos', 'public');
 
-        // Sesuaikan model RoutineResult kamu
+        // patient_id & date wajib diisi eksplisit: relasi routineResults() hanya
+        // mengisi rehab_routine_id, sedangkan kedua kolom ini NOT NULL tanpa default.
         $result = $rehabData->routineResults()->create([
-            'video_url' => $videoPath,
-            'feedback'  => $request->feedback,
+            'patient_id' => $patient->id,
+            'date'       => now()->toDateString(),
+            'video_url'  => $videoPath,
+            'feedback'   => $request->feedback,
         ]);
 
         return response()->json([

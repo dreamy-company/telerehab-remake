@@ -11,9 +11,10 @@ class RoutineResult extends Model
     {
         return $this->belongsTo(RehabRoutine::class, 'rehab_routine_id');
     }
+    // patient_id merujuk ke tabel `patients`, bukan `users`.
     public function patient()
     {
-        return $this->belongsTo(User::class, 'patient_id');
+        return $this->belongsTo(Patient::class, 'patient_id');
     }
 
     public function rehabRoutine()

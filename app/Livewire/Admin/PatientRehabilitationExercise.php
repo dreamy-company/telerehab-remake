@@ -33,45 +33,78 @@ class PatientRehabilitationExercise extends Component
         $this->activeResultId = $resultId;
     }
 
+    /**
+     * Divalidasi begitu file dipilih supaya error (mis. ukuran / format) langsung
+     * tampil di modal, bukan gagal diam-diam saat tombol submit ditekan.
+     */
+    public function updatedVideo()
+    {
+        $this->validateOnly('video', [
+            'video' => 'nullable|file|mimetypes:video/mp4,video/quicktime,video/x-msvideo,video/webm,video/x-matroska,video/3gpp|max:102400',
+        ], [
+            'video.mimetypes' => 'Format video tidak didukung (gunakan mp4, mov, avi, webm, mkv, atau 3gp).',
+            'video.max'       => 'Ukuran video maksimal 100MB.',
+        ]);
+    }
+
     public function submitFeedback()
     {
-
-        $resultId = $this->activeResultId;
-
-        $checkRatingResponse = RatingResponse::where('routine_result_id', $resultId)->first();
-
         $user = Auth::user();
 
-        if ($checkRatingResponse) {
-            $updateData = [];
-            if ($user->role === 'doctor') {
-                $updateData['video_doctor'] = $this->video?->store('feedback_videos', 'public') ?? $checkRatingResponse->video_doctor;
-                $updateData['review_doctor'] = $this->review;
-                $updateData['doctor_id'] = $user->id;
-            } elseif ($user->role === 'therapist') {
-                $updateData['video_therapist'] = $this->video?->store('feedback_videos', 'public') ?? $checkRatingResponse->video_therapist;
-                $updateData['review_therapist'] = $this->review;
-                $updateData['therapist_id'] = $user->id;
-            }
-            $checkRatingResponse->update($updateData);
-            $userRole = $user->role;
-            return redirect()->route($userRole . '.patient.rehabilitation.exercise', ['id' => $this->patientId, 'rehabRoutineId' => $this->rehabRoutineId])->with('success-alert', 'Feedback submitted successfully.');
-        } else {
-            $data = ['routine_result_id' => $resultId];
-            if ($user->role === 'doctor') {
-                $data['video_doctor'] = $this->video?->store('feedback_videos', 'public');
-                $data['review_doctor'] = $this->review;
-                $data['doctor_id'] = $user->id;
-            } elseif ($user->role === 'therapist') {
-                $data['therapist_id'] = $user->id;
-                $data['video_therapist'] = $this->video?->store('feedback_videos', 'public');
-                $data['review_therapist'] = $this->review;
-            }
-            RatingResponse::create($data);
+        if (! in_array($user->role, ['doctor', 'therapist'], true)) {
+            $this->addError('video', 'Hanya dokter atau terapis yang dapat mengirim feedback.');
 
-            $userRole = $user->role;
-            return redirect()->route($userRole . '.patient.rehabilitation.exercise', ['id' => $this->patientId, 'rehabRoutineId' => $this->rehabRoutineId])->with('success-alert', 'Feedback submitted successfully.');
+            return;
         }
+
+        if (! $this->activeResultId) {
+            $this->addError('video', 'Sesi latihan tidak ditemukan, silakan buka ulang modal.');
+
+            return;
+        }
+
+        $this->validate([
+            'video'  => 'nullable|file|mimetypes:video/mp4,video/quicktime,video/x-msvideo,video/webm,video/x-matroska,video/3gpp|max:102400',
+            'review' => 'nullable|string|max:5000',
+        ], [
+            'video.mimetypes' => 'Format video tidak didukung (gunakan mp4, mov, avi, webm, mkv, atau 3gp).',
+            'video.max'       => 'Ukuran video maksimal 100MB.',
+        ]);
+
+        if (! $this->video && ! filled($this->review)) {
+            $this->addError('video', 'Isi minimal video atau catatan evaluasi.');
+
+            return;
+        }
+
+        // Simpan file sekali saja, lalu pakai path-nya untuk kolom sesuai role.
+        $videoPath = $this->video?->store('feedback_videos', 'public');
+
+        $videoColumn  = $user->role === 'doctor' ? 'video_doctor' : 'video_therapist';
+        $reviewColumn = $user->role === 'doctor' ? 'review_doctor' : 'review_therapist';
+        $userColumn   = $user->role === 'doctor' ? 'doctor_id' : 'therapist_id';
+
+        $ratingResponse = RatingResponse::where('routine_result_id', $this->activeResultId)->first();
+
+        $data = [
+            $reviewColumn => $this->review,
+            $userColumn   => $user->id,
+        ];
+
+        // Kalau tidak ada video baru, jangan timpa video lama dengan null.
+        if ($videoPath) {
+            $data[$videoColumn] = $videoPath;
+        }
+
+        if ($ratingResponse) {
+            $ratingResponse->update($data);
+        } else {
+            RatingResponse::create($data + ['routine_result_id' => $this->activeResultId]);
+        }
+
+        $this->reset(['video', 'review']);
+
+        return redirect()->route($user->role . '.patient.rehabilitation.exercise', ['id' => $this->patientId, 'rehabRoutineId' => $this->rehabRoutineId])->with('success-alert', 'Feedback submitted successfully.');
     }
 
     public function render()
