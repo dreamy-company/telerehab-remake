@@ -27,8 +27,8 @@ class RehabilitationExercise extends Component
     public function uploadVideo()
     {
         $this->validate([
-            'video' => 'required|mimes:mp4,mov,avi|max:51200',
-            'feedback' => 'required|string',
+            'video' => 'required|mimes:mp4,mov,avi,webm,mkv,3gp|max:102400',
+            'feedback' => 'nullable|string',
         ]);
 
         $path = $this->video->store('rehab_videos', 'public');

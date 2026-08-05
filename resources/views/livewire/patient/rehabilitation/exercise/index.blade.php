@@ -81,16 +81,17 @@
     </div>
     <dialog id="uploadModal" class="modal" wire:ignore.self>
         <form method="dialog" class="modal-box w-full max-w-lg"
-            x-data="{ isUploading: false, progress: 0 }"
-            x-on:livewire-upload-start="isUploading = true"
+            x-data="{ isUploading: false, progress: 0, uploadError: '' }"
+            x-on:livewire-upload-start="isUploading = true; uploadError = ''"
             x-on:livewire-upload-finish="isUploading = false"
-            x-on:livewire-upload-error="isUploading = false"
+            x-on:livewire-upload-cancel="isUploading = false"
+            x-on:livewire-upload-error="isUploading = false; progress = 0; uploadError = 'Upload video gagal. Pastikan ukuran file di bawah 100MB dan koneksi stabil, lalu coba lagi.'"
             x-on:livewire-upload-progress="progress = $event.detail.progress">
 
             <h3 class="font-bold text-lg mb-4">Upload Video Latihan</h3>
 
             <div>
-                <label for="video" class="block text-sm font-medium text-gray-700 mb-1">Choose Your Exercise Video <span class="font-bold text-primary-500">Max 10 MB</span></label>
+                <label for="video" class="block text-sm font-medium text-gray-700 mb-1">Choose Your Exercise Video <span class="font-bold text-primary-500">Max 100 MB</span></label>
 
                 <div class="relative w-full">
                     <label for="video"
@@ -130,6 +131,8 @@
                     <span>Video selected successfully.</span>
                 </div>
                 @endif
+
+                <div x-show="uploadError" x-cloak class="text-red-600 text-sm mt-1 block" style="display: none;" x-text="uploadError"></div>
 
                 @error('video')
                 <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span>

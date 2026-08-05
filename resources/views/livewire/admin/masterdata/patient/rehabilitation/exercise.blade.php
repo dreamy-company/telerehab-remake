@@ -147,10 +147,11 @@
         <div class="p-8 space-y-6">
             
             <div class="space-y-2"
-                 x-data="{ isUploading: false, progress: 0 }"
-                 x-on:livewire-upload-start="isUploading = true"
+                 x-data="{ isUploading: false, progress: 0, uploadError: '' }"
+                 x-on:livewire-upload-start="isUploading = true; uploadError = ''"
                  x-on:livewire-upload-finish="isUploading = false"
-                 x-on:livewire-upload-error="isUploading = false"
+                 x-on:livewire-upload-cancel="isUploading = false"
+                 x-on:livewire-upload-error="isUploading = false; progress = 0; uploadError = 'Upload video gagal. Pastikan ukuran file di bawah 100MB dan koneksi stabil, lalu coba lagi.'"
                  x-on:livewire-upload-progress="progress = $event.detail.progress">
                  
                 <label class="text-xs font-black text-gray-500 uppercase tracking-widest ml-1">Upload Video Feedback</label>
@@ -174,8 +175,8 @@
                         </div>
                     </div>
 
-                    <input type="file" wire:model="video" 
-                        class="file-input file-input-bordered w-full pl-11 rounded-xl border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all text-sm h-12 disabled:bg-gray-50 disabled:text-gray-400" 
+                    <input type="file" wire:model="video" accept="video/*"
+                        class="file-input file-input-bordered w-full pl-11 rounded-xl border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all text-sm h-12 disabled:bg-gray-50 disabled:text-gray-400"
                         :disabled="isUploading" />
                         
                     <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none" 
@@ -184,13 +185,35 @@
                     </div>
                 </div>
 
-                <div class="h-4 mt-1"> <div x-show="isUploading" class="flex items-center gap-2 text-xs text-teal-600 font-bold animate-pulse" style="display: none;">
-                        <span>Uploading video... please wait.</span>
+                <div class="mt-1 min-h-4">
+                    <div x-show="isUploading" class="flex items-center gap-2 text-xs text-teal-600 font-bold animate-pulse" style="display: none;">
+                        <span x-text="'Uploading video... ' + progress + '% — jangan tutup halaman ini.'"></span>
                     </div>
                     <div wire:loading wire:target="video" class="flex items-center gap-2 text-xs text-orange-500 font-bold">
-                        <i class="fas fa-cog fa-spin"></i> Finalizing & Processing...
+                        <i class="fas fa-cog fa-spin"></i> Finalizing &amp; Processing...
                     </div>
+
+                    {{-- Error dari browser/endpoint upload Livewire (mis. file terlalu besar, koneksi putus) --}}
+                    <div x-show="uploadError" x-cloak class="flex items-start gap-2 text-xs text-red-600 font-bold" style="display: none;">
+                        <i class="fas fa-triangle-exclamation mt-0.5"></i>
+                        <span x-text="uploadError"></span>
+                    </div>
+
+                    {{-- Error dari validasi server --}}
+                    @error('video')
+                        <div class="flex items-start gap-2 text-xs text-red-600 font-bold">
+                            <i class="fas fa-triangle-exclamation mt-0.5"></i>
+                            <span>{{ $message }}</span>
+                        </div>
+                    @enderror
                 </div>
+
+                @if ($video)
+                    <div class="flex items-center gap-2 text-xs text-emerald-600 font-bold">
+                        <i class="fas fa-circle-check"></i>
+                        <span>Video siap dikirim: {{ $video->getClientOriginalName() }}</span>
+                    </div>
+                @endif
             </div>
 
             <div class="space-y-2">
@@ -200,6 +223,9 @@
                     rows="4"
                     class="textarea textarea-bordered w-full rounded-xl border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all text-sm p-4 leading-relaxed"
                     placeholder="Provide detailed feedback on patient's form, range of motion, and progress..."></textarea>
+                @error('review')
+                    <span class="text-xs text-red-600 font-bold">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-50">
