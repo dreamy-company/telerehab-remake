@@ -12,6 +12,8 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/erimicel/select2-tailwindcss-theme/dist/select2-tailwindcss-theme-plain.min.css" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/toastify.min.css') }}">
+    {{-- Batas ukuran upload dibaca oleh penjaga file di resources/js/app.js --}}
+    <meta name="upload-max-bytes" content="{{ config('upload.max_size_bytes') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 

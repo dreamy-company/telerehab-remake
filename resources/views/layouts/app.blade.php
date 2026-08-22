@@ -9,6 +9,8 @@
     <title>Telerehab - Solusi Pemulihan Tangan</title>
     <script src="https://cdn.tailwindcss.com/"></script>
     <link href="{{ asset('assets/css/fontawesome.min.css') }}" rel="stylesheet">
+    {{-- Batas ukuran upload dibaca oleh penjaga file di resources/js/app.js --}}
+    <meta name="upload-max-bytes" content="{{ config('upload.max_size_bytes') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 

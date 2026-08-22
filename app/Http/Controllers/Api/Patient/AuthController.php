@@ -7,6 +7,7 @@ use App\Mail\VerifyEmailMail;
 use App\Models\Patient;
 use App\Models\PatientPhoto;
 use App\Models\User;
+use App\Support\UploadValidation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -75,10 +76,13 @@ class AuthController extends Controller
             'prosthetic_since'      => 'nullable|date',
             // Step 3
             'bpjs_number'       => 'nullable|unique:patients,bpjs_number',
-            'bpjs_card'         => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'bpjs_card'         => 'nullable|file|mimes:' . config('upload.document_mimes') . '|max:' . config('upload.max_size_kb'),
             'patient_condition' => 'nullable|array',
-            'patient_condition.*' => 'file|mimes:jpg,jpeg,png|max:2048',
-        ]);
+            'patient_condition.*' => 'file|mimes:' . config('upload.image_mimes') . '|max:' . config('upload.max_size_kb'),
+        ], UploadValidation::messages([
+            'bpjs_card' => 'kartu BPJS',
+            'patient_condition.*' => 'foto kondisi pasien',
+        ]));
 
         $user = User::create([
             'name'      => $request->name,
@@ -201,10 +205,13 @@ class AuthController extends Controller
             'prosthetic'            => 'nullable|string',
             'prosthetic_since'      => 'nullable|date',
             'bpjs_number'           => ['nullable', Rule::unique('patients', 'bpjs_number')->ignore($patient->id)],
-            'bpjs_card'             => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'bpjs_card'             => 'nullable|file|mimes:' . config('upload.document_mimes') . '|max:' . config('upload.max_size_kb'),
             'patient_condition'     => 'nullable|array',
-            'patient_condition.*'   => 'file|mimes:jpg,jpeg,png|max:2048',
-        ]);
+            'patient_condition.*'   => 'file|mimes:' . config('upload.image_mimes') . '|max:' . config('upload.max_size_kb'),
+        ], UploadValidation::messages([
+            'bpjs_card' => 'kartu BPJS',
+            'patient_condition.*' => 'foto kondisi pasien',
+        ]));
 
         // Update data user (hanya field yang dikirim)
         foreach (['name', 'email', 'country', 'telephone'] as $field) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Patient;
 use App\Http\Controllers\Controller;
 use App\Models\RehabRoutine;
+use App\Support\UploadValidation;
 use Illuminate\Http\Request;
 
 class ExerciseController extends Controller
@@ -57,9 +58,9 @@ class ExerciseController extends Controller
     public function uploadVideo(Request $request, $id)
     {
         $request->validate([
-            'video'    => 'required|file|mimes:mp4,mov,avi,webm,mkv,3gp|max:102400',
+            'video'    => 'required|file|mimes:' . config('upload.video_mimes') . '|max:' . config('upload.max_size_kb'),
             'feedback' => 'nullable|string',
-        ]);
+        ], UploadValidation::messages(['video' => 'video']));
 
         $patient   = $request->user()->patient;
         $rehabData = RehabRoutine::where('id', $id)

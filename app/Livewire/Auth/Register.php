@@ -6,6 +6,7 @@ use App\Mail\VerifyEmailMail;
 use App\Models\Patient;
 use App\Models\PatientPhoto;
 use App\Models\User;
+use App\Support\UploadValidation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -97,10 +98,13 @@ class Register extends Component
         // 1. Validasi Step Terakhir (Step 3)
         $this->validate([
             'bpjs_number' => 'nullable|unique:patients,bpjs_number',
-            'bpjs_card' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'bpjs_card' => 'nullable|file|mimes:' . config('upload.document_mimes') . '|max:' . config('upload.max_size_kb'),
             'patient_condition' => 'nullable|array', // Validasi array
-            'patient_condition.*' => 'file|mimes:jpg,jpeg,png|max:2048', // Validasi tiap file
-        ]);
+            'patient_condition.*' => 'file|mimes:' . config('upload.image_mimes') . '|max:' . config('upload.max_size_kb'), // Validasi tiap file
+        ], UploadValidation::messages([
+            'bpjs_card' => 'kartu BPJS',
+            'patient_condition.*' => 'foto kondisi pasien',
+        ]));
 
         try {
             // 2. Buat User

@@ -85,13 +85,13 @@
             x-on:livewire-upload-start="isUploading = true; uploadError = ''"
             x-on:livewire-upload-finish="isUploading = false"
             x-on:livewire-upload-cancel="isUploading = false"
-            x-on:livewire-upload-error="isUploading = false; progress = 0; uploadError = 'Upload video gagal. Pastikan ukuran file di bawah 100MB dan koneksi stabil, lalu coba lagi.'"
+            x-on:livewire-upload-error="isUploading = false; progress = 0; uploadError = 'Upload video gagal. Pastikan ukuran file di bawah {{ config('upload.max_size_mb') }}MB dan koneksi stabil, lalu coba lagi.'"
             x-on:livewire-upload-progress="progress = $event.detail.progress">
 
             <h3 class="font-bold text-lg mb-4">Upload Video Latihan</h3>
 
             <div>
-                <label for="video" class="block text-sm font-medium text-gray-700 mb-1">Choose Your Exercise Video <span class="font-bold text-primary-500">Max 100 MB</span></label>
+                <label for="video" class="block text-sm font-medium text-gray-700 mb-1">Choose Your Exercise Video <span class="font-bold text-primary-500">Max {{ config('upload.max_size_mb') }} MB</span></label>
 
                 <div class="relative w-full">
                     <label for="video"
@@ -121,7 +121,7 @@
                             <p class="text-xs text-gray-500 mt-2 font-medium">Uploading...</p>
                         </div>
 
-                        <input type="file" id="video" name="video" wire:model="video" accept="video/*" class="hidden">
+                        <input type="file" id="video" name="video" wire:model="video" accept="{{ config('upload.video_accept') }}" class="hidden">
                     </label>
                 </div>
 

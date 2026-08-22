@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\PatientPhoto;
 use App\Models\User;
+use App\Support\UploadValidation;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -29,13 +30,16 @@ class RegisteredUserController extends Controller
             'telephone' => 'required',
             'medical_record_number' => 'nullable|unique:patients,medical_record_number',
             'bpjs_number' => 'nullable|unique:patients,bpjs_number',
-            'bpjs_card' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'bpjs_card' => 'nullable|file|mimes:' . config('upload.document_mimes') . '|max:' . config('upload.max_size_kb'),
             'patient_photo' => 'nullable',
-            'patient_photo.*' => 'file|mimes:jpg,jpeg,png|max:2048',
+            'patient_photo.*' => 'file|mimes:' . config('upload.image_mimes') . '|max:' . config('upload.max_size_kb'),
             'address' => 'required',
             'prosthetic' => 'nullable|string',
             'prosthetic_since' => 'nullable|date',
-        ]);
+        ], UploadValidation::messages([
+            'bpjs_card' => 'kartu BPJS',
+            'patient_photo.*' => 'foto kondisi pasien',
+        ]));
 
         try {
 

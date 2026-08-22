@@ -248,18 +248,22 @@
                     <div>
                         <div class="flex justify-between items-end mb-3">
                             <label class="text-sm font-bold text-slate-700">Patient Condition Photos</label>
-                            <span class="text-xs text-slate-400">Max 2MB/Image</span>
+                            <span class="text-xs text-slate-400">Max {{ config('upload.max_size_mb') }}MB/Image</span>
                         </div>
 
                         <div
                             class="relative group w-full h-32 border-2 border-dashed border-slate-300 rounded-xl hover:border-primary-500 hover:bg-primary-50 transition-all cursor-pointer flex flex-col items-center justify-center text-center mb-4">
-                            <input type="file" wire:model="patient_condition" multiple accept="image/*"
+                            <input type="file" wire:model="patient_condition" multiple accept="{{ config('upload.image_accept') }}"
                                 class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                             <i
                                 class="fas fa-camera text-2xl text-slate-400 group-hover:text-primary-500 mb-2 transition-colors"></i>
                             <p class="text-xs font-semibold text-slate-500 group-hover:text-primary-600">Click to upload
                                 photos</p>
                         </div>
+
+                        @error('patient_condition.*')
+                            <span class="text-red-500 text-xs mb-3 block">{{ $message }}</span>
+                        @enderror
 
                         @if((is_array($patient_condition) && count($patient_condition) > 0) || ($old_patient_condition && count($old_patient_condition) > 0))
                             <div class="grid grid-cols-2 gap-3">
@@ -316,9 +320,9 @@
                                 </div>
                                 <div class="flex-grow">
                                     <p class="text-xs font-semibold text-slate-700">Change Card File</p>
-                                    <p class="text-[10px] text-slate-400">JPG/PNG only</p>
+                                    <p class="text-[10px] text-slate-400">JPG/PNG/PDF, max {{ config('upload.max_size_mb') }}MB</p>
                                 </div>
-                                <input type="file" wire:model="bpjs_card" accept="image/*"
+                                <input type="file" wire:model="bpjs_card" accept="{{ config('upload.document_accept') }}"
                                     class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
 
@@ -328,9 +332,11 @@
                                     <div
                                         class="absolute top-2 right-2 z-10 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded">
                                         New File</div>
-                                    <img src="{{ $bpjs_card->temporaryUrl() }}" class="w-full h-full object-cover">
+                                    <x-document-preview :url="$bpjs_card->temporaryUrl()"
+                                        :pdf="$bpjs_card->getMimeType() === 'application/pdf'" />
                                 @elseif($old_bpjs_card)
-                                    <img src="{{ asset('storage/'.$old_bpjs_card) }}" class="w-full h-full object-cover">
+                                    <x-document-preview :url="asset('storage/'.$old_bpjs_card)"
+                                        :pdf="str_ends_with(strtolower($old_bpjs_card), '.pdf')" />
                                     <a href="{{ asset('storage/'.$old_bpjs_card) }}" target="_blank"
                                         class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                         <span
