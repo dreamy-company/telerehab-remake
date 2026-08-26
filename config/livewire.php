@@ -68,8 +68,10 @@ return [
 
         // Default Livewire hanya mengizinkan 12MB (max:12288). Video rehabilitasi
         // dari kamera HP hampir selalu lebih besar dari itu, sehingga upload
-        // ditolak diam-diam. Dinaikkan ke 100MB.
-        'rules' => ['required', 'file', 'max:102400'], // 100MB
+        // ditolak diam-diam. Sekarang mengikuti UPLOAD_MAX_SIZE_KB (default 100MB).
+        // File config tidak boleh memanggil config(), jadi env() dibaca langsung
+        // di sini supaya tetap sinkron dengan config/upload.php.
+        'rules' => ['required', 'file', 'max:'.(int) env('UPLOAD_MAX_SIZE_KB', 102400)],
 
         'directory' => null,   // Example: 'tmp'                      | Default: 'livewire-tmp'
 
@@ -82,6 +84,10 @@ return [
             'mov', 'avi', 'wmv', 'mp3', 'm4a',
             'jpg', 'jpeg', 'mpga', 'webp', 'wma',
             'webm', 'mkv', '3gp',
+
+            // Kartu BPJS boleh PDF. Tanpa entri ini temporaryUrl() melempar
+            // exception saat user memilih PDF di form pasien/profil.
+            'pdf',
         ],
 
         // Default 5 menit. Koneksi lambat + video besar bisa melewati batas ini

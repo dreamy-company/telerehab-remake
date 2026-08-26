@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\RatingResponse;
 use App\Models\RehabRoutine;
 use App\Models\RoutineResult;
+use App\Support\UploadValidation;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -33,6 +34,13 @@ class PatientRehabilitationExercise extends Component
         $this->activeResultId = $resultId;
     }
 
+    protected function videoMessages(): array
+    {
+        return array_merge(UploadValidation::messages(['video' => 'video']), [
+            'video.mimetypes' => 'Format video tidak didukung (gunakan mp4, mov, avi, webm, mkv, atau 3gp).',
+        ]);
+    }
+
     /**
      * Divalidasi begitu file dipilih supaya error (mis. ukuran / format) langsung
      * tampil di modal, bukan gagal diam-diam saat tombol submit ditekan.
@@ -40,11 +48,8 @@ class PatientRehabilitationExercise extends Component
     public function updatedVideo()
     {
         $this->validateOnly('video', [
-            'video' => 'nullable|file|mimetypes:video/mp4,video/quicktime,video/x-msvideo,video/webm,video/x-matroska,video/3gpp|max:102400',
-        ], [
-            'video.mimetypes' => 'Format video tidak didukung (gunakan mp4, mov, avi, webm, mkv, atau 3gp).',
-            'video.max'       => 'Ukuran video maksimal 100MB.',
-        ]);
+            'video' => 'nullable|file|mimetypes:' . config('upload.video_mimetypes') . '|max:' . config('upload.max_size_kb'),
+        ], $this->videoMessages());
     }
 
     public function submitFeedback()
@@ -64,12 +69,9 @@ class PatientRehabilitationExercise extends Component
         }
 
         $this->validate([
-            'video'  => 'nullable|file|mimetypes:video/mp4,video/quicktime,video/x-msvideo,video/webm,video/x-matroska,video/3gpp|max:102400',
+            'video'  => 'nullable|file|mimetypes:' . config('upload.video_mimetypes') . '|max:' . config('upload.max_size_kb'),
             'review' => 'nullable|string|max:5000',
-        ], [
-            'video.mimetypes' => 'Format video tidak didukung (gunakan mp4, mov, avi, webm, mkv, atau 3gp).',
-            'video.max'       => 'Ukuran video maksimal 100MB.',
-        ]);
+        ], $this->videoMessages());
 
         if (! $this->video && ! filled($this->review)) {
             $this->addError('video', 'Isi minimal video atau catatan evaluasi.');

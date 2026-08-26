@@ -5,6 +5,7 @@ namespace App\Livewire\Auth;
 use App\Models\Patient;
 use App\Models\PatientPhoto;
 use App\Models\User;
+use App\Support\UploadValidation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -102,17 +103,20 @@ class Profile extends Component
                 ],
 
                 'bpjs_card' => $this->old_bpjs_card
-                    ? 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048'
-                    : 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                    ? 'nullable|file|mimes:' . config('upload.document_mimes') . '|max:' . config('upload.max_size_kb')
+                    : 'required|file|mimes:' . config('upload.document_mimes') . '|max:' . config('upload.max_size_kb'),
 
                 'patient_condition' => !empty($this->old_patient_condition)
                     ? 'nullable|array'
                     : 'required|array',
-                'patient_condition.*' => 'file|mimes:jpg,jpeg,png|max:2048',
+                'patient_condition.*' => 'file|mimes:' . config('upload.image_mimes') . '|max:' . config('upload.max_size_kb'),
                 'address' => 'required',
                 'prosthetic' => 'required|string',
                 'prosthetic_since' => 'required|date',
-            ]);
+            ], UploadValidation::messages([
+                'bpjs_card' => 'kartu BPJS',
+                'patient_condition.*' => 'foto kondisi pasien',
+            ]));
 
             /** =========================
              * USER (updateOrCreate)

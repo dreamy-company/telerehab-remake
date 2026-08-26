@@ -39,6 +39,8 @@
         .animation-delay-2000 { animation-delay: 2s; }
     </style>
 
+    {{-- Batas ukuran upload dibaca oleh penjaga file di resources/js/app.js --}}
+    <meta name="upload-max-bytes" content="{{ config('upload.max_size_bytes') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>

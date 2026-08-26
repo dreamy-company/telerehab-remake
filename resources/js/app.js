@@ -92,3 +92,76 @@ Livewire.on('toaster-error', (message) => {
     }).showToast();
 
 });
+
+/*
+|------------------------------------------------------------------------------
+| Penjaga Ukuran File Upload
+|------------------------------------------------------------------------------
+|
+| Batas ukuran dibaca dari <meta name="upload-max-bytes"> yang diisi oleh
+| config/upload.php, jadi angkanya cuma diatur di satu tempat.
+|
+| Tanpa penjaga ini file yang kebesaran tetap dikirim penuh ke server lalu baru
+| ditolak — atau lebih buruk, mati di layer PHP karena post_max_size terlampaui
+| tanpa pesan apa pun. Listener dipasang di document pada fase CAPTURE supaya
+| jalan sebelum listener milik Livewire pada input, sehingga upload benar-benar
+| bisa dibatalkan sebelum satu byte pun terkirim.
+|
+*/
+
+const uploadMaxBytes = Number(
+    document.querySelector('meta[name="upload-max-bytes"]')?.content ?? 0
+);
+const uploadMaxMb = Math.round(uploadMaxBytes / 1024 / 1024);
+
+function uploadToastError(message) {
+    Toastify({
+        text: message,
+        duration: 6000,
+        close: true,
+        closeStyle: "color: white;",
+        gravity: "bottom",
+        position: "right",
+        style: {
+            background: "linear-gradient(135deg, #e3342f 0%, #cc1f1a 100%)",
+            borderRadius: "8px",
+            boxShadow: "0 4px 12px rgba(227, 52, 47, 0.3)"
+        }
+    }).showToast();
+}
+
+document.addEventListener('change', (event) => {
+    const input = event.target;
+
+    if (!uploadMaxBytes || !(input instanceof HTMLInputElement) || input.type !== 'file') {
+        return;
+    }
+
+    const oversized = Array.from(input.files ?? []).filter((file) => file.size > uploadMaxBytes);
+
+    if (oversized.length === 0) {
+        return;
+    }
+
+    // Hentikan event sebelum sampai ke listener Livewire pada input.
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    input.value = '';
+
+    const sizeMb = (bytes) => (bytes / 1024 / 1024).toFixed(1);
+
+    uploadToastError(
+        oversized.length === 1
+            ? `"${oversized[0].name}" berukuran ${sizeMb(oversized[0].size)} MB. Maksimal ${uploadMaxMb} MB per file.`
+            : `${oversized.length} file melebihi batas ${uploadMaxMb} MB dan tidak diupload.`
+    );
+}, true);
+
+// Jaring pengaman kalau file lolos pengecekan di atas tapi tetap ditolak server
+// (mis. koneksi putus, atau endpoint temporary upload Livewire menolaknya).
+// Sebelumnya kegagalan ini tidak terlihat sama sekali pada input gambar.
+document.addEventListener('livewire-upload-error', () => {
+    uploadToastError(
+        `Upload gagal. Pastikan ukuran file di bawah ${uploadMaxMb} MB dan koneksi stabil, lalu coba lagi.`
+    );
+});

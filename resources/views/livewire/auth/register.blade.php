@@ -308,14 +308,14 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                     <!-- Upload Patient Condition -->
                     <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 md:p-6 text-center hover:border-[#17B8A6] hover:bg-teal-50/50 transition-all cursor-pointer relative group">
-                        <input type="file" wire:model="patient_condition" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept=".jpg,.jpeg,.png">
+                        <input type="file" wire:model="patient_condition" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="{{ config('upload.image_accept') }}">
                         <div class="space-y-2">
                             <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
                                 <i class="fas fa-camera text-lg md:text-xl"></i>
                             </div>
                             <h5 class="text-xs md:text-sm font-bold text-slate-700">Patient Condition Photos</h5>
                             <p class="text-[10px] md:text-xs text-slate-400">.jpg, .jpeg, .png</p>
-                            <p class="text-[10px] md:text-xs text-slate-400">Upload multiple photos (Max 2MB/photo)</p>
+                            <p class="text-[10px] md:text-xs text-slate-400">Upload multiple photos (Max {{ config('upload.max_size_mb') }}MB/photo)</p>
                         </div>
 
                         <!-- Preview Count -->
@@ -329,14 +329,14 @@
 
                     <!-- Upload BPJS Card -->
                     <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 md:p-6 text-center hover:border-[#17B8A6] hover:bg-teal-50/50 transition-all cursor-pointer relative group">
-                        <input type="file" wire:model="bpjs_card" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept=".jpg,.jpeg,.png">
+                        <input type="file" wire:model="bpjs_card" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="{{ config('upload.document_accept') }}">
                         <div class="space-y-2">
                             <div class="w-10 h-10 md:w-12 md:h-12 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
                                 <i class="fas fa-id-card text-lg md:text-xl"></i>
                             </div>
                             <h5 class="text-xs md:text-sm font-bold text-slate-700">Insurance Card Photo (Optional, like BPJS, etc)</h5>
-                            <p class="text-[10px] md:text-xs text-slate-400">.jpg, .jpeg, .png</p>
-                            <p class="text-[10px] md:text-xs text-slate-400">Upload (Max 2MB)</p>
+                            <p class="text-[10px] md:text-xs text-slate-400">{{ config('upload.document_accept') }}</p>
+                            <p class="text-[10px] md:text-xs text-slate-400">Upload (Max {{ config('upload.max_size_mb') }}MB)</p>
                         </div>
                         @if($bpjs_card)
                         <div class="mt-2 text-[10px] md:text-xs text-green-600 font-bold bg-green-50 py-1 px-2 rounded-lg inline-block">

@@ -19,6 +19,10 @@ services:
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
         volumes:
             - '.:/var/www/html'
+            # Batas upload 100MB. Tanpa mount ini PHP di container tetap memakai
+            # default 2M/8M dan upload video gagal. Sail menjalankan aplikasi
+            # lewat `artisan serve`, jadi cukup SAPI cli. Lihat docs/UPLOAD-LIMITS.md.
+            - './docs/php/99-upload.ini:/etc/php/8.5/cli/conf.d/99-upload.ini'
         networks:
             - sail
         depends_on:

@@ -151,10 +151,10 @@
                  x-on:livewire-upload-start="isUploading = true; uploadError = ''"
                  x-on:livewire-upload-finish="isUploading = false"
                  x-on:livewire-upload-cancel="isUploading = false"
-                 x-on:livewire-upload-error="isUploading = false; progress = 0; uploadError = 'Upload video gagal. Pastikan ukuran file di bawah 100MB dan koneksi stabil, lalu coba lagi.'"
+                 x-on:livewire-upload-error="isUploading = false; progress = 0; uploadError = 'Upload video gagal. Pastikan ukuran file di bawah {{ config('upload.max_size_mb') }}MB dan koneksi stabil, lalu coba lagi.'"
                  x-on:livewire-upload-progress="progress = $event.detail.progress">
                  
-                <label class="text-xs font-black text-gray-500 uppercase tracking-widest ml-1">Upload Video Feedback</label>
+                <label class="text-xs font-black text-gray-500 uppercase tracking-widest ml-1">Upload Video Feedback <span class="text-teal-600">(Max {{ config('upload.max_size_mb') }} MB)</span></label>
                 
                 <div class="relative group">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-opacity duration-200" 
@@ -175,7 +175,7 @@
                         </div>
                     </div>
 
-                    <input type="file" wire:model="video" accept="video/*"
+                    <input type="file" wire:model="video" accept="{{ config('upload.video_accept') }}"
                         class="file-input file-input-bordered w-full pl-11 rounded-xl border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all text-sm h-12 disabled:bg-gray-50 disabled:text-gray-400"
                         :disabled="isUploading" />
                         
